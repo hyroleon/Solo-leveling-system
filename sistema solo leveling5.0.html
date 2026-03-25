@@ -1,0 +1,238 @@
+<!DOCTYPE html>        
+<html lang="pt-br">        
+<head>        
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        
+<title>SHADOW SYSTEM | MONARCA</title>        
+<style>        
+:root{--bg:#010409;--p:rgba(5,12,25,0.9);--a:#00e5ff;--shadow:#002244;--t:#e6f0ff;--b:rgba(0,229,255,0.3)}        
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;transition:0.2s}        
+body{background:var(--bg);color:var(--t);margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-bottom:80px;overflow-x:hidden}        
+.setup-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-card{background:var(--p);border:1px solid var(--a);padding:25px;width:100%;max-width:400px;text-align:center}
+.arch-opt{border:1px solid var(--b);padding:10px;margin:5px;cursor:pointer;font-size:10px;display:inline-block;width:45%}
+.arch-opt.selected{border-color:var(--a);background:rgba(0,229,255,0.1)}
+input{width:100%;padding:10px;margin:5px 0;background:rgba(0,0,0,0.6);border:1px solid var(--b);color:var(--a);text-align:center}
+.container{width:100%;max-width:450px;padding:15px}        
+.panel{background:var(--p);border:1px solid var(--b);padding:15px;margin-bottom:15px;border-radius:4px}        
+.day-ui{font-size:9px;color:var(--a);letter-spacing:2px;font-weight:bold;border:1px solid var(--b);padding:4px;display:inline-block;margin-bottom:10px}
+.stat-label{font-size:9px;color:#888;text-transform:uppercase;display:block}
+.stat-val{font-size:28px;font-weight:900}
+.bar-w{width:100%;height:6px;background:#000;margin:8px 0;border-radius:3px;overflow:hidden;border:1px solid #111}        
+.bar-f{height:100%;background:linear-gradient(90deg,var(--shadow),var(--a));width:0%}        
+.trinity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}
+.trinity-card{background:rgba(5,12,25,0.8);border:1px solid var(--b);padding:10px;text-align:center;border-bottom:2px solid var(--a)}
+.mission-item{background:rgba(0,0,0,0.4);border:1px solid var(--b);padding:12px;margin-bottom:8px;border-left:3px solid var(--a);cursor:pointer}
+.mission-item.done{opacity:0.3;filter:grayscale(1);pointer-events:none}
+.m-type{font-size:8px;font-weight:900;color:var(--a);display:block}
+.m-hint{font-size:8px;color:#555;margin-top:4px;font-style:italic}
+.w-tab{flex:1;padding:10px;background:rgba(0,0,0,0.5);border:1px solid var(--b);text-align:center;font-size:9px;cursor:pointer}
+.w-tab.active{border-color:var(--a);color:var(--a)}
+.w-table{width:100%;border-collapse:collapse}
+.w-table input{padding:5px;font-size:11px;background:transparent;border:none;border-bottom:1px solid #222;color:#fff}
+.nav{position:fixed;bottom:0;width:100%;max-width:450px;background:#010306;border-top:1px solid var(--b);display:grid;grid-template-columns:1fr 1fr;height:60px}
+.nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;color:#444;text-transform:uppercase}
+.nav-btn.active{color:var(--a);border-top:2px solid var(--a)}
+.hidden{display:none!important}
+#alert-box{position:fixed;top:10px;background:var(--a);color:#000;padding:10px;font-weight:bold;z-index:2000;display:none;font-size:10px}
+</style>
+</head>
+<body>
+
+<div id="alert-box">PENALIDADE: -50 XP</div>
+
+<div id="setup-screen" class="setup-overlay hidden">
+    <div class="setup-card">
+        <h2 style="color:var(--a);margin:0;">SISTEMA MONARCA</h2>
+        <div id="arch-box">
+            <div class="arch-opt" onclick="Sys.selArch('viking',this)">VIKING</div>
+            <div class="arch-opt" onclick="Sys.selArch('samurai',this)">SAMURAI</div>
+            <div class="arch-opt" onclick="Sys.selArch('templario',this)">TEMPLÁRIO</div>
+            <div class="arch-opt" onclick="Sys.selArch('soldado',this)">SOLDADO</div>
+        </div>
+        <input type="text" id="setup-name" placeholder="CODINOME">
+        <input type="date" id="setup-dob">
+        <button onclick="Sys.finalize()" style="width:100%;padding:10px;background:none;border:1px solid var(--a);color:var(--a);margin-top:10px">INICIALIZAR</button>
+    </div>
+</div>
+
+<div class="container">
+    <div id="tab-status">
+        <div class="panel" style="text-align:center">
+            <span class="day-ui" id="day-ui" onclick="Sys.editDay()">DIA 1</span>
+            <div id="p-arch" style="font-size:8px;color:var(--a);letter-spacing:2px">--</div>
+            <div id="p-name" style="font-size:18px;font-weight:900;margin-bottom:10px">--</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr">
+                <div style="text-align:left"><span class="stat-label">Rank</span><span class="stat-val" id="rank-ui" style="color:var(--a)">E</span></div>
+                <div style="text-align:right"><span class="stat-label">Level</span><span class="stat-val" id="lvl-ui">00</span></div>
+            </div>
+            <div class="bar-w"><div id="rank-bar" class="bar-f"></div></div>
+            <div style="margin-top:10px;text-align:left">
+                <span class="stat-label">Potencial Genético: <span id="testo-val" onclick="Sys.edSt('testo')">300</span></span>
+                <div class="bar-w"><div id="testo-bar" class="bar-f"></div></div>
+            </div>
+        </div>
+        <div class="trinity-grid">
+            <div class="trinity-card"><span class="stat-label">Corpo</span><b id="v-corpo" onclick="Sys.edSt('corpo')">10</b></div>
+            <div class="trinity-card"><span class="stat-label">Mente</span><b id="v-mente" onclick="Sys.edSt('mente')">10</b></div>
+            <div class="trinity-card"><span class="stat-label">Espírito</span><b id="v-espirito" onclick="Sys.edSt('espirito')">10</b></div>
+        </div>
+        <div id="mission-ui"></div>
+    </div>
+
+    <div id="tab-sys" class="hidden">
+        <div class="panel">
+            <span class="stat-label">Hidratação</span>
+            <div style="font-size:22px;font-weight:900"><span id="w-curr">0</span> <small style="font-size:10px;color:#555">/ <span id="w-goal">3000</span> ML</small></div>
+            <div class="bar-w"><div id="w-bar" class="bar-f"></div></div>
+            <div style="display:flex;gap:5px"><input type="number" id="w-add" placeholder="ML"><button onclick="Sys.addW()" style="background:none;border:1px solid var(--a);color:var(--a);padding:0 15px">BEBER</button></div>
+        </div>
+        <div class="panel">
+            <span class="stat-label">Habilidades</span>
+            <div id="sk-list" style="margin:10px 0"></div>
+            <div style="display:flex;gap:5px"><input type="text" id="sk-in" placeholder="Nova Skill..."><button onclick="Sys.addSk()" style="background:none;border:1px solid var(--a);color:var(--a);padding:0 10px">OK</button></div>
+        </div>
+        <div class="panel">
+            <div style="display:flex;gap:5px;margin-bottom:10px"><div class="w-tab active" id="t-PUXADA" onclick="Sys.swW('PUXADA')">PUXADA</div><div class="w-tab" id="t-EMPURRADA" onclick="Sys.swW('EMPURRADA')">EMPURRADA</div></div>
+            <table class="w-table"><tbody id="w-list"></tbody></table>
+        </div>
+        <button onclick="Sys.reset()" style="width:100%;background:none;border:none;color:#333;font-size:8px;margin-top:15px">[ REINICIALIZAR ]</button>
+    </div>
+</div>
+
+<div class="nav">
+    <div class="nav-btn active" id="b1" onclick="Sys.swT(1)">Status</div>
+    <div class="nav-btn" id="b2" onclick="Sys.swT(2)">Painel</div>
+</div>
+
+<script>
+const POOLS = {
+    CALI: {
+        "E": ["10-30 Flexões", "8-20 Barra Fixa", "5-15 Dips"],
+        "D": ["30-100 Flexões", "20-50 Barra", "15-20 Dips"],
+        "C": ["Frog p/ Crow", "Wall Handstand", "L-Sit"],
+        "B": ["Tuck Planche", "One Leg Front", "Handstand"],
+        "A": ["Straddle Front", "V-Sit", "HSPU"],
+        "S": ["Front Lever", "Full Planche", "Maltese"]
+    },
+    TESTO: ["Jejum de dopamina fácil", "7 a 8h de sono", "20 minutos de sol", "Treino de perna"],
+    MENTE: ["Ler 10 a 20 páginas", "Deep work 2h sem interrupção", "Estudar skill"],
+    ESPIRITO: ["Ler a bíblia", "Exame de consciência: reflexão estóica sobre os erros do dia", "Ato de caridade", "Meditação", "Gratidão por três coisas"]
+};
+
+const Sys = {
+    db: null, key: 'monarch_v5_final', curW: 'PUXADA',
+    init() {
+        let d = localStorage.getItem(this.key);
+        if (d) { this.db = JSON.parse(d); this.check(); this.render(); }
+        else document.getElementById('setup-screen').classList.remove('hidden');
+    },
+    selArch(a, e) { this.tA = a; document.querySelectorAll('.arch-opt').forEach(o => o.classList.remove('selected')); e.classList.add('selected'); },
+    finalize() {
+        let n = document.getElementById('setup-name').value, b = document.getElementById('setup-dob').value;
+        if (!n || !b || !this.tA) return;
+        this.db = { name: n.toUpperCase(), dob: b, arch: this.tA, xp: 0, testo: 300, start: new Date().toISOString(), last: '', water: 0,
+                    attr: { C: 10, M: 10, E: 10 }, miss: [], lastMiss: [], skills: [], 
+                    work: { PUXADA: Array(5).fill().map(()=>({n:'',s:'',r:'',d:false})), EMPURRADA: Array(5).fill().map(()=>({n:'',s:'',r:'',d:false})) } };
+        this.genMiss(); this.save(); location.reload();
+    },
+    check() {
+        let today = new Date().toLocaleDateString();
+        if (this.db.last !== today) {
+            let pen = this.db.miss.find(m => m.type === 'CORPO' && !m.done);
+            if (pen) { this.db.xp = Math.max(0, this.db.xp - 50); this.showPen(); }
+            this.db.lastMiss = this.db.miss.map(m => m.task);
+            this.db.last = today; this.db.water = 0;
+            this.genMiss();
+            ['PUXADA', 'EMPURRADA'].forEach(k => this.db.work[k].forEach(ex => ex.d = false));
+            this.save();
+        }
+    },
+    getRank() {
+        let x = this.db.xp;
+        if(x>=30000) return "S"; if(x>=15000) return "A"; if(x>=7000) return "B"; if(x>=2000) return "C"; if(x>=500) return "D"; return "E";
+    },
+    genMiss() {
+        let r = this.getRank();
+        this.db.miss = [
+            {type:'CORPO', task: this.getU(POOLS.CALI[r], 0), done:false},
+            {type:'TESTO', task: this.getU(POOLS.TESTO, 1), done:false},
+            {type:'MENTE', task: this.getU(POOLS.MENTE, 2), done:false},
+            {type:'ESPIRITO', task: this.getU(POOLS.ESPIRITO, 3), done:false}
+        ];
+    },
+    getU(p, i) {
+        let available = p.filter(t => !this.db.lastMiss.includes(t));
+        let pool = available.length > 0 ? available : p;
+        return pool[Math.floor(Math.random()*pool.length)];
+    },
+    doMiss(i) {
+        let m = this.db.miss[i]; m.done = true; this.db.xp += 30;
+        if(m.type==='CORPO') this.db.attr.C+=2; if(m.type==='TESTO') this.db.testo+=30;
+        if(m.type==='MENTE') this.db.attr.M+=2; if(m.type==='ESPIRITO') this.db.attr.E+=2;
+        this.save(); this.render();
+    },
+    addW() {
+        let v = parseInt(document.getElementById('w-add').value);
+        if(v>0) { this.db.water += v; document.getElementById('w-add').value=''; this.save(); this.render(); }
+    },
+    edSt(s) {
+        let v = prompt("Novo Valor:", s==='testo'?this.db.testo:this.db.attr[s.charAt(0).toUpperCase()]);
+        if(v) { if(s==='testo') this.db.testo=parseInt(v); else this.db.attr[s.charAt(0).toUpperCase()]=parseInt(v); this.save(); this.render(); }
+    },
+    editDay() {
+        let v = prompt("Definir Dia Atual:", 1);
+        if(v) { let d=new Date(); d.setDate(d.getDate()-(parseInt(v)-1)); this.db.start=d.toISOString(); this.save(); this.render(); }
+    },
+    swW(t) { this.curW = t; this.renderW(); },
+    swT(t) {
+        document.getElementById('tab-status').classList.toggle('hidden', t!==1);
+        document.getElementById('tab-sys').classList.toggle('hidden', t!==2);
+        document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active', i+1===t));
+        if(t===2) { this.renderW(); this.renderSk(); }
+    },
+    renderW() {
+        document.querySelectorAll('.w-tab').forEach(b=>b.classList.toggle('active', b.id==='t-'+this.curW));
+        document.getElementById('w-list').innerHTML = this.db.work[this.curW].map((ex,i)=>`
+        <tr>
+            <td><input type="checkbox" ${ex.d?'checked':''} onchange="Sys.tkW(${i})"></td>
+            <td><input type="text" value="${ex.n}" placeholder="Ex..." onchange="Sys.upW(${i},'n',this.value)"></td>
+            <td><input type="text" value="${ex.s}" placeholder="S" style="width:25px" onchange="Sys.upW(${i},'s',this.value)"></td>
+            <td><input type="text" value="${ex.r}" placeholder="R" style="width:25px" onchange="Sys.upW(${i},'r',this.value)"></td>
+        </tr>`).join('');
+    },
+    tkW(i){ this.db.work[this.curW][i].d=!this.db.work[this.curW][i].d; this.db.xp+=5; this.save(); this.render(); },
+    upW(i,f,v){ this.db.work[this.curW][i][f]=v; this.save(); },
+    addSk(){ let i=document.getElementById('sk-in'); if(i.value){this.db.skills.push(i.value); i.value=''; this.save(); this.renderSk();}},
+    renderSk(){ document.getElementById('sk-list').innerHTML=this.db.skills.map(s=>`<span style="background:#111;padding:4px;font-size:10px;margin:2px;border:1px solid var(--b)">${s}</span>`).join(' ');},
+    showPen(){ let a=document.getElementById('alert-box'); a.style.display='block'; setTimeout(() => a.style.display='none', 3000);},
+    save(){ localStorage.setItem(this.key, JSON.stringify(this.db)); },
+    reset(){ if(confirm("Deseja reinicializar o sistema?")) {localStorage.removeItem(this.key); location.reload();}},
+    render() {
+        if(!this.db) return;
+        let day = Math.floor((new Date()-new Date(this.db.start))/86400000)+1;
+        document.getElementById('day-ui').innerText = "DIA "+day;
+        document.getElementById('p-name').innerText = this.db.name;
+        document.getElementById('p-arch').innerText = this.db.arch.toUpperCase();
+        document.getElementById('lvl-ui').innerText = new Date().getFullYear()-new Date(this.db.dob).getFullYear();
+        let r=this.getRank(), xP=0, nxt=500, lvls={E:0,D:500,C:2000,B:7000,A:15000,S:30000,MAX:100000};
+        xP=lvls[r]; nxt=lvls[Object.keys(lvls)[Object.keys(lvls).indexOf(r)+1]];
+        document.getElementById('rank-ui').innerText=r;
+        document.getElementById('rank-bar').style.width=((this.db.xp-xP)/(nxt-xP)*100)+"%";
+        document.getElementById('testo-val').innerText=this.db.testo;
+        document.getElementById('testo-bar').style.width=Math.min(100,(this.db.testo/1200)*100)+"%";
+        document.getElementById('v-corpo').innerText=this.db.attr.C;
+        document.getElementById('v-mente').innerText=this.db.attr.M;
+        document.getElementById('v-espirito').innerText=this.db.attr.E;
+        document.getElementById('w-curr').innerText=this.db.water;
+        document.getElementById('w-bar').style.width=Math.min(100,(this.db.water/3000)*100)+"%";
+        document.getElementById('mission-ui').innerHTML = this.db.miss.map((m,i)=>`
+        <div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i})">
+            <span class="m-type">${m.type} QUEST</span><b>${m.task}</b>
+            ${m.type==='CORPO'?'<div class="m-hint">Dica: se não aguentar a progressão, tente uma mais fácil.</div>':''}
+        </div>`).join('');
+    }
+};
+window.onload = () => Sys.init();
+</script>
+</body>
+</html>
