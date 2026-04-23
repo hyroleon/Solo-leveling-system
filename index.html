@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SISTEMA DE UPADOR | MONARCA 7.6</title>
+<style>
+:root{
+    --bg:#020005;
+    --p:#0a0014;
+    --b:#122a45;
+    --a:#00e1ff;
+    --a-dim:rgba(130, 0, 255, 0.1);
+    --t:#e1ecff;
+    --t-dim:#8fb0d6;
+    --glow:0 0 12px rgba(0, 225, 255, 0.6);
+    --locked:#10002b;
+    --state-icon: #b450ff;
+    --gold:#ffaa00;
+}
+*{box-sizing:border-box;font-family:'Segoe UI','Roboto',sans-serif;transition:0.15s ease-out; outline: none;}
+
+body{
+    background:var(--bg);
+    color:var(--t);
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-bottom:30px;
+    overflow-x:hidden;
+    font-size: 14px;
+}
+
+::-webkit-scrollbar {width: 4px;}
+::-webkit-scrollbar-track {background: var(--bg);}
+::-webkit-scrollbar-thumb {background: var(--b);}
+
+.xp-float{position:fixed;color:var(--a);font-weight:900;pointer-events:none;animation:up 1s forwards;z-index:9999;text-shadow:var(--glow);font-size:16px;}
+@keyframes up{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
+@keyframes pulse{0%{opacity:0.7;text-shadow:none;}50%{opacity:1;text-shadow:var(--glow);}100%{opacity:0.7;text-shadow:none;}}
+
+.setup-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.setup-card{background:var(--p);border:1px solid var(--b);padding:30px;width:100%;max-width:400px;text-align:center;box-shadow: 0 10px 30px rgba(0,0,0,0.7);}
+.setup-card h2{color:var(--a);margin:0 0 20px 0;letter-spacing:4px;font-weight:900;text-transform:uppercase;font-size:18px;}
+.arch-opt{border:1px solid var(--b);padding:12px;margin:5px;cursor:pointer;font-size:11px;display:inline-block;width:46%;background:rgba(0,0,0,0.3);text-transform:uppercase;letter-spacing:1px;color:var(--t-dim);}
+.arch-opt.selected{border-color:var(--a);background:var(--a-dim);color:var(--a);box-shadow:var(--glow);}
+input, textarea{width:100%;padding:12px;margin:8px 0;background:rgba(0,0,0,0.5);border:1px solid var(--b);color:var(--a);text-align:center;border-radius:2px;font-weight:bold;}
+input::placeholder, textarea::placeholder{color:var(--b);}
+textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}
+.btn-init{width:100%;padding:15px;background:none;border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase;}
+
+.container{width:100%;max-width:450px;padding:15px;}
+.protocol-banner{background:var(--a-dim);border:1px solid var(--b);color:var(--t);font-size:10px;padding:10px;text-align:center;margin-bottom:15px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;}
+
+.profile-wrap { display: flex; justify-content: center; margin-bottom: 15px; position: relative; }
+.profile-circle { 
+    width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--a); 
+    box-shadow: var(--glow); overflow: hidden; cursor: pointer; background: var(--p);
+    display: flex; align-items: center; justify-content: center;
+}
+.profile-circle img { width: 100%; height: 100%; object-fit: cover; }
+.profile-circle i { font-size: 10px; color: var(--a-dim); text-transform: uppercase; }
+
+.nav-tabs{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:15px;width:100%;}
+.nav-btn{background:var(--p);border:1px solid var(--b);color:var(--t-dim);padding:12px;font-size:11px;font-weight:900;letter-spacing:2px;cursor:pointer;text-transform:uppercase;}
+.nav-btn.active{border-color:var(--a);color:var(--a);background:var(--a-dim);box-shadow: inset 0 -2px 0 var(--a);}
+
+.panel{background:var(--p);border:1px solid var(--b);padding:20px;margin-bottom:15px;position:relative;}
+
+#p-name{font-size:24px;font-weight:900;margin-bottom:2px;text-transform:uppercase;letter-spacing:1px;}
+#p-arch{font-size:10px;color:var(--t-dim);letter-spacing:4px;font-weight:bold;margin-bottom:10px;text-transform:uppercase;}
+
+.streak-ui{font-size:12px;color:var(--state-icon);font-weight:bold;margin-bottom:5px;letter-spacing:1px;text-shadow: 0 0 5px rgba(180, 80, 255, 0.4); cursor:pointer;}
+
+.buff-active{color:var(--state-icon);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:15px;animation:pulse 2s infinite;min-height:15px;text-transform:uppercase;}
+
+.stat-box-grid{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; border-top:1px solid var(--b); border-bottom:1px solid var(--b); padding:10px 0;}
+.stat-label{font-size:9px;color:var(--t-dim);text-transform:uppercase;display:block;letter-spacing:2px;margin-bottom:2px;}
+.stat-val{font-size:20px;font-weight:900;color:var(--t);}
+.stat-val.blue{color:var(--a);text-shadow:var(--glow);}
+
+.bar-f{height:100%;background:var(--a);width:0%;box-shadow:var(--glow);}
+.bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}
+
+.bio-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:15px;}
+.bio-btn{padding:10px;font-size:10px;font-weight:bold;cursor:pointer;border:1px solid var(--b);background:rgba(0,0,0,0.3);color:var(--t-dim);text-transform:uppercase;letter-spacing:1px;}
+.bio-btn.up{border-color:var(--b);color:var(--state-icon);}
+.bio-btn.fatal{grid-column: span 2; border-color:var(--a); color:var(--a); background:rgba(0,0,0,0.3); font-size:10px; margin-top:5px;}
+
+.trinity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px;}
+.trinity-card{background:var(--p);border:1px solid var(--b);padding:15px;text-align:center;position:relative;}
+.trinity-card b{font-size:22px;font-weight:900;color:var(--t);}
+.trinity-card::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:var(--a);box-shadow:var(--glow);}
+
+.personal-slot { margin-top: 20px; text-align: left; border-top: 1px solid var(--b); padding-top: 15px;}
+.personal-slot h4 { font-size: 10px; color: var(--a); letter-spacing: 2px; text-transform: uppercase; margin: 10px 0 5px 0;}
+.personal-text { background: rgba(0,0,0,0.3); border: 1px solid var(--b); padding: 10px; font-size: 12px; color: var(--t-dim); min-height: 40px; cursor: pointer; white-space: pre-wrap;}
+
+#lock-msg{color:var(--t);font-size:11px;font-weight:bold;margin-bottom:15px;display:none;text-align:center;letter-spacing:1px;text-transform:uppercase;padding:10px;border:1px solid var(--a);background:var(--a-dim);}
+
+.mission-header{display:flex; justify-content:space-between; align-items:center; margin: 20px 0 10px 5px;}
+.mission-header h3{font-size:11px; color:var(--t-dim); letter-spacing:3px; text-transform:uppercase; margin:0;}
+.btn-shuffle{background:none; border:1px solid var(--b); color:var(--a); font-size:9px; font-weight:900; padding:4px 8px; cursor:pointer; text-transform:uppercase; letter-spacing:1px;}
+
+.mission-item{background:var(--p);border:1px solid var(--b);padding:15px;margin-bottom:6px;border-left:2px solid var(--b);cursor:pointer;position:relative;}
+.mission-item.locked{border-left-color:#300;opacity:0.3;pointer-events:none;background:var(--locked);}
+.mission-item.done{opacity:0.15;filter:grayscale(1);pointer-events:none;}
+.mission-item.done::after{content:'CONCLUÍDO';position:absolute;right:15px;top:15px;font-size:9px;color:var(--state-icon);font-weight:bold;letter-spacing:1px;}
+.mission-item.skipped::after{content:'PROVIDÊNCIA';color:var(--t-dim);}
+
+.btn-skip{position:absolute; right:10px; bottom:10px; font-size:8px; color:var(--t-dim); border:1px solid var(--b); padding:2px 5px; text-transform:uppercase; letter-spacing:1px; z-index:10;}
+
+.m-type{font-size:9px;font-weight:bold;color:var(--a);display:block;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.m-task{font-size:14px;color:var(--t);font-weight:bold;}
+.m-buff{color:var(--state-icon);font-size:9px;margin-left:8px;font-weight:bold;}
+
+.btn-liar{width:100%;padding:15px;background:none;border:1px solid var(--b);color:var(--t-dim);font-size:11px;font-weight:900;margin-top:25px;cursor:pointer;letter-spacing:2px;text-transform:uppercase; opacity: 0.5;}
+
+.skill-category{margin-bottom:20px;}
+.skill-rank-label{font-size:11px;color:var(--a);font-weight:900;margin-bottom:10px;display:block;letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid var(--b);padding-bottom:5px;}
+.skill-item{background:var(--p);border:1px solid var(--b);padding:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.skill-item.mastered{border-color:var(--a);background:var(--a-dim);}
+.skill-item.mastered b{color:var(--state-icon);}
+.check-box{width:18px;height:18px;border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;background:rgba(0,0,0,0.3);}
+.skill-item.mastered .check-box{border-color:var(--state-icon);background:rgba(130, 0, 255, 0.2);color:var(--state-icon);text-shadow:0 0 5px var(--state-icon);}
+
+.btn-reset{width:100%;color:#222;font-size:9px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;}
+
+.hidden{display:none!important}
+</style>
+
+</head>
+<body>
+<div id="setup-screen" class="setup-overlay hidden">
+    <div class="setup-card">
+        <h2>SISTEMA DE UPADOR</h2>
+        <div id="arch-box">
+            <div class="arch-opt" onclick="Sys.selArch('Viking',this)">Viking</div>
+            <div class="arch-opt" onclick="Sys.selArch('Samurai',this)">Samurai</div>
+            <div class="arch-opt" onclick="Sys.selArch('Templário',this)">Templário</div>
+            <div class="arch-opt" onclick="Sys.selArch('Soldado',this)">Soldado</div>
+        </div>
+        <input type="text" id="setup-name" placeholder="INSIRA SEU CODINOME">
+        <button class="btn-init" onclick="Sys.finalize()">INICIALIZAR</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="protocol-banner">
+        ❗ "Se eu mentir no sistema, eu perco o sistema"
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>
+        <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">HABILIDADES</button>
+    </div>
+
+    <div id="tab-system">
+        <div class="panel" style="text-align:center">
+            <div class="profile-wrap">
+                <div class="profile-circle" onclick="document.getElementById('file-input').click()">
+                    <img id="p-img" src="" class="hidden">
+                    <i id="p-img-placeholder">Upload Foto</i>
+                </div>
+                <input type="file" id="file-input" class="hidden" accept="image/*" onchange="Sys.upImg(event)">
+            </div>
+
+            <div id="p-name">--</div>
+            <div id="p-arch">--</div>
+            <div id="streak-ui" class="streak-ui" onclick="Sys.edStreak()">🔥 CICLO: 1 / 7 DIAS</div>
+            <div id="day-buffs" class="buff-active"></div>
+
+            <div class="stat-box-grid">
+                <div style="text-align:left"><span class="stat-label">RANK</span><span class="stat-val blue" id="rank-ui" style="cursor:pointer" onclick="Sys.edRank()">E</span></div>
+                <div style="text-align:right"><span class="stat-label">SISTEMA XP</span><span class="stat-val" id="xp-ui" style="cursor:pointer; font-size:16px; white-space:nowrap" onclick="Sys.edXP()">0 / 5000</span></div>
+            </div>
+
+            <div style="text-align:left">
+                <span class="stat-label">STATUS: BIOQUÍMICA (ANDROGÊNICO) <span id="testo-val" style="color:var(--a); cursor:pointer; font-weight:bold;" onclick="Sys.edSt('testo')">430</span></span>
+                <div class="bar-w"><div id="testo-bar" class="bar-f"></div></div>
+
+                <div class="bio-grid">
+                    <button class="bio-btn down" onclick="Sys.modTesto(-50, 'PREGUIÇA (TREINO)', event)">-50 TREINO</button>
+                    <button class="bio-btn down" onclick="Sys.modTesto(-100, 'RECAÍDA (P)', event)">-100 PORN</button>
+                    <button class="bio-btn fatal" onclick="Sys.punishLook(event)">☠️ DESVIO VISUAL (-200 BIO / -500 XP)</button>
+                </div>
+            </div>
+
+            <div class="personal-slot">
+                <h4>Background / Origem</h4>
+                <div id="txt-bg" class="personal-text" onclick="Sys.edPers('bg')">Escreva sua história...</div>
+                
+                <h4>Valores Fins</h4>
+                <div id="txt-values" class="personal-text" onclick="Sys.edPers('values')">Quais são seus objetivos inegociáveis?</div>
+                
+                <h4>Princípios Inabaláveis</h4>
+                <div id="txt-principles" class="personal-text" onclick="Sys.edPers('principles')">Quais leis regem sua conduta?</div>
+            </div>
+        </div>
+
+        <div class="trinity-grid">
+            <div class="trinity-card"><span class="stat-label">Corpo</span><b id="v-corpo" style="cursor:pointer" onclick="Sys.edSt('corpo')">10</b></div>
+            <div class="trinity-card"><span class="stat-label">Mente</span><b id="v-mente" style="cursor:pointer" onclick="Sys.edSt('mente')">10</b></div>
+            <div class="trinity-card"><span class="stat-label">Espírito</span><b id="v-espirito" style="cursor:pointer" onclick="Sys.edSt('espirito')">10</b></div>
+        </div>
+
+        <div id="lock-msg">AVISO: ESTADO DE DEGRADAÇÃO BIOQUÍMICA (BIO < 500)</div>
+
+        <div class="mission-header">
+            <h3>Modificações Diárias</h3>
+            <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio 🔥</button>
+        </div>
+        <div id="mission-ui"></div>
+
+        <button class="btn-liar" onclick="Sys.failIntegrity()">⚠️ FALSEI EXECUÇÃO</button>
+
+        <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
+    </div>
+
+    <div id="tab-skills" class="hidden">
+        <div class="panel">
+            <h3 style="color:var(--a);font-size:14px;margin:0 0 20px 0;letter-spacing:3px; text-transform:uppercase; font-weight:900;">Árvore de Habilidades Físicas</h3>
+            <div id="skills-list-ui"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const RANKS = [
+    {id:'E', min:0},
+    {id:'D', min:3330},
+    {id:'C', min:13300},
+    {id:'B', min:26600},
+    {id:'A', min:39900},
+    {id:'S', min:53250},
+    {id:'MAX', min:100000}
+];
+
+const POOLS = {
+CALI: {
+"E":["Flexões (35–45)", "Barra Fixa (20–25)", "Dips (20–30)", "Prancha (1-2min)" ],
+"D":["Flexões Pseudo (15–20)", "Tuck Front Lever (20–30s)", "L-Sit (20–30s)"],
+"C":["Frog → Crow (30–45s)", "Wall Handstand (45–60s)", "Adv. Tuck Front Lever (15–20s)"],
+"B":["Tuck Planche (10–15s)", "One Leg Front Lever (10–15s)", "Handstand Livre (15–30s)"],
+"A":["Straddle Front Lever (5–10s)", "V-Sit (5–10s)", "HSPU (3–6)"],
+"S":["Front Lever (3–8s)", "Full Planche (2–5s)", "Maltese (1–3s)"]
+},
+TESTO: [
+"treino de core",
+"Sono profundo (7h+)",
+"Evitar ejaculação por 24–48h",
+"Treino de perna intenso",
+"Treino de resistência",
+"Sol (30 min)",
+"Cardio intenso" 
+],
+SEXUAL: [
+"Relação real / parceira",
+"KEGEL 3x",
+],
+MENTE: [
+"Deep Work 90min",
+"Ler 20–40 páginas",
+"Estudar conteúdo valor",
+"Escrita reflexiva",
+"24h sem estímulo visual",
+"Caminhada matinal",
+"Meditação por 10 minutos", 
+],
+ESPIRITO: [
+"Leitura bíblica + aplicação",
+"Oração silenciosa",
+"Ato de Caridade",
+"Prática da Gratidão",
+"Orar por outra pessoa",
+"Confessar um erro a Deus"
+],
+};
+
+const Sys = {
+db: null, key: 'monarch_v7_solo',
+init() {
+let d = localStorage.getItem(this.key);
+if (d) { 
+    this.db = JSON.parse(d); 
+    if(!this.db.skills) this.db.skills = []; 
+    if(!this.db.pers) this.db.pers = {bg:'', values:'', principles:''};
+    this.check(); 
+    this.render(); 
+}
+else document.getElementById('setup-screen').classList.remove('hidden');
+},
+save(){ localStorage.setItem(this.key, JSON.stringify(this.db)); },
+switchTab(t) {
+document.getElementById('tab-system').classList.toggle('hidden', t!=='system');
+document.getElementById('tab-skills').classList.toggle('hidden', t!=='skills');
+document.getElementById('tab-sys-btn').classList.toggle('active', t==='system');
+document.getElementById('tab-skills-btn').classList.toggle('active', t==='skills');
+if(t==='skills') this.renderSkills();
+},
+selArch(a, e) { this.tA = a; document.querySelectorAll('.arch-opt').forEach(o => o.classList.remove('selected')); e.classList.add('selected'); },
+finalize() {
+let n = document.getElementById('setup-name').value;
+if (!n || !this.tA) return;
+
+let baseAttr = { C: 10, M: 10, E: 10 };
+if(this.tA === 'Soldado') baseAttr = { C: 15, M: 15, E: 15 };
+if(this.tA === 'Templário') baseAttr = { C: 10, M: 15, E: 20 };
+if(this.tA === 'Viking') baseAttr = { C: 20, M: 10, E: 15 };
+if(this.tA === 'Samurai') baseAttr = { C: 15, M: 20, E: 10 };
+
+this.db = { 
+    name: n.toUpperCase(), 
+    arch: this.tA, 
+    xp: 0, 
+    testo: 430, 
+    streak: 1, 
+    start: new Date().toISOString(), 
+    last: '', 
+    attr: baseAttr, 
+    miss: [], 
+    lastMiss: [], 
+    customRank: null, 
+    skills: [], 
+    pic: '',
+    pers: {bg:'', values:'', principles:''}
+};
+this.genMiss(); this.save(); location.reload();
+},
+check() {
+let today = new Date().toLocaleDateString();
+if (this.db.last !== today && this.db.last !== '') {
+    let missed = this.db.miss.filter(m => {
+        if (m.done || m.skipped) return false;
+        const isLocked = (this.db.testo < 500) && !m.type.includes('TESTOSTERONA') && !m.type.includes('SEXUAL');
+        return !isLocked;
+    });
+
+    if (missed.length > 0) {           
+        this.db.xp = Math.max(0, this.db.xp - (missed.length * 300));          
+        this.db.streak = 1;          
+        alert(`AVISO DO SISTEMA\n\nFalha detectada em missões.\nSequência resetada.`);          
+    } else { 
+        // Lógica de Ciclo de 7 Dias
+        if (this.db.streak >= 7) {
+            this.db.streak = 1;
+            alert("NOVO CICLO INICIADO\n\nVocê completou 7 dias de disciplina ininterrupta.\nSequência reiniciada para o novo ciclo!");
+        } else {
+            this.db.streak++; 
+        }
+    }          
+    this.db.lastMiss = this.db.miss.map(m => m.task);          
+    this.db.last = today; this.genMiss(); this.save();          
+} else if (this.db.last === '') { this.db.last = today; this.save(); }          
+},          
+getRank() {           
+    if(this.db.customRank) return this.db.customRank;          
+    let current = RANKS[0].id;          
+    for(let r of RANKS) { if(this.db.xp >= r.min) current = r.id; }          
+    return current;          
+},          
+genMiss() {          
+    let rIdx = RANKS.findIndex(rk => rk.id === this.getRank());          
+    let poolCali = [];          
+    for(let i=0; i<=rIdx; i++) { if(POOLS.CALI[RANKS[i].id]) poolCali = poolCali.concat(POOLS.CALI[RANKS[i].id]); }          
+    
+    let testoTask = this.getU(POOLS.TESTO);
+    let sexualPool = POOLS.SEXUAL;
+    
+    if (testoTask === "Evitar ejaculação por 24–48h") {
+        sexualPool = sexualPool.filter(t => t !== "Relação real / parceira");
+    }
+
+    this.db.miss = [          
+        {type:'🧬 CORPO', task: this.getU(poolCali), done:false, skipped: false},          
+        {type:'🧬 TESTOSTERONA (BIOLOGIA REAL)', task: testoTask, done:false, skipped: false},          
+        {type:'🍆 POTÊNCIA SEXUAL', task: this.getU(sexualPool), done:false, skipped: false},      
+        {type:'🧠 MENTE', task: this.getU(POOLS.MENTE), done:false, skipped: false},          
+        {type:'✝️ ESPÍRITO', task: this.getU(POOLS.ESPIRITO), done:false, skipped: false}          
+    ];          
+},        
+shuffleMiss() {        
+    if(confirm("SORTEAR NOVAS MISSÕES?")) {        
+        this.genMiss(); this.save(); this.render();        
+    }        
+},        
+getU(p) {          
+    let avail = p.filter(t => !this.db.lastMiss.includes(t));          
+    return (avail.length > 0 ? avail : p)[Math.floor(Math.random()*(avail.length||p.length))];          
+},          
+modTesto(val, label, e) {          
+    let s7 = (this.db.streak > 0 && this.db.streak % 7 === 0);
+    let finalVal = (val > 0 && s7) ? val * 2 : val;          
+    this.db.testo = Math.max(0, this.db.testo + finalVal);          
+    this.pop(e, (finalVal > 0 ? "+" : "") + finalVal + " BIO");          
+    this.save(); this.render();          
+},          
+punishLook(e) {          
+    if(confirm("QUEBRA DE LEALDADE VISUAL?")) {          
+        this.db.testo = Math.max(0, this.db.testo - 200);          
+        this.db.xp = Math.max(0, this.db.xp - 500);          
+        this.db.streak = 1;          
+        this.pop(e, "☠️ DISCIPLINA VIOLADA");          
+        this.save(); this.render();          
+    }          
+},          
+failIntegrity() {          
+    if(confirm("PROTOCOLO DE DESONRA (MENTIRA).")) {          
+        this.db.xp = Math.max(0, this.db.xp - 1000);          
+        this.db.attr = { C: 10, M: 10, E: 10 };          
+        this.db.streak = 1;          
+        this.db.testo = Math.max(100, this.db.testo - 300);          
+        this.save(); this.render();          
+    }          
+},          
+toggleSkill(s, e) {          
+    if(this.db.skills.includes(s)) {       
+        this.db.skills = this.db.skills.filter(i => i !== s);       
+    } else {       
+        this.db.skills.push(s);       
+        this.db.xp += 1480;       
+        this.pop(e, "+1480 XP (HABILIDADE)");       
+    }          
+    this.save(); this.render(); this.renderSkills();          
+},          
+doMiss(i, e) {          
+    let m = this.db.miss[i];          
+    const low = this.db.testo < 500;          
+    if(low && !m.type.includes('TESTOSTERONA') && !m.type.includes('SEXUAL')) return;          
+    
+    let s3 = (this.db.streak % 7 === 3);
+    let s7 = (this.db.streak > 0 && this.db.streak % 7 === 0);
+    
+    let baseGain = low ? 6 : 8;          
+    let xpGain = s3 ? baseGain * 2 : baseGain;          
+    let bioGain = 0;
+
+    m.done = true;           
+    this.db.xp += xpGain;          
+    
+    if(m.type==='🧬 CORPO') this.db.attr.C++;          
+    if(m.type.includes('TESTOSTERONA') || m.type.includes('SEXUAL')) { 
+        bioGain = s7 ? 20 : 10;
+        this.db.testo += bioGain; 
+        this.db.attr.C++; 
+    }          
+    if(m.type==='🧠 MENTE') this.db.attr.M++;          
+    if(m.type.includes('ESPÍRITO')) this.db.attr.E++;          
+    
+    this.pop(e, `+${xpGain} XP` + (bioGain > 0 ? ` | +${bioGain} BIO` : ""));           
+    this.save(); this.render();          
+},
+skipMiss(i, e) {
+    e.stopPropagation();
+    if(confirm("ESTE IMPEDIMENTO É REAL E ALÉM DO SEU CONTROLE? (JURAMENTO DE HONRA)")) {
+        let m = this.db.miss[i];
+        m.done = true;
+        m.skipped = true;
+        m.task = "[REMANEJADO] " + m.task;
+        this.pop(e, "PROVIDÊNCIA ACEITA");
+        this.save(); this.render();
+    }
+},
+upImg(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            this.db.pic = event.target.result;
+            this.save(); this.render();
+        };
+        reader.readAsDataURL(file);
+    }
+},
+edPers(key) {
+    let old = this.db.pers[key] || "";
+    let val = prompt("Editar Slot:", old);
+    if(val !== null) {
+        this.db.pers[key] = val;
+        this.save(); this.render();
+    }
+},
+pop(e, txt) {          
+    const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt;          
+    const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);          
+    const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);          
+    p.style.left = x + 'px'; p.style.top = y + 'px';          
+    document.body.appendChild(p); setTimeout(() => p.remove(), 1000);          
+},          
+edSt(s) { 
+    let v = prompt("Ajuste manual:", s==='testo'?this.db.testo:this.db.attr[s.charAt(0).toUpperCase()]); 
+    if(v !== null) { 
+        if(s==='testo') this.db.testo = Number(v); 
+        else this.db.attr[s.charAt(0).toUpperCase()] = Number(v); 
+        this.save(); this.render(); 
+    } 
+},          
+edRank() { let v = prompt("Definir Rank (E-S):"); if(v !== null) { this.db.customRank = v.toUpperCase() || null; this.save(); this.render(); } },          
+edXP() { let v = prompt("XP:", this.db.xp); if(v !== null) { this.db.xp = Number(v); this.save(); this.render(); } },          
+edStreak() { 
+    let v = prompt("Ajustar Sequência (Dias):", this.db.streak); 
+    if(v !== null) { 
+        this.db.streak = Number(v); 
+        this.save(); this.render(); 
+    } 
+},
+reset(){ if(confirm("FORMATAR SISTEMA?")) {localStorage.removeItem(this.key); location.reload();} },          
+renderSkills() {          
+    let html = "";          
+    for(let rank in POOLS.CALI) {          
+        html += `<div class="skill-category"><span class="skill-rank-label">CONQUISTAS RANK ${rank}</span>`;          
+        POOLS.CALI[rank].forEach(skill => {          
+            const mastered = this.db.skills.includes(skill);          
+            html += `<div class="skill-item ${mastered?'mastered':''}" onclick="Sys.toggleSkill('${skill}', event)">          
+                <b>${skill}</b>  <div class="check-box">${mastered?'✓':''}</div>          
+            </div>`;          
+        });          
+        html += `</div>`;          
+    }          
+    document.getElementById('skills-list-ui').innerHTML = html;          
+},          
+render() {          
+    if(!this.db) return;          
+    const low = this.db.testo < 500;          
+    const s3 = (this.db.streak % 7 === 3), s7 = (this.db.streak > 0 && this.db.streak % 7 === 0);
+    
+    if(this.db.pic) {
+        document.getElementById('p-img').src = this.db.pic;
+        document.getElementById('p-img').classList.remove('hidden');
+        document.getElementById('p-img-placeholder').classList.add('hidden');
+    }
+
+    document.getElementById('p-name').innerText = this.db.name;          
+    document.getElementById('p-arch').innerText = this.db.arch;          
+    document.getElementById('streak-ui').innerText = "🔥 CICLO: " + this.db.streak + " / 7 DIAS";          
+    document.getElementById('day-buffs').innerText = s3 ? "[XP DOBRADO ATIVO]" : s7 ? "[BÔNUS BIO ATIVO]" : "";          
+    let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);          
+    document.getElementById('rank-ui').innerText = rId;          
+    document.getElementById('xp-ui').innerText = this.db.xp + " / " + (RANKS[rIdx+1] ? RANKS[rIdx+1].min : "MAX");          
+    document.getElementById('testo-val').innerText = this.db.testo;          
+    document.getElementById('testo-bar').style.width = Math.min(100,(this.db.testo/1200)*100)+"%";          
+    document.getElementById('v-corpo').innerText=this.db.attr.C;          
+    document.getElementById('v-mente').innerText=this.db.attr.M;          
+    document.getElementById('v-espirito').innerText=this.db.attr.E;          
+    document.getElementById('lock-msg').style.display = low ? 'block' : 'none';          
+    
+    document.getElementById('txt-bg').innerText = this.db.pers.bg || "Escreva sua história...";
+    document.getElementById('txt-values').innerText = this.db.pers.values || "Quais são seus objetivos inegociáveis?";
+    document.getElementById('txt-principles').innerText = this.db.pers.principles || "Quais leis regem sua conduta?";
+
+    let html = "";          
+    this.db.miss.forEach((m, i) => {          
+        const locked = low && !m.type.includes('TESTOSTERONA') && !m.type.includes('SEXUAL');          
+        const isBio = m.type.includes('TESTOSTERONA') || m.type.includes('SEXUAL');
+        
+        let xpDisplay = (low ? 6 : 8) * (s3 ? 2 : 1);
+        let bioDisplay = isBio ? (s7 ? 20 : 10) : 0;
+        
+        let gainTag = (!m.done && !m.skipped) ? `<span class="m-buff">[+${xpDisplay} XP${bioDisplay > 0 ? ' / +'+bioDisplay+' BIO' : ''}]</span>` : '';          
+        let skipBtn = (!m.done && !locked) ? `<div class="btn-skip" onclick="Sys.skipMiss(${i}, event)">Impedimento</div>` : '';
+        html += `<div class="mission-item ${m.done?'done':''} ${locked?'locked':''} ${m.skipped?'skipped':''}" onclick="Sys.doMiss(${i}, event)">          
+            <span class="m-type">${m.type} ${locked?'[BLOQUEADO]':''}</span>          
+            <span class="m-task">${locked?'Status Bioquímico Insuficiente':m.task}</span> ${gainTag}
+            ${skipBtn}          
+        </div>`;          
+    });          
+    document.getElementById('mission-ui').innerHTML = html;          
+}
+
+};
+window.onload = () => Sys.init();
+</script>  </body>
+
+</html>
