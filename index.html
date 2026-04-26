@@ -346,6 +346,7 @@ ENTRETENIMENTO: ["Assistir conteúdo educativo", "Documentário completo", "Anim
 
 const Sys = {
 db: null, key: 'monarch_v7_solo',
+isSun() { return new Date().getDay() === 0; },
 init() {
     let d = localStorage.getItem(this.key);
     if (d) { 
@@ -385,7 +386,8 @@ check() {
         let mult = (this.db.streak === 8) ? 2 : 1;
         let missed = this.db.miss.filter(m => !m.done && !m.skipped && (this.db.testo >= 500 || m.type.includes('TESTOSTERONA') || m.type.includes('POTÊNCIA')));
         
-        if (missed.length > 0) { 
+        // No domingo, as punições por missões incompletas são zeradas
+        if (missed.length > 0 && !this.isSun()) { 
             this.db.xp = Math.max(0, this.db.xp - (missed.length * 300 * mult)); 
             this.db.streak = 1; 
         } 
@@ -410,14 +412,23 @@ genMiss() {
     let poolCali = [];
     for(let i=0; i<=rIdx; i++) { if(p.CALI[RANKS[i].id]) poolCali = poolCali.concat(p.CALI[RANKS[i].id]); }
     
-    this.db.miss = [
-        {type:'🧬 CORPO', task: this.getU(poolCali, useHard), done:false, skipped: false, hard: useHard},
-        {type:'🧬 TESTOSTERONA', task: this.getU(p.TESTO, useHard), done:false, skipped: false, hard: useHard},
-        {type:'🍆 POTÊNCIA', task: this.getU(p.SEXUAL, useHard), done:false, skipped: false, hard: useHard},
-        {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard},
-        {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard},
-        {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard}
-    ];
+    // Se for domingo, remove missões de corpo, testo e sexual
+    if (this.isSun()) {
+        this.db.miss = [
+            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard},
+            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard},
+            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard}
+        ];
+    } else {
+        this.db.miss = [
+            {type:'🧬 CORPO', task: this.getU(poolCali, useHard), done:false, skipped: false, hard: useHard},
+            {type:'🧬 TESTOSTERONA', task: this.getU(p.TESTO, useHard), done:false, skipped: false, hard: useHard},
+            {type:'🍆 POTÊNCIA', task: this.getU(p.SEXUAL, useHard), done:false, skipped: false, hard: useHard},
+            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard},
+            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard},
+            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard}
+        ];
+    }
 },
 shuffleMiss() { if(confirm("SORTEAR NOVAS MISSÕES?")) { this.genMiss(); this.save(); this.render(); } },
 getU(p, isHard) { 
@@ -426,12 +437,14 @@ getU(p, isHard) {
     return (avail.length > 0 ? avail : p)[Math.floor(Math.random()*(avail.length||p.length))]; 
 },
 modTesto(val, label, e) {
+    if (this.isSun() && val < 0) { this.pop(e, "BLOQUEADO (DOMINGO)"); return; }
     let finalVal = (val > 0 && this.db.streak % 8 === 0) ? val * 2 : val;
     this.db.testo = Math.max(0, this.db.testo + finalVal);
     this.pop(e, (finalVal > 0 ? "+" : "") + finalVal + " BIO");
     this.save(); this.render();
 },
 procrastinate(e) {
+    if (this.isSun()) { this.pop(e, "BLOQUEADO (DOMINGO)"); return; }
     if(confirm("CONFIRMAR ATO DE PROCRASTINAÇÃO?")) {
         this.db.xp = Math.max(0, this.db.xp - 200);
         this.db.testo = Math.max(0, this.db.testo - 10);
@@ -440,6 +453,7 @@ procrastinate(e) {
     }
 },
 punishLook(e) {
+    if (this.isSun()) { this.pop(e, "BLOQUEADO (DOMINGO)"); return; }
     if(confirm("QUEBRA DE LEALDADE VISUAL?")) {
         this.db.testo = Math.max(0, this.db.testo - 200);
         this.db.xp = Math.max(0, this.db.xp - 500);
@@ -449,6 +463,7 @@ punishLook(e) {
     }
 },
 failIntegrity() {
+    if (this.isSun()) return;
     if(confirm("PROTOCOLO DE DESONRA (MENTIRA).")) {
         this.db.xp = Math.max(0, this.db.xp - 1000);
         this.db.attr = { C: 10, M: 10, E: 10 };
@@ -479,6 +494,12 @@ doMiss(i, e) {
     let bioGain = isHard ? 30 : ((m.type.includes('TESTOSTERONA') || m.type.includes('POTÊNCIA')) ? 10 : 0);
     let auraGain = isHard ? 50 : 0;
 
+    // Se for domingo, as recompensas de XP e Aura são menores (metade)
+    if (this.isSun()) {
+        xpGain = Math.floor(xpGain * 0.5);
+        auraGain = Math.floor(auraGain * 0.5);
+    }
+
     m.done = true; 
     this.db.xp += xpGain; 
     this.db.testo += bioGain;
@@ -503,7 +524,12 @@ addRoutine() {
 },
 toggleRoutine(i, e) { 
     this.db.routine[i].done = !this.db.routine[i].done; 
-    if(this.db.routine[i].done) { this.db.aura += 25; this.pop(e, "+25 AURA"); this.checkLvl(); }
+    if(this.db.routine[i].done) { 
+        let gain = this.isSun() ? 12 : 25;
+        this.db.aura += gain; 
+        this.pop(e, `+${gain} AURA`); 
+        this.checkLvl(); 
+    }
     this.save(); this.render(); 
 },
 addTrain(cat) {
@@ -515,7 +541,12 @@ addTrain(cat) {
 toggleTrain(cat, i, e) {
     let item = this.db.trains[cat][i];
     item.done = !item.done;
-    if(item.done) { this.db.aura += 25; this.pop(e, "+25 AURA"); this.checkLvl(); }
+    if(item.done) { 
+        let gain = this.isSun() ? 12 : 25;
+        this.db.aura += gain; 
+        this.pop(e, `+${gain} AURA`); 
+        this.checkLvl(); 
+    }
     this.save(); this.render();
 },
 delTrain(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.trains[cat].splice(i, 1); this.save(); this.render(); } },
@@ -568,14 +599,20 @@ render() {
     if(!this.db) return;
     const low = this.db.testo < 500;
     const isHard = (this.db.streak === 8);
+    const sun = this.isSun();
     
     if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }
     document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;
     document.getElementById('streak-ui').innerText = "🔥 CICLO: " + this.db.streak + " / 8 DIAS";
     document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
     
-    document.getElementById('banner-txt').innerText = isHard ? "⚠️ PROTOCOLO HARD ATIVADO: RECOMPENSAS TRIPLAS / PUNIÇÃO DUPLA" : '❗ "Se eu mentir no sistema, eu perco o sistema"';
-    document.getElementById('banner-txt').style.color = isHard ? 'var(--aura-color)' : 'var(--t)';
+    if (sun) {
+        document.getElementById('banner-txt').innerText = "☀️ PROTOCOLO DESCANSO: SEM PUNIÇÕES | RECOMPENSAS REDUZIDAS";
+        document.getElementById('banner-txt').style.color = "var(--state-icon)";
+    } else {
+        document.getElementById('banner-txt').innerText = isHard ? "⚠️ PROTOCOLO HARD ATIVADO: RECOMPENSAS TRIPLAS / PUNIÇÃO DUPLA" : '❗ "Se eu mentir no sistema, eu perco o sistema"';
+        document.getElementById('banner-txt').style.color = isHard ? 'var(--aura-color)' : 'var(--t)';
+    }
 
     let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);
     document.getElementById('rank-ui').innerText = rId;
@@ -615,6 +652,12 @@ render() {
             </div>`;
     });
     document.getElementById('mission-ui').innerHTML = mHtml;
+    
+    // Opacidade para botões de punição no domingo
+    document.querySelectorAll('.bio-btn.down, .bio-btn.fatal, .btn-liar').forEach(b => {
+        b.style.opacity = sun ? "0.2" : (b.classList.contains('btn-liar') ? "0.5" : "1");
+        b.style.pointerEvents = sun ? "none" : "auto";
+    });
 }
 };
 window.onload = () => Sys.init();
