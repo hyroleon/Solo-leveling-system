@@ -16,7 +16,7 @@
     --glow:0 0 12px rgba(0, 242, 255, 0.6);
     --locked:#001a2b;
     --state-icon: #00ffaa;
-    --gold:#00ffaa;
+    --gold:#ffcc00; /* Cor para moedas */
     --danger: #ff4d4d;
     --aura-color: #a066ff;
 }
@@ -85,6 +85,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 .stat-label{font-size:9px;color:var(--t-dim);text-transform:uppercase;display:block;letter-spacing:2px;margin-bottom:2px;}
 .stat-val{font-size:20px;font-weight:900;color:var(--t);}
 .stat-val.blue{color:var(--a);text-shadow:var(--glow);}
+.stat-val.gold{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,0.4);}
 
 .bar-f{height:100%;background:var(--a);width:0%;box-shadow:var(--glow);}
 .bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}
@@ -125,7 +126,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 
 .mission-item{background:var(--p);border:1px solid var(--b);padding:15px;margin-bottom:6px;border-left:2px solid var(--b);cursor:pointer;position:relative; display: flex; flex-direction: column;}
 .mission-item.locked{border-left-color:#001a2b;opacity:0.3;pointer-events:none;background:var(--locked);}
-.mission-item.done{opacity:0.15;filter:grayscale(1);pointer-events:none;}
+.mission-item.done{opacity:0.3;filter:grayscale(0.5); border-left-color: var(--state-icon);}
 .mission-item.done::after{content:'CONCLUÍDO';position:absolute;right:15px;top:15px;font-size:9px;color:var(--state-icon);font-weight:bold;letter-spacing:1px;}
 .mission-item.skipped{opacity:0.2; pointer-events:none; border-left-color: var(--t-dim);}
 .mission-item.skipped::after{content:'PULADO';position:absolute;right:15px;top:15px;font-size:9px;color:var(--t-dim);font-weight:bold;letter-spacing:1px;}
@@ -193,12 +194,16 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 
             <div id="p-name">--</div>
             <div id="p-arch">--</div>
-            <div id="streak-ui" class="streak-ui" onclick="Sys.edStreak()">🔥 CICLO: 1 / 8 DIAS</div>
+            <div id="streak-ui" class="streak-ui" onclick="Sys.edStreak()">🔥 CICLO: 1 / 7 DIAS</div>
             <div id="day-buffs" class="buff-active"></div>
 
             <div class="stat-box-grid">
                 <div style="text-align:left"><span class="stat-label">RANK</span><span class="stat-val blue" id="rank-ui" style="cursor:pointer" onclick="Sys.edRank()">E</span></div>
                 <div style="text-align:right"><span class="stat-label">SISTEMA XP</span><span class="stat-val" id="xp-ui" style="cursor:pointer; font-size:16px; white-space:nowrap" onclick="Sys.edXP()">0 / 5000</span></div>
+                <div style="text-align:left; margin-top:5px; grid-column: span 2; border-top: 1px solid var(--b); padding-top:5px;">
+                    <span class="stat-label">SALDO DE MOEDAS</span>
+                    <span class="stat-val gold" id="coin-ui" style="cursor:pointer" onclick="Sys.edCoins()">0.00</span>
+                </div>
             </div>
 
             <div style="text-align:left">
@@ -208,7 +213,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
                 <span class="stat-label" style="color:var(--aura-color)">FARM DE AURA <span id="aura-val" style="cursor:pointer; font-weight:bold;" onclick="Sys.edAura()">0 / 100</span></span>
                 <div class="bar-w"><div id="aura-bar" class="aura-bar-f"></div></div>
 
-                <div class="punishment-zone">
+                <div class="punishment-zone" id="punish-module">
                     <span class="punishment-label">Módulo de Gestão de Falhas</span>
                     <div class="bio-grid">
                         <button class="bio-btn down" onclick="Sys.modTesto(-50, 'PREGUIÇA', event)">Preguiça (-50 Bio)</button>
@@ -325,7 +330,7 @@ CALI: {
 SEXUAL: ["segurar o gozo por 10s", "Elevação pélvica (3x)", "cardio", "10min respiração"],
 MENTE: ["Editar por 2h", "Ler 20–40 páginas", "Estudar conteúdo de valor", "Escrita", "Jejum de dopamina barata", "Caminhada matinal", "Meditação 10min", "assistir um filme completo"],
 ESPIRITO: ["estudo bíblico", "Oração silenciosa", "Ato de Caridade", "listar 3 coisas pelas quais sou grato", "Orar por outra pessoa", "Confessar um erro a Deus"],
-ENTRETENIMENTO: ["Jogar por 30 minutos", "Assistir um filme completo", "assistir um vídeo no YouTube", "assistir dois episódios de anime", "editar icons", "assistir dois episódios de desenho", "papel machê", "bater uma punheta", "30 minutos fazendo nada"]
+ENTRETENIMENTO: ["Jogar por 30 minutos", "Assistir um filme completo", "assistir um vídeo no YouTube", "assistir dois episódios de anime", "editar icons", "assistir dois episódios de desenho", "papel machê", "bater duas punheta", "30 minutos fazendo nada"]
 };
 
 const HARD_POOLS = {
@@ -347,6 +352,7 @@ ENTRETENIMENTO: ["Assistir conteúdo educativo", "Documentário completo", "Anim
 const Sys = {
 db: null, key: 'monarch_v7_solo',
 isSun() { return new Date().getDay() === 0; },
+isHard() { return this.db.streak === 6; },
 init() {
     let d = localStorage.getItem(this.key);
     if (d) { 
@@ -357,9 +363,11 @@ init() {
         if(!this.db.trains) this.db.trains = {puxada:[], empurrada:[], core:[], perna:[]};
         if(!this.db.lvl) this.db.lvl = 1;
         if(!this.db.aura) this.db.aura = 0;
+        if(this.db.coins === undefined) this.db.coins = 0;
         this.check(); this.render(); 
     }
     else document.getElementById('setup-screen').classList.remove('hidden');
+    window.onbeforeunload = () => this.save();
 },
 save(){ localStorage.setItem(this.key, JSON.stringify(this.db)); },
 switchTab(t) {
@@ -377,22 +385,21 @@ finalize() {
     if(this.tA === 'Templário') baseAttr = { C: 10, M: 15, E: 20 };
     if(this.tA === 'Viking') baseAttr = { C: 20, M: 10, E: 15 };
     if(this.tA === 'Samurai') baseAttr = { C: 15, M: 20, E: 10 };
-    this.db = { name: n.toUpperCase(), arch: this.tA, xp: 0, testo: 430, streak: 1, last: '', attr: baseAttr, miss: [], lastMiss: [], skills: [], routine: [], trains: {puxada:[], empurrada:[], core:[], perna:[]}, pers: {bg:'', values:'', principles:''}, lvl: 1, aura: 0 };
+    this.db = { name: n.toUpperCase(), arch: this.tA, xp: 0, testo: 430, streak: 1, last: '', attr: baseAttr, miss: [], lastMiss: [], skills: [], routine: [], trains: {puxada:[], empurrada:[], core:[], perna:[]}, pers: {bg:'', values:'', principles:''}, lvl: 1, aura: 0, coins: 0 };
     this.genMiss(); this.save(); location.reload();
 },
 check() {
     let today = new Date().toLocaleDateString();
     if (this.db.last !== today && this.db.last !== '') {
-        let mult = (this.db.streak === 8) ? 2 : 1;
+        let mult = (this.isHard()) ? 2 : 1;
         let missed = this.db.miss.filter(m => !m.done && !m.skipped && (this.db.testo >= 500 || m.type.includes('TESTOSTERONA') || m.type.includes('POTÊNCIA')));
         
-        // No domingo, as punições por missões incompletas são zeradas
         if (missed.length > 0 && !this.isSun()) { 
             this.db.xp = Math.max(0, this.db.xp - (missed.length * 300 * mult)); 
             this.db.streak = 1; 
         } 
         else { 
-            if (this.db.streak >= 8) this.db.streak = 1; else this.db.streak++; 
+            if (this.db.streak >= 7) this.db.streak = 1; else this.db.streak++; 
         }
         
         this.db.lastMiss = this.db.miss.map(m => m.task);
@@ -406,27 +413,26 @@ check() {
 getRank() { if(this.db.customRank) return this.db.customRank; let current = RANKS[0].id; for(let r of RANKS) { if(this.db.xp >= r.min) current = r.id; } return current; },
 genMiss() {
     let rIdx = RANKS.findIndex(rk => rk.id === this.getRank());
-    let useHard = (this.db.streak === 8);
+    let useHard = this.isHard();
     let p = useHard ? HARD_POOLS : POOLS;
     
     let poolCali = [];
     for(let i=0; i<=rIdx; i++) { if(p.CALI[RANKS[i].id]) poolCali = poolCali.concat(p.CALI[RANKS[i].id]); }
     
-    // Se for domingo, remove missões de corpo, testo e sexual
     if (this.isSun()) {
         this.db.miss = [
-            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard},
-            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard},
-            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard}
+            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0}
         ];
     } else {
         this.db.miss = [
-            {type:'🧬 CORPO', task: this.getU(poolCali, useHard), done:false, skipped: false, hard: useHard},
-            {type:'🧬 TESTOSTERONA', task: this.getU(p.TESTO, useHard), done:false, skipped: false, hard: useHard},
-            {type:'🍆 POTÊNCIA', task: this.getU(p.SEXUAL, useHard), done:false, skipped: false, hard: useHard},
-            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard},
-            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard},
-            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard}
+            {type:'🧬 CORPO', task: this.getU(poolCali, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'🧬 TESTOSTERONA', task: this.getU(p.TESTO, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'🍆 POTÊNCIA', task: this.getU(p.SEXUAL, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'🧠 MENTE', task: this.getU(p.MENTE, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'✝️ ESPÍRITO', task: this.getU(p.ESPIRITO, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0},
+            {type:'🕹️ ENTRETENIMENTO', task: this.getU(p.ENTRETENIMENTO, useHard), done:false, skipped: false, hard: useHard, xpG:0, bioG:0, auraG:0}
         ];
     }
 },
@@ -438,7 +444,7 @@ getU(p, isHard) {
 },
 modTesto(val, label, e) {
     if (this.isSun() && val < 0) { this.pop(e, "BLOQUEADO (DOMINGO)"); return; }
-    let finalVal = (val > 0 && this.db.streak % 8 === 0) ? val * 2 : val;
+    let finalVal = (val > 0 && this.isHard()) ? val * 2 : val;
     this.db.testo = Math.max(0, this.db.testo + finalVal);
     this.pop(e, (finalVal > 0 ? "+" : "") + finalVal + " BIO");
     this.save(); this.render();
@@ -473,8 +479,12 @@ failIntegrity() {
     }
 },
 toggleSkill(s, e) {
-    if(this.db.skills.includes(s)) this.db.skills = this.db.skills.filter(i => i !== s);
-    else { this.db.skills.push(s); this.db.xp += 1480; this.pop(e, "+1480 XP"); }
+    if(this.db.skills.includes(s)) {
+        this.db.skills = this.db.skills.filter(i => i !== s);
+        this.db.xp -= 1480; this.pop(e, "-1480 XP");
+    } else { 
+        this.db.skills.push(s); this.db.xp += 1480; this.pop(e, "+1480 XP"); 
+    }
     this.save(); this.render(); this.renderSkills();
 },
 skipMiss(i, e) {
@@ -486,32 +496,47 @@ skipMiss(i, e) {
 },
 doMiss(i, e) {
     let m = this.db.miss[i];
-    if(m.skipped || m.done) return;
+    if(m.skipped) return;
+    
+    // Lógica para desmarcar
+    if (m.done) {
+        this.db.xp = Math.max(0, this.db.xp - m.xpG);
+        this.db.testo = Math.max(0, this.db.testo - m.bioG);
+        this.db.aura = Math.max(0, this.db.aura - m.auraG);
+        
+        if(m.type==='🧬 CORPO') this.db.attr.C--; 
+        if(m.type==='🧠 MENTE') this.db.attr.M--; 
+        if(m.type.includes('ESPÍRITO')) this.db.attr.E--;
+        
+        m.done = false;
+        m.xpG = 0; m.bioG = 0; m.auraG = 0;
+        this.pop(e, "REVERTIDO");
+        this.save(); this.render();
+        return;
+    }
+
     if(this.db.testo < 500 && !m.type.includes('TESTOSTERONA') && !m.type.includes('POTÊNCIA')) return;
     
-    let isHard = (this.db.streak === 8);
+    let isHard = this.isHard();
     let xpGain = isHard ? 25 : ((this.db.testo < 500 ? 6 : 8));
     let bioGain = isHard ? 30 : ((m.type.includes('TESTOSTERONA') || m.type.includes('POTÊNCIA')) ? 10 : 0);
     let auraGain = isHard ? 50 : 0;
 
-    // Se for domingo, as recompensas de XP e Aura são menores (metade)
     if (this.isSun()) {
         xpGain = Math.floor(xpGain * 0.5);
         auraGain = Math.floor(auraGain * 0.5);
     }
 
     m.done = true; 
+    m.xpG = xpGain; m.bioG = bioGain; m.auraG = auraGain;
+
     this.db.xp += xpGain; 
     this.db.testo += bioGain;
     this.db.aura += auraGain;
 
     if(m.type==='🧬 CORPO') this.db.attr.C++; if(m.type==='🧠 MENTE') this.db.attr.M++; if(m.type.includes('ESPÍRITO')) this.db.attr.E++;
     
-    let popTxt = `+${xpGain} XP`;
-    if(bioGain > 0) popTxt += ` | +${bioGain} BIO`;
-    if(auraGain > 0) popTxt += ` | +${auraGain} AURA`;
-    
-    this.pop(e, popTxt);
+    this.pop(e, `+${xpGain} XP`);
     this.checkLvl();
     this.save(); 
     this.render();
@@ -519,40 +544,52 @@ doMiss(i, e) {
 addRoutine() {
     let inp = document.getElementById('routine-input');
     if(!inp.value) return;
-    this.db.routine.push({task: inp.value, done: false});
+    this.db.routine.push({task: inp.value, done: false, gain: 0});
     inp.value = ""; this.save(); this.render();
 },
 toggleRoutine(i, e) { 
-    this.db.routine[i].done = !this.db.routine[i].done; 
-    if(this.db.routine[i].done) { 
+    let r = this.db.routine[i];
+    if (r.done) {
+        this.db.aura = Math.max(0, this.db.aura - r.gain);
+        r.done = false;
+        this.pop(e, `-${r.gain} AURA`);
+        r.gain = 0;
+    } else {
+        r.done = true; 
         let gain = this.isSun() ? 12 : 25;
+        r.gain = gain;
         this.db.aura += gain; 
         this.pop(e, `+${gain} AURA`); 
-        this.checkLvl(); 
     }
-    this.save(); this.render(); 
+    this.checkLvl(); this.save(); this.render(); 
 },
 addTrain(cat) {
     let inp = document.getElementById('inp-' + cat);
     if(!inp.value) return;
-    this.db.trains[cat].push({task: inp.value, done: false});
+    this.db.trains[cat].push({task: inp.value, done: false, gain: 0});
     inp.value = ""; this.save(); this.render();
 },
 toggleTrain(cat, i, e) {
     let item = this.db.trains[cat][i];
-    item.done = !item.done;
-    if(item.done) { 
+    if (item.done) {
+        this.db.aura = Math.max(0, this.db.aura - item.gain);
+        item.done = false;
+        this.pop(e, `-${item.gain} AURA`);
+        item.gain = 0;
+    } else {
+        item.done = true;
         let gain = this.isSun() ? 12 : 25;
+        item.gain = gain;
         this.db.aura += gain; 
         this.pop(e, `+${gain} AURA`); 
-        this.checkLvl(); 
     }
-    this.save(); this.render();
+    this.checkLvl(); this.save(); this.render();
 },
 delTrain(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.trains[cat].splice(i, 1); this.save(); this.render(); } },
 checkLvl() {
     let req = this.db.lvl * 100;
     while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; }
+    while(this.db.aura < 0 && this.db.lvl > 1) { this.db.lvl--; this.db.aura += (this.db.lvl * 100); }
 },
 delRoutine(i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.routine.splice(i, 1); this.save(); this.render(); } },
 upImg(e) {
@@ -582,6 +619,7 @@ edAura() { let v = prompt("Aura:"); if(v !== null) { this.db.aura = Number(v); t
 edRank() { let v = prompt("Rank:"); if(v !== null) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },
 edXP() { let v = prompt("XP:"); if(v !== null) { this.db.xp = Number(v); this.save(); this.render(); } },
 edStreak() { let v = prompt("Dias:"); if(v !== null) { this.db.streak = Number(v); this.save(); this.render(); } },
+edCoins() { let v = prompt("Saldo de Moedas:", this.db.coins); if(v !== null) { this.db.coins = parseFloat(v); this.save(); this.render(); } },
 reset(){ if(confirm("FORMATAR?")) {localStorage.removeItem(this.key); location.reload();} },
 renderSkills() {
     let html = "";
@@ -598,20 +636,25 @@ renderSkills() {
 render() {
     if(!this.db) return;
     const low = this.db.testo < 500;
-    const isHard = (this.db.streak === 8);
+    const isHard = this.isHard();
     const sun = this.isSun();
     
     if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }
     document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;
-    document.getElementById('streak-ui').innerText = "🔥 CICLO: " + this.db.streak + " / 8 DIAS";
+    document.getElementById('streak-ui').innerText = "🔥 CICLO: " + this.db.streak + " / 7 DIAS";
     document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
+    document.getElementById('coin-ui').innerText = this.db.coins.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     
     if (sun) {
         document.getElementById('banner-txt').innerText = "☀️ PROTOCOLO DESCANSO: SEM PUNIÇÕES | RECOMPENSAS REDUZIDAS";
         document.getElementById('banner-txt').style.color = "var(--state-icon)";
+        document.getElementById('punish-module').style.opacity = "0.2";
+        document.getElementById('punish-module').style.pointerEvents = "none";
     } else {
         document.getElementById('banner-txt').innerText = isHard ? "⚠️ PROTOCOLO HARD ATIVADO: RECOMPENSAS TRIPLAS / PUNIÇÃO DUPLA" : '❗ "Se eu mentir no sistema, eu perco o sistema"';
         document.getElementById('banner-txt').style.color = isHard ? 'var(--aura-color)' : 'var(--t)';
+        document.getElementById('punish-module').style.opacity = "1";
+        document.getElementById('punish-module').style.pointerEvents = "auto";
     }
 
     let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);
@@ -652,12 +695,6 @@ render() {
             </div>`;
     });
     document.getElementById('mission-ui').innerHTML = mHtml;
-    
-    // Opacidade para botões de punição no domingo
-    document.querySelectorAll('.bio-btn.down, .bio-btn.fatal, .btn-liar').forEach(b => {
-        b.style.opacity = sun ? "0.2" : (b.classList.contains('btn-liar') ? "0.5" : "1");
-        b.style.pointerEvents = sun ? "none" : "auto";
-    });
 }
 };
 window.onload = () => Sys.init();
