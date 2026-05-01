@@ -89,14 +89,6 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 .bar-f{height:100%;background:var(--a);width:0%;box-shadow:var(--glow);}
 .bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}
 
-.punishment-zone { margin-top: 15px; padding: 10px; border: 1px solid rgba(255, 77, 77, 0.2); background: rgba(255, 77, 77, 0.05); }
-.punishment-label { font-size: 9px; color: var(--danger); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; display: block; text-align: center;}
-.bio-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.bio-btn{padding:10px;font-size:10px;font-weight:bold;cursor:pointer;border:1px solid var(--b);background:rgba(0,0,0,0.3);color:var(--t-dim);text-transform:uppercase;letter-spacing:1px;}
-.bio-btn.down{color:var(--danger); border-color:rgba(255,77,77,0.3);}
-.bio-btn.full-width { grid-column: span 2; }
-.bio-btn.fatal{grid-column: span 2; border-color:var(--danger); color:var(--danger); background:rgba(255,77,77,0.1); font-size:10px; margin-top:2px; box-shadow: inset 0 0 10px rgba(255,0,0,0.1);}
-
 .routine-box { margin-top: 20px; text-align: left; border: 1px solid var(--b); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px;}
 .routine-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .routine-list { list-style: none; padding: 0; margin: 0; }
@@ -198,16 +190,6 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             <div style="text-align:left">
                 <span class="stat-label" style="color:var(--aura-color)">FARM DE AURA <span id="aura-val" style="cursor:pointer; font-weight:bold;" onclick="Sys.edAura()">0 / 100</span></span>
                 <div class="bar-w"><div id="aura-bar" class="aura-bar-f"></div></div>
-
-                <div class="punishment-zone" id="punish-module">
-                    <span class="punishment-label">Módulo de Gestão de Falhas</span>
-                    <div class="bio-grid">
-                        <button class="bio-btn down" onclick="Sys.punish(100, 10, 'PREGUIÇA', event)">Preguiça (-100 XP / -10 Aura)</button>
-                        <button class="bio-btn down" onclick="Sys.punish(300, 50, 'RECAÍDA', event, true)">Recaída (-300 XP / -50 Aura)</button>
-                        <button class="bio-btn down full-width" onclick="Sys.punish(200, 20, 'PROCRASTINAÇÃO', event)">⏳ Procrastinação (-200 XP / -20 Aura)</button>
-                        <button class="bio-btn fatal" onclick="Sys.punish(500, 100, 'DESVIO VISUAL', event)">☠️ Desvio Visual (-500 XP / -100 Aura)</button>
-                    </div>
-                </div>
             </div>
 
             <div class="routine-box">
@@ -245,7 +227,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
         </div>
         <div id="mission-ui"></div>
 
-        <button class="btn-liar" onclick="Sys.failIntegrity()">⚠️ FALSEI EXECUÇÃO (-1000 XP)</button>
+        <button class="btn-liar" onclick="Sys.failReten()">⚠️ RECAÍDA (RESET RETENÇÃO)</button>
 
         <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
     </div>
@@ -307,7 +289,7 @@ const POOLS = {
     MENTE: ["Editar" , "icons" , "assistir 2 ep de anime" , "1h papel machê" , "assistir um filme completo" , "ler 40 páginas de mangá" , "jogar pokemon por 30 min" , "jogar brawl stars por 30 min" , "assistir 1 react", "assistir 2 ep de desenho"],
     ESPIRITO: ["estudo bíblico", "Oração silenciosa",  "listar 3 coisas pelas quais sou grato", "Orar por outra pessoa", "Confessar um erro a Deus"],
     CALI: {
-        "E":["Flexões (35–45)", "Barra Fixa (20–25)", "Dips (20–30)", "Prancha (1-2min)" ],
+        "E":["Flexões", "Barra Fixa", "Dips (20–30)", "Prancha (1-2min)" ],
         "D":["Flexões Pseudo (15–20)", "Tuck Front Lever (20–30s)", "L-Sit (20–30s)", "Flexão Archer (10–12)"],
         "C":["Frog → Crow (30–45s)", "Wall Handstand (45–60s)", "Adv. Tuck Front Lever (15–20s)", "Flexão de uma mão assistida (5-10)"],
         "B":["Tuck Planche (10–15s)", "One Leg Front Lever (10–15s)", "Handstand Livre (15–30s)", "Flexão de uma mão badform (1-5)"],
@@ -352,6 +334,7 @@ const Sys = {
         let today = new Date().toLocaleDateString();
         if (this.db.last !== today && this.db.last !== '') {
             if (this.db.reten < 7) this.db.reten++;
+            
             if(this.db.routine) this.db.routine.forEach(r => r.done = false);
             if(this.db.trains) Object.keys(this.db.trains).forEach(k => this.db.trains[k].forEach(ex => ex.done = false));
             this.db.last = today; 
@@ -362,9 +345,11 @@ const Sys = {
     getRank() { if(this.db.customRank) return this.db.customRank; let current = RANKS[0].id; for(let r of RANKS) { if(this.db.xp >= r.min) current = r.id; } return current; },
     genMiss() {
         const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+        
         let missCorpo = shuffle([...POOLS.CORPO]).slice(0, 1);
         let missEspirito = shuffle([...POOLS.ESPIRITO]).slice(0, 1);
         let missMente = shuffle([...POOLS.MENTE]).slice(0, 2);
+
         this.db.miss = [
             {type:'🧬 CORPO', task: missCorpo[0], done:false, xpG:0, auraG:0},
             {type:'✝️ ESPÍRITO', task: missEspirito[0], done:false, xpG:0, auraG:0},
@@ -373,18 +358,9 @@ const Sys = {
         ];
     },
     shuffleMiss() { if(confirm("SORTEAR NOVAS MISSÕES?")) { this.genMiss(); this.save(); this.render(); } },
-    punish(xpP, auraP, label, e, isRelapse = false) {
-        if(confirm(`CONFIRMAR ${label}?`)) {
-            this.db.xp = Math.max(0, this.db.xp - xpP);
-            this.db.aura = Math.max(0, this.db.aura - auraP);
-            if(isRelapse) this.db.reten = 0;
-            this.pop(e, `-${xpP} XP / -${auraP} AURA`);
-            this.checkLvl(); this.save(); this.render();
-        }
-    },
-    failIntegrity() {
-        if(confirm("PROTOCOLO DE DESONRA (MENTIRA).")) {
-            this.db.xp = Math.max(0, this.db.xp - 1000);
+    failReten() {
+        if(confirm("CONFIRMAR RECAÍDA? A RETENÇÃO SERÁ ZERADA.")) {
+            this.db.reten = 0;
             this.save(); this.render();
         }
     },
@@ -392,6 +368,7 @@ const Sys = {
         let rIdx = RANKS.findIndex(rk => rk.id === rank);
         let myIdx = RANKS.findIndex(rk => rk.id === this.getRank());
         if(rIdx > myIdx) return;
+
         if(this.db.skills.includes(s)) {
             this.db.skills = this.db.skills.filter(i => i !== s);
             this.db.xp -= 1480; this.pop(e, "-1480 XP");
@@ -413,12 +390,18 @@ const Sys = {
             this.save(); this.render();
             return;
         }
+
         let mult = (this.db.reten >= 3) ? 1.5 : 1.0;
         let xpGain = Math.floor(10 * mult);
         let auraGain = Math.floor(25 * mult);
-        m.done = true; m.xpG = xpGain; m.auraG = auraGain;
-        this.db.xp += xpGain; this.db.aura += auraGain;
+
+        m.done = true; 
+        m.xpG = xpGain; m.auraG = auraGain;
+        this.db.xp += xpGain; 
+        this.db.aura += auraGain;
+
         if(m.type==='🧬 CORPO') this.db.attr.C++; if(m.type==='🧠 MENTE') this.db.attr.M++; if(m.type.includes('ESPÍRITO')) this.db.attr.E++;
+        
         this.pop(e, `+${xpGain} XP`);
         this.checkLvl(); this.save(); this.render();
     },
@@ -515,23 +498,30 @@ const Sys = {
     render() {
         if(!this.db) return;
         const isRetenBuff = this.db.reten >= 3;
+        
         if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }
         document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;
         document.getElementById('streak-ui').innerText = "💎 RETENÇÃO: " + this.db.reten + " DIAS";
         document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
+        
         document.getElementById('day-buffs').innerText = isRetenBuff ? "✨ BUFF DE RETENÇÃO ATIVO (+RECOMPENSAS)" : "";
+
         let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);
         document.getElementById('rank-ui').innerText = rId;
         document.getElementById('xp-ui').innerText = this.db.xp + " / " + (RANKS[rIdx+1] ? RANKS[rIdx+1].min : "MAX");
+        
         let auraReq = this.db.lvl * 100;
         document.getElementById('aura-val').innerText = Math.floor(this.db.aura) + " / " + auraReq;
         document.getElementById('aura-bar').style.width = Math.min(100,(this.db.aura/auraReq)*100)+"%";
+
         document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;
         document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";
+        
         let rHtml = ""; this.db.routine.forEach((r, i) => {
             rHtml += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine(${i}, event)"><div class="routine-check">${r.done?'✓':''}</div><span style="flex:1">${r.task}</span><span style="opacity:0.3" onclick="Sys.delRoutine(${i}, event)">✕</span></div>`;
         });
         document.getElementById('routine-list-ui').innerHTML = rHtml || "<div style='font-size:10px;text-align:center;padding:10px;'>SEM PROTOCOLO</div>";
+
         ['puxada', 'empurrada', 'core', 'perna'].forEach(cat => {
             let tHtml = "";
             this.db.trains[cat].forEach((ex, i) => {
@@ -539,6 +529,7 @@ const Sys = {
             });
             document.getElementById(`train-${cat}-ui`).innerHTML = tHtml || "<div style='font-size:10px;text-align:center;padding:5px;opacity:0.5'>Vazio</div>";
         });
+
         let mHtml = ""; this.db.miss.forEach((m, i) => {
             mHtml += `
                 <div class="mission-item ${m.done?'done':''} ${isRetenBuff?'retention-mode':''}" onclick="Sys.doMiss(${i}, event)">
