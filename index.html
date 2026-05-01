@@ -157,7 +157,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 
 <div class="container">
     <div class="protocol-banner" id="banner-txt">
-        ❗ "Se eu mentir no sistema, eu perco o sistema"
+        “Você não é o que passa na sua mente — você é quem decide se fica ou deixa ir.”
     </div>
 
     <div class="nav-tabs">
@@ -259,20 +259,13 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
                     <button class="btn-add-rtn" onclick="Sys.addTrain('core')">+</button>
                 </div>
             </div>
-            <div class="routine-box">
-                <div class="routine-header"><span class="stat-label" style="color:var(--a)">[04] PERNA (Legs)</span></div>
-                <div id="train-perna-ui" class="routine-list"></div>
-                <div class="routine-input-wrap">
-                    <input type="text" id="inp-perna" class="routine-input" placeholder="Ex: Agachamento...">
-                    <button class="btn-add-rtn" onclick="Sys.addTrain('perna')">+</button>
-                </div>
-            </div>
         </div>
     </div>
 
     <div id="tab-skills" class="hidden">
         <div class="panel">
-            <h3 style="color:var(--a);font-size:14px;margin:0 0 20px 0;letter-spacing:3px; text-transform:uppercase; font-weight:900;">Árvore de Habilidades Físicas</h3>
+            <h3 style="color:var(--a);font-size:14px;margin:0 0 5px 0;letter-spacing:3px; text-transform:uppercase; font-weight:900; text-align: center;">Árvore de Habilidades</h3>
+            <p style="font-size:9px; color:var(--t-dim); text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Dica: se não aguentar tente as progressões anteriores</p>
             <div id="skills-list-ui"></div>
         </div>
     </div>
@@ -285,16 +278,28 @@ const RANKS = [
 ];
 
 const POOLS = {
-    CORPO: ["Treino de resistência", "Treino de core", "treino de perna", "cardio"],
-    MENTE: ["Editar" , "icons" , "assistir 2 ep de anime" , "1h papel machê" , "assistir um filme completo" , "ler 40 páginas de mangá" , "jogar pokemon por 30 min" , "jogar brawl stars por 30 min" , "assistir 1 react", "assistir 2 ep de desenho"],
-    ESPIRITO: ["estudo bíblico", "Oração silenciosa",  "listar 3 coisas pelas quais sou grato", "Orar por outra pessoa", "Confessar um erro a Deus"],
+    CORPO: [
+        {t: "Puxada/empurrada", w: 40}, {t: "Treino de core", w: 25},
+        {t: "Treino de resistência", w: 15}, {t: "Cardio", w: 15}
+    ],
+    MENTE: [
+        {t: "Editar", w: 40}, {t: "icons", w: 25}, {t: "assistir 2 ep de anime", w: 25},
+        {t: "assistir 2 ep de desenho", w: 24}, {t: "assistir um filme completo", w: 23},
+        {t: "jogar pokemon por 30 min", w: 20}, {t: "jogar brawl stars por 30 min", w: 18},
+        {t: "ler 40 páginas de mangá", w: 30}, {t: "assistir 1 react", w: 15}, {t: "1h papel machê", w: 15}
+    ],
+    ESPIRITO: [
+        {t: "Oração silenciosa", w: 40}, {t: "estudo bíblico", w: 25},
+        {t: "Confessar um erro a Deus", w: 30}, {t: "listar 3 coisas pelas quais sou grato", w: 26},
+        {t: "Orar por outra pessoa", w: 17}
+    ],
     CALI: {
-        "E":["Flexões", "Barra Fixa", "Dips", "Prancha" ],
-        "D":["Flexões Pseudo", "Tuck Front Lever", "L-Sit", "Flexão Archer"],
-        "C":["Frog → Crow", "Wall Handstand", "Adv. Tuck Front Lever", "Flexão de uma mão assistida"],
-        "B":["Tuck Planche", "One Leg Front Lever", "Handstand Livre", "Flexão de uma mão badform"],
-        "A":["Straddle Front Lever", "V-Sit", "HSPU", "Flexão de uma mão"],
-        "S":["Front Lever", "Full Planche", "Bandeira"]
+        "E":["Flexão", "Barra fixa", "Prancha" ],
+        "D":["Flexão pseudo", "Tuck Front Lever", "Lean Planche"],
+        "C":["Tuck Planche", "Adv. Tuck Front Lever", "L-Sit"],
+        "B":["Semi Adv. Tuck Planche", "Front Lever uma perna", "V-sit"],
+        "A":["Adv. Tuck Planche", "Front Lever straddle"],
+        "S":["1. Full Front Lever", "2. Full Planche"]
     }
 };
 
@@ -307,7 +312,7 @@ const Sys = {
             if(!this.db.skills) this.db.skills = []; 
             if(!this.db.pers) this.db.pers = {bg:'', values:'', principles:''};
             if(!this.db.routine) this.db.routine = [];
-            if(!this.db.trains) this.db.trains = {puxada:[], empurrada:[], core:[], perna:[]};
+            if(!this.db.trains) this.db.trains = {puxada:[], empurrada:[], core:[]};
             if(!this.db.lvl) this.db.lvl = 1;
             if(!this.db.aura) this.db.aura = 0;
             if(this.db.reten === undefined) this.db.reten = 0;
@@ -327,14 +332,13 @@ const Sys = {
         let n = document.getElementById('setup-name').value;
         if (!n || !this.tA) return;
         let baseAttr = { C: 10, M: 10, E: 10 };
-        this.db = { name: n.toUpperCase(), arch: this.tA, xp: 0, reten: 0, last: '', attr: baseAttr, miss: [], skills: [], routine: [], trains: {puxada:[], empurrada:[], core:[], perna:[]}, pers: {bg:'', values:'', principles:''}, lvl: 1, aura: 0 };
+        this.db = { name: n.toUpperCase(), arch: this.tA, xp: 0, reten: 0, last: '', attr: baseAttr, miss: [], skills: [], routine: [], trains: {puxada:[], empurrada:[], core:[]}, pers: {bg:'', values:'', principles:''}, lvl: 1, aura: 0 };
         this.genMiss(); this.save(); location.reload();
     },
     check() {
         let today = new Date().toLocaleDateString();
         if (this.db.last !== today && this.db.last !== '') {
             if (this.db.reten < 7) this.db.reten++;
-            
             if(this.db.routine) this.db.routine.forEach(r => r.done = false);
             if(this.db.trains) Object.keys(this.db.trains).forEach(k => this.db.trains[k].forEach(ex => ex.done = false));
             this.db.last = today; 
@@ -343,12 +347,31 @@ const Sys = {
         } else if (this.db.last === '') { this.db.last = today; this.save(); }
     },
     getRank() { if(this.db.customRank) return this.db.customRank; let current = RANKS[0].id; for(let r of RANKS) { if(this.db.xp >= r.min) current = r.id; } return current; },
+    
+    weightedPick(pool, count) {
+        let selected = [];
+        let items = [...pool];
+        for(let i=0; i<count; i++) {
+            if(items.length === 0) break;
+            let totalW = items.reduce((s, x) => s + x.w, 0);
+            let r = Math.random() * totalW;
+            let acc = 0;
+            for(let j=0; j<items.length; j++) {
+                acc += items[j].w;
+                if(r <= acc) {
+                    selected.push(items[j].t);
+                    items.splice(j, 1);
+                    break;
+                }
+            }
+        }
+        return selected;
+    },
+
     genMiss() {
-        const shuffle = (array) => array.sort(() => Math.random() - 0.5);
-        
-        let missCorpo = shuffle([...POOLS.CORPO]).slice(0, 1);
-        let missEspirito = shuffle([...POOLS.ESPIRITO]).slice(0, 1);
-        let missMente = shuffle([...POOLS.MENTE]).slice(0, 2);
+        let missCorpo = this.weightedPick(POOLS.CORPO, 1);
+        let missEspirito = this.weightedPick(POOLS.ESPIRITO, 1);
+        let missMente = this.weightedPick(POOLS.MENTE, 2);
 
         this.db.miss = [
             {type:'🧬 CORPO', task: missCorpo[0], done:false, xpG:0, auraG:0},
@@ -357,6 +380,7 @@ const Sys = {
             {type:'🧠 MENTE', task: missMente[1], done:false, xpG:0, auraG:0}
         ];
     },
+
     shuffleMiss() { if(confirm("SORTEAR NOVAS MISSÕES?")) { this.genMiss(); this.save(); this.render(); } },
     failReten() {
         if(confirm("CONFIRMAR RECAÍDA? A RETENÇÃO SERÁ ZERADA.")) {
@@ -368,7 +392,6 @@ const Sys = {
         let rIdx = RANKS.findIndex(rk => rk.id === rank);
         let myIdx = RANKS.findIndex(rk => rk.id === this.getRank());
         if(rIdx > myIdx) return;
-
         if(this.db.skills.includes(s)) {
             this.db.skills = this.db.skills.filter(i => i !== s);
             this.db.xp -= 1480; this.pop(e, "-1480 XP");
@@ -390,18 +413,12 @@ const Sys = {
             this.save(); this.render();
             return;
         }
-
         let mult = (this.db.reten >= 3) ? 1.5 : 1.0;
         let xpGain = Math.floor(10 * mult);
         let auraGain = Math.floor(25 * mult);
-
-        m.done = true; 
-        m.xpG = xpGain; m.auraG = auraGain;
-        this.db.xp += xpGain; 
-        this.db.aura += auraGain;
-
+        m.done = true; m.xpG = xpGain; m.auraG = auraGain;
+        this.db.xp += xpGain; this.db.aura += auraGain;
         if(m.type==='🧬 CORPO') this.db.attr.C++; if(m.type==='🧠 MENTE') this.db.attr.M++; if(m.type.includes('ESPÍRITO')) this.db.attr.E++;
-        
         this.pop(e, `+${xpGain} XP`);
         this.checkLvl(); this.save(); this.render();
     },
@@ -498,38 +515,30 @@ const Sys = {
     render() {
         if(!this.db) return;
         const isRetenBuff = this.db.reten >= 3;
-        
         if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }
         document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;
         document.getElementById('streak-ui').innerText = "💎 RETENÇÃO: " + this.db.reten + " DIAS";
         document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
-        
         document.getElementById('day-buffs').innerText = isRetenBuff ? "✨ BUFF DE RETENÇÃO ATIVO (+RECOMPENSAS)" : "";
-
         let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);
         document.getElementById('rank-ui').innerText = rId;
         document.getElementById('xp-ui').innerText = this.db.xp + " / " + (RANKS[rIdx+1] ? RANKS[rIdx+1].min : "MAX");
-        
         let auraReq = this.db.lvl * 100;
         document.getElementById('aura-val').innerText = Math.floor(this.db.aura) + " / " + auraReq;
         document.getElementById('aura-bar').style.width = Math.min(100,(this.db.aura/auraReq)*100)+"%";
-
         document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;
         document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";
-        
         let rHtml = ""; this.db.routine.forEach((r, i) => {
             rHtml += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine(${i}, event)"><div class="routine-check">${r.done?'✓':''}</div><span style="flex:1">${r.task}</span><span style="opacity:0.3" onclick="Sys.delRoutine(${i}, event)">✕</span></div>`;
         });
         document.getElementById('routine-list-ui').innerHTML = rHtml || "<div style='font-size:10px;text-align:center;padding:10px;'>SEM PROTOCOLO</div>";
-
-        ['puxada', 'empurrada', 'core', 'perna'].forEach(cat => {
+        ['puxada', 'empurrada', 'core'].forEach(cat => {
             let tHtml = "";
             this.db.trains[cat].forEach((ex, i) => {
                 tHtml += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)"><div class="routine-check">${ex.done?'✓':''}</div><span style="flex:1">${ex.task}</span><span style="opacity:0.3" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span></div>`;
             });
             document.getElementById(`train-${cat}-ui`).innerHTML = tHtml || "<div style='font-size:10px;text-align:center;padding:5px;opacity:0.5'>Vazio</div>";
         });
-
         let mHtml = ""; this.db.miss.forEach((m, i) => {
             mHtml += `
                 <div class="mission-item ${m.done?'done':''} ${isRetenBuff?'retention-mode':''}" onclick="Sys.doMiss(${i}, event)">
