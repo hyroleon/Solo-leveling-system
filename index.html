@@ -182,7 +182,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 
             <div id="p-name">--</div>
             <div id="p-arch">--</div>
-            <div id="streak-ui" class="streak-ui" onclick="Sys.edReten()">💎 SEQUÊNCIA: 0 DIAS</div>
+            <div id="streak-ui" class="streak-ui" onclick="Sys.edReten()">SEQUÊNCIA: 0 DIAS</div>
             <div id="day-buffs" class="buff-active"></div>
 
             <div class="stat-box-grid">
@@ -496,7 +496,7 @@ const Sys = {
         if(!this.db) return; const isB = this.db.reten >= 3;
         if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }
         document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;
-        document.getElementById('streak-ui').innerText = "💎 RETENÇÃO: " + this.db.reten + " DIAS";
+        document.getElementById('streak-ui').innerText = "SEQUÊNCIA: " + this.db.reten + " DIAS";
         document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
         document.getElementById('day-buffs').innerText = isB ? "✨ BUFF ATIVO" : "";
         let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);
