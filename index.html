@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>SISTEMA DE UPADOR | MONARCA 8.0</title>
+<title>SISTEMA DE UPADOR | MONARCA 8.5</title>
 <style>
 :root{
     --bg:#00050f;
@@ -159,7 +159,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 </div>
 
 <div class="container">
-    <div class="protocol-banner">“Você não é o que passa na sua mente — você é quem decide se fica ou deixa ir.”</div>
+    <div class="protocol-banner">“Seja perigoso para o mundo, mas seguro para os seus. Domine a Trindade.”</div>
 
     <div class="nav-tabs">
         <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>
@@ -298,17 +298,11 @@ const POOLS = {
 };
 
 const Sys = {
-    db: null, key: 'monarch_v7_solo', tA: null,
+    db: null, key: 'monarch_v8_permanent', tA: null,
     init() {
         let d = localStorage.getItem(this.key);
         if (d) { 
             this.db = JSON.parse(d); 
-            this.db.skills = this.db.skills || [];
-            this.db.pers = this.db.pers || {bg:'', values:'', principles:''};
-            this.db.journey = this.db.journey || [];
-            this.db.trainTitles = this.db.trainTitles || {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'};
-            this.db.customCali = this.db.customCali || JSON.parse(JSON.stringify(POOLS.CALI));
-            this.db.pools = this.db.pools || JSON.parse(JSON.stringify({CORPO: POOLS.CORPO, ESPIRITO: POOLS.ESPIRITO}));
             this.check(); this.render(); this.setJourneyDefaults();
         } else document.getElementById('setup-screen').classList.remove('hidden');
     },
@@ -381,67 +375,92 @@ const Sys = {
         ];
     },
     saveJourney() {
-        const date = document.getElementById('jou-date').value;
-        const time = document.getElementById('jou-time').value;
         const text = document.getElementById('jou-text').value;
         if(!text) return;
-        this.db.journey.unshift({ date, time, text });
-        document.getElementById('jou-text').value = "";
-        this.save(); this.renderJourney();
+        this.db.journey.unshift({ date: document.getElementById('jou-date').value, time: document.getElementById('jou-time').value, text });
+        document.getElementById('jou-text').value = ""; this.save(); this.renderJourney();
     },
     renderJourney() {
         const query = document.getElementById('jou-search').value;
         let html = "";
         const filtered = this.db.journey.filter(j => j.date.includes(query));
-        filtered.forEach((j, i) => {
-            html += `<div class="log-card"><div class="log-meta"><span>📅 ${j.date}</span><span>🕒 ${j.time}</span><span style="color:red; cursor:pointer" onclick="Sys.delJou(${i})">✕</span></div><div class="log-content">${j.text}</div></div>`;
-        });
+        filtered.forEach((j, i) => { html += `<div class="log-card"><div class="log-meta"><span>📅 ${j.date}</span><span>🕒 ${j.time}</span><span style="color:red; cursor:pointer" onclick="Sys.delJou(${i})">✕</span></div><div class="log-content">${j.text}</div></div>`; });
         document.getElementById('journey-logs').innerHTML = html || "<div style='text-align:center; font-size:10px; opacity:0.5'>Nenhum registro encontrado.</div>";
     },
     delJou(i) { if(confirm("Apagar registro?")) { this.db.journey.splice(i, 1); this.save(); this.renderJourney(); } },
+    
+    // PROTOCOLO EVOLUÇÃO PERMANENTE: DESMARCAR NÃO REMOVE STATUS
     toggleSkill(s, rank, e) {
         if(e.target.tagName === 'B') return; 
         let rIdx = RANKS.findIndex(rk => rk.id === rank), myIdx = RANKS.findIndex(rk => rk.id === this.getRank());
         if(rIdx > myIdx) return;
-        if(this.db.skills.includes(s)) { this.db.skills = this.db.skills.filter(i => i !== s); this.db.xp -= 1480; this.db.attr.C -= 1; } 
-        else { this.db.skills.push(s); this.db.xp += 1480; this.db.attr.C += 1; this.pop(e, "+1480 XP / +1 CORPO"); }
+        if(this.db.skills.includes(s)) { 
+            this.db.skills = this.db.skills.filter(i => i !== s); 
+            // XP e Atributos permanecem salvos
+        } else { 
+            this.db.skills.push(s); this.db.xp += 1480; this.db.attr.C += 1; 
+            this.pop(e, "+1480 XP / +1 CORPO"); 
+        }
         this.save(); this.render(); this.renderSkills();
     },
+    toggleRoutine(i, e) { 
+        let r = this.db.routine[i]; 
+        if (r.done) { 
+            r.done = false; 
+            // Aura permanece salva
+        } else { 
+            r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25; 
+            this.db.aura += r.gain; this.pop(e, `+${r.gain} AURA`); 
+        } 
+        this.checkLvl(); this.save(); this.render(); 
+    },
+    toggleTrain(cat, i, e) { 
+        let item = this.db.trains[cat][i]; 
+        if (item.done) { 
+            item.done = false; 
+            // Aura permanece salva
+        } else { 
+            item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25; 
+            this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`); 
+        } 
+        this.checkLvl(); this.save(); this.render(); 
+    },
+    doMiss(i, e) { 
+        let m = this.db.miss[i]; 
+        if (m.done) { 
+            m.done = false; 
+            // XP, Aura e Atributos permanecem salvos
+        } else { 
+            m.done = true; 
+            let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
+            m.xpG = Math.floor(10 * mult); m.auraG = Math.floor(25 * mult); 
+            this.db.xp += m.xpG; this.db.aura += m.auraG; 
+            let txtPop = `+${m.xpG} XP`;
+            if (m.type.includes('CORPO')) { this.db.attr.C += 1; txtPop += " / +1 CORPO"; }
+            if (m.type.includes('ESPÍRITO')) { this.db.attr.E += 1; txtPop += " / +1 ESPÍRITO"; }
+            if (m.type.includes('HOBBY')) { this.db.attr.M += 1; txtPop += " / +1 MENTE"; }
+            this.pop(e, txtPop); 
+        } 
+        this.checkLvl(); this.save(); this.render(); 
+    },
+
     edSkillName(rank, idx) {
         let oldName = this.db.customCali[rank][idx];
         let newName = prompt("Renomear Habilidade:", oldName);
         if(newName) {
-            if(this.db.skills.includes(oldName)) {
-                this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);
-            }
-            this.db.customCali[rank][idx] = newName;
-            this.save(); this.renderSkills();
+            if(this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);
+            this.db.customCali[rank][idx] = newName; this.save(); this.renderSkills();
         }
     },
-    edTrainTitle(cat) {
-        let newT = prompt("Novo nome para esta categoria de treino:", this.db.trainTitles[cat]);
-        if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); }
-    },
+    edTrainTitle(cat) { let newT = prompt("Novo nome:", this.db.trainTitles[cat]); if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); } },
     edMissTask(i, e) {
-        e.stopPropagation();
-        let m = this.db.miss[i];
-        let oldTask = m.task;
-        let newVal = prompt("Novo nome para esta missão (Ficará salvo para sempre no sorteio):", oldTask);
-        
+        e.stopPropagation(); let m = this.db.miss[i]; let oldTask = m.task;
+        let newVal = prompt("Novo nome (Permanente no Sorteio):", oldTask);
         if(newVal) {
             m.task = newVal;
-            if(m.type.includes('CORPO')) {
-                let idx = this.db.pools.CORPO.findIndex(x => x.t === oldTask);
-                if(idx !== -1) this.db.pools.CORPO[idx].t = newVal;
-            } else if(m.type.includes('ESPÍRITO')) {
-                let idx = this.db.pools.ESPIRITO.findIndex(x => x.t === oldTask);
-                if(idx !== -1) this.db.pools.ESPIRITO[idx].t = newVal;
-            } else if(m.type.includes('HOBBY')) {
-                for(let cat in this.db.hobbies) {
-                    let idx = this.db.hobbies[cat].findIndex(x => x.task === oldTask);
-                    if(idx !== -1) this.db.hobbies[cat][idx].task = newVal;
-                }
-            }
+            if(m.type.includes('CORPO')) { let idx = this.db.pools.CORPO.findIndex(x => x.t === oldTask); if(idx !== -1) this.db.pools.CORPO[idx].t = newVal; } 
+            else if(m.type.includes('ESPÍRITO')) { let idx = this.db.pools.ESPIRITO.findIndex(x => x.t === oldTask); if(idx !== -1) this.db.pools.ESPIRITO[idx].t = newVal; } 
+            else if(m.type.includes('HOBBY')) { for(let cat in this.db.hobbies) { let idx = this.db.hobbies[cat].findIndex(x => x.task === oldTask); if(idx !== -1) this.db.hobbies[cat][idx].task = newVal; } }
             this.save(); this.render();
         }
     },
@@ -450,56 +469,13 @@ const Sys = {
         this.db.trains[cat].forEach(item => { if(!item.done) { item.done = true; item.gain = mult; total += mult; } });
         if(total > 0) { this.db.aura += total; this.checkLvl(); this.save(); this.render(); }
     },
-    addHobby(cat) { 
-        let inp = document.getElementById('inp-' + cat); 
-        if(!inp.value) return; 
-        this.db.hobbies[cat].push({task: inp.value}); 
-        inp.value = ""; this.save(); this.render(); 
-    },
+    addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },
     delHobby(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },
     addRoutine() { let inp = document.getElementById('routine-input'); if(!inp.value) return; this.db.routine.push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },
-    toggleRoutine(i, e) { let r = this.db.routine[i]; if (r.done) { this.db.aura -= r.gain; r.done = false; } else { r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25; this.db.aura += r.gain; this.pop(e, `+${r.gain} AURA`); } this.checkLvl(); this.save(); this.render(); },
     delRoutine(i, e) { e.stopPropagation(); this.db.routine.splice(i, 1); this.save(); this.render(); },
     addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },
-    toggleTrain(cat, i, e) { let item = this.db.trains[cat][i]; if (item.done) { this.db.aura -= item.gain; item.done = false; } else { item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25; this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`); } this.checkLvl(); this.save(); this.render(); },
     delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },
     
-    // LÓGICA DE MISSÃO ATUALIZADA - FIX MENTE (M)
-    doMiss(i, e) { 
-        let m = this.db.miss[i]; 
-        if (m.done) { 
-            this.db.xp -= m.xpG; 
-            this.db.aura -= m.auraG; 
-            if (m.type.includes('CORPO')) this.db.attr.C -= 1;
-            if (m.type.includes('ESPÍRITO')) this.db.attr.E -= 1;
-            if (m.type.includes('HOBBY')) this.db.attr.M -= 1; // Reverter ponto de Mente
-            m.done = false; 
-        } else { 
-            m.done = true; 
-            let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
-            m.xpG = Math.floor(10 * mult); 
-            m.auraG = Math.floor(25 * mult); 
-            this.db.xp += m.xpG; 
-            this.db.aura += m.auraG; 
-
-            let txtPop = `+${m.xpG} XP`;
-            if (m.type.includes('CORPO')) {
-                this.db.attr.C += 1;
-                txtPop += " / +1 CORPO";
-            }
-            if (m.type.includes('ESPÍRITO')) {
-                this.db.attr.E += 1;
-                txtPop += " / +1 ESPÍRITO";
-            }
-            if (m.type.includes('HOBBY')) {
-                this.db.attr.M += 1; // Adicionar ponto de Mente
-                txtPop += " / +1 MENTE";
-            }
-            this.pop(e, txtPop); 
-        } 
-        this.checkLvl(); this.save(); this.render(); 
-    },
-
     checkLvl() { let req = this.db.lvl * 100; while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; } },
     pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },
     upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },
@@ -542,10 +518,7 @@ const Sys = {
         document.getElementById('aura-bar').style.width = Math.min(100,(this.db.aura/aR)*100)+"%";
         document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;
         document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";
-        
-        document.getElementById('title-puxada').innerText = this.db.trainTitles.puxada;
-        document.getElementById('title-empurrada').innerText = this.db.trainTitles.empurrada;
-        document.getElementById('title-core').innerText = this.db.trainTitles.core;
+        document.getElementById('title-puxada').innerText = this.db.trainTitles.puxada; document.getElementById('title-empurrada').innerText = this.db.trainTitles.empurrada; document.getElementById('title-core').innerText = this.db.trainTitles.core;
 
         let rH = ""; this.db.routine.forEach((r, i) => { rH += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine(${i}, event)"><div class="routine-check">${r.done?'✓':''}</div><span style="flex:1">${r.task}</span><span style="opacity:0.3" onclick="Sys.delRoutine(${i}, event)">✕</span></div>`; });
         document.getElementById('routine-list-ui').innerHTML = rH;
