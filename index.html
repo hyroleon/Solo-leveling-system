@@ -463,7 +463,43 @@ const Sys = {
     addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },
     toggleTrain(cat, i, e) { let item = this.db.trains[cat][i]; if (item.done) { this.db.aura -= item.gain; item.done = false; } else { item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25; this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`); } this.checkLvl(); this.save(); this.render(); },
     delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },
-    doMiss(i, e) { let m = this.db.miss[i]; if (m.done) { this.db.xp -= m.xpG; this.db.aura -= m.auraG; m.done = false; } else { m.done = true; let mult = (this.db.reten >= 3) ? 1.5 : 1.0; m.xpG = Math.floor(10 * mult); m.auraG = Math.floor(25 * mult); this.db.xp += m.xpG; this.db.aura += m.auraG; this.pop(e, `+${m.xpG} XP`); } this.checkLvl(); this.save(); this.render(); },
+    
+    // LÓGICA DE MISSÃO ATUALIZADA - FIX MENTE (M)
+    doMiss(i, e) { 
+        let m = this.db.miss[i]; 
+        if (m.done) { 
+            this.db.xp -= m.xpG; 
+            this.db.aura -= m.auraG; 
+            if (m.type.includes('CORPO')) this.db.attr.C -= 1;
+            if (m.type.includes('ESPÍRITO')) this.db.attr.E -= 1;
+            if (m.type.includes('HOBBY')) this.db.attr.M -= 1; // Reverter ponto de Mente
+            m.done = false; 
+        } else { 
+            m.done = true; 
+            let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
+            m.xpG = Math.floor(10 * mult); 
+            m.auraG = Math.floor(25 * mult); 
+            this.db.xp += m.xpG; 
+            this.db.aura += m.auraG; 
+
+            let txtPop = `+${m.xpG} XP`;
+            if (m.type.includes('CORPO')) {
+                this.db.attr.C += 1;
+                txtPop += " / +1 CORPO";
+            }
+            if (m.type.includes('ESPÍRITO')) {
+                this.db.attr.E += 1;
+                txtPop += " / +1 ESPÍRITO";
+            }
+            if (m.type.includes('HOBBY')) {
+                this.db.attr.M += 1; // Adicionar ponto de Mente
+                txtPop += " / +1 MENTE";
+            }
+            this.pop(e, txtPop); 
+        } 
+        this.checkLvl(); this.save(); this.render(); 
+    },
+
     checkLvl() { let req = this.db.lvl * 100; while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; } },
     pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },
     upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },
