@@ -88,7 +88,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 
 .bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}
 
-.routine-box { margin-top: 20px; text-align: left; border: 1px solid var(--b); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px;}
+.routine-box { margin-top: 5px; text-align: left; border: 1px solid var(--b); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px;}
 .routine-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .routine-list { list-style: none; padding: 0; margin: 0; }
 .routine-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid rgba(18, 36, 69, 0.5); font-size: 13px; color: var(--t-dim); }
@@ -131,7 +131,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 .m-type{font-size:9px;font-weight:bold;color:var(--a);display:block;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
 .m-task{font-size:14px;color:var(--t);font-weight:bold;}
 
-.skill-category{margin-bottom:20px;}
+.skill-category{margin-bottom:25px;}
 .skill-rank-label{font-size:11px;color:var(--a);font-weight:900;margin-bottom:10px;display:block;letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid var(--b);padding-bottom:5px;}
 .skill-item{background:var(--p);border:1px solid var(--b);padding:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
 .skill-item.mastered{border-color:var(--a);background:var(--a-dim);}
@@ -140,6 +140,36 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 .btn-reset{width:100%;color:#555;font-size:9px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;}
 .btn-liar{width:100%;padding:15px;background:none;border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:1px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:10px;}
 .hidden{display:none!important}
+
+.quest-division { 
+    border-bottom: 1px solid var(--b); 
+    margin: 25px 0 10px 0; 
+    padding-bottom: 5px; 
+    color: var(--a); 
+    font-size: 10px; 
+    letter-spacing: 4px; 
+    text-transform: uppercase; 
+    font-weight: 900;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+.quest-division::before { content: '>'; margin-right: 10px; color: var(--state-icon); }
+.division-mente { color: var(--gold); }
+
+/* CSS IA GEMINI */
+.ai-fab { position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:var(--p); border:2px solid var(--a); border-radius:50%; box-shadow:var(--glow); color:var(--a); font-size:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:999; }
+.ai-window { position:fixed; bottom:80px; right:20px; width:300px; height:400px; max-width:90vw; max-height: 70vh; background:var(--p); border:1px solid var(--a); box-shadow:var(--glow); border-radius:8px; display:flex; flex-direction:column; z-index:999; overflow:hidden; transform: scale(0); transform-origin: bottom right; transition: 0.3s ease; }
+.ai-window.open { transform: scale(1); }
+.ai-header { background:var(--b); padding:10px; color:var(--a); font-weight:bold; text-align:center; border-bottom:1px solid var(--a); text-transform:uppercase; font-size: 12px; position:relative;}
+.ai-close { position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:10px; opacity:0.7; }
+.ai-body { flex:1; padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; scroll-behavior: smooth;}
+.ai-msg { max-width:85%; padding:8px 12px; border-radius:4px; font-size:12px; line-height:1.4; word-wrap: break-word;}
+.ai-msg.bot { background:rgba(0, 242, 255, 0.1); border:1px solid var(--a); color:var(--t); align-self:flex-start; border-top-left-radius:0;}
+.ai-msg.user { background:var(--b); border:1px solid var(--t-dim); color:var(--t); align-self:flex-end; border-top-right-radius:0;}
+.ai-input { display:flex; border-top:1px solid var(--b); }
+.ai-input input { border:none; margin:0; border-radius:0; flex:1; background:rgba(0,0,0,0.5); font-weight:normal; font-size:12px; padding: 12px;}
+.ai-input button { background:var(--a-dim); color:var(--a); border:none; padding:0 15px; cursor:pointer; font-weight:bold; }
 </style>
 </head>
 <body>
@@ -166,7 +196,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
         <button class="nav-btn" id="tab-pessoal-btn" onclick="Sys.switchTab('pessoal')">PESSOAL</button>
         <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>
         <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">HABILIDADES</button>
-        <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">HOBBIES</button>
+        <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>
     </div>
 
     <div id="tab-system">
@@ -258,29 +288,29 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
     <div id="tab-train" class="hidden">
         <div class="panel">
             <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px;">TREINAMENTOS</h3>
-            <div class="routine-box">
-                <div class="routine-header"><span class="stat-label" id="title-puxada" onclick="Sys.edTrainTitle('puxada')" style="cursor:pointer">[01] PUXADA</span><button class="btn-all-train" onclick="Sys.checkAllTrain('puxada')">Finalizar Tudo</button></div>
-                <div id="train-puxada-ui" class="routine-list"></div>
-                <div class="routine-input-wrap"><input type="text" id="inp-puxada" class="routine-input" placeholder="Ex: Barra..."><button class="btn-add-rtn" onclick="Sys.addTrain('puxada')">+</button></div>
-            </div>
-            <div class="routine-box">
-                <div class="routine-header"><span class="stat-label" id="title-empurrada" onclick="Sys.edTrainTitle('empurrada')" style="cursor:pointer">[02] EMPURRADA</span><button class="btn-all-train" onclick="Sys.checkAllTrain('empurrada')">Finalizar Tudo</button></div>
-                <div id="train-empurrada-ui" class="routine-list"></div>
-                <div class="routine-input-wrap"><input type="text" id="inp-empurrada" class="routine-input" placeholder="Ex: Flexão..."><button class="btn-add-rtn" onclick="Sys.addTrain('empurrada')">+</button></div>
-            </div>
-            <div class="routine-box">
-                <div class="routine-header"><span class="stat-label" id="title-core" onclick="Sys.edTrainTitle('core')" style="cursor:pointer">[03] CORE</span><button class="btn-all-train" onclick="Sys.checkAllTrain('core')">Finalizar Tudo</button></div>
-                <div id="train-core-ui" class="routine-list"></div>
-                <div class="routine-input-wrap"><input type="text" id="inp-core" class="routine-input" placeholder="Ex: Abs..."><button class="btn-add-rtn" onclick="Sys.addTrain('core')">+</button></div>
-            </div>
+            <div id="trains-container"></div>
+            <button class="btn-init" onclick="Sys.createNewTrainTable()">+ CRIAR NOVO GRUPO DE TREINO</button>
         </div>
     </div>
 
-    <div id="tab-skills" class="hidden"><div class="panel"><h3 style="text-align:center; color:var(--a);">HABILIDADES</h3><div id="skills-list-ui"></div></div></div>
+    <div id="tab-skills" class="hidden">
+        <div class="panel">
+            <h3 style="text-align:center; color:var(--a);">MAESTRIAS & HABILIDADES</h3>
+            <div id="skills-list-ui"></div>
+        </div>
+    </div>
 
     <div id="tab-hobbies" class="hidden">
         <div class="panel">
-            <h3 style="text-align:center; color:var(--a);">CENTRAL DE HOBBIES</h3>
+            <h3 style="text-align:center; color:var(--a); letter-spacing: 5px;">CENTRAL DE QUESTS</h3>
+            
+            <div class="quest-division">Corpo</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧬 Físico</span></div><div id="hobby-corpo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-corpo" class="routine-input" placeholder="Novo Treino..."><button class="btn-add-rtn" onclick="Sys.addHobby('corpo')">+</button></div></div>
+            
+            <div class="quest-division">Espírito</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
+            
+            <div class="quest-division division-mente">Mente</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Social</span></div><div id="hobby-social-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-social" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('social')">+</button></div></div>
@@ -289,13 +319,21 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
     </div>
 </div>
 
+<div class="ai-fab" onclick="Sys.toggleAi()">🧠</div>
+<div id="ai-window" class="ai-window">
+    <div class="ai-header">
+        NÚCLEO I.A. GEMINI
+        <span class="ai-close" onclick="Sys.toggleAi()">✕</span>
+    </div>
+    <div id="ai-body" class="ai-body"></div>
+    <div class="ai-input">
+        <input type="text" id="ai-text" placeholder="Fale com a I.A..." onkeypress="if(event.key==='Enter') Sys.sendAi()">
+        <button onclick="Sys.sendAi()">►</button>
+    </div>
+</div>
+
 <script>
 const RANKS = [{id:'E', min:0}, {id:'D', min:3330}, {id:'C', min:13300}, {id:'B', min:26600}, {id:'A', min:39900}, {id:'S', min:53250}, {id:'MAX', min:100000}];
-const POOLS = {
-    CORPO: [{t: "Puxada/empurrada", w: 40}, {t: "Core", w: 25}, {t: "Resistência", w: 15}, {t: "Cardio", w: 15}],
-    ESPIRITO: [{t: "Oração silenciosa", w: 40}, {t: "Estudo bíblico", w: 25}, {t: "Confessar um erro a Deus", w: 30}, {t: "Listar 3 gratidões", w: 26}, {t: "Orar por alguém", w: 17}],
-    CALI: { "E":["Flexão", "Barra fixa", "Prancha"], "D":["Flexão pseudo", "Tuck FL", "Lean Planche"], "C":["Tuck Planche", "Adv. Tuck FL", "L-Sit"], "B":["Semi Adv. Tuck Planche", "FL uma perna", "V-sit"], "A":["Adv. Tuck Planche", "FL straddle"], "S":["Full FL", "Full Planche"] }
-};
 
 const Sys = {
     db: null, key: 'monarch_v8_permanent', tA: null,
@@ -303,6 +341,18 @@ const Sys = {
         let d = localStorage.getItem(this.key);
         if (d) { 
             this.db = JSON.parse(d); 
+            if(!this.db.customCali) this.db.customCali = {E:[], D:[], C:[], B:[], A:[], S:[]};
+            if(!this.db.trains) this.db.trains = {};
+            if(!this.db.trainTitles) this.db.trainTitles = {};
+            
+            if(!this.db.aiChat) {
+                this.db.aiChat = [
+                    {sender: 'bot', text: 'Saudações, Monarca. Sou a NÚCLEO I.A., sua inteligência artificial auxiliar integrada ao Sistema.'},
+                    {sender: 'bot', text: 'TUTORIAL DE INICIAÇÃO:\n\n1. STATUS: Acompanhe sua Evolução (Aura upa o LVL | XP upa o Rank), gerencie seus atributos e faça as Missões Diárias.\n2. PESSOAL: Documente sua jornada e defina seus princípios inabaláveis.\n3. TREINOS: Crie grupos (Ex: Costas, Pernas). O botão "Tudo" finaliza o treino concedendo muita Aura e +1 de Corpo.\n4. HABILIDADES: Cadastre maestrias do E ao S. Concluí-las gera XP massiva para seu Rank.\n5. QUESTS: Alimente com seus hobbies. Eles formarão a base dos Sorteios Diários no seu Status.\n\nSua disciplina dita seu sucesso. Mantenha a sequência de dias intacta para multiplicadores. Como posso ajudar agora?'}
+                ];
+                this.save();
+            }
+
             this.check(); this.render(); this.setJourneyDefaults();
         } else document.getElementById('setup-screen').classList.remove('hidden');
     },
@@ -332,83 +382,81 @@ const Sys = {
         this.db = { 
             name: n.toUpperCase(), arch: this.tA, xp:0, reten:0, last:'', 
             attr: initialAttr, miss:[], skills:[], routine:[], 
-            hobbies:{criativo:[], conhecimento:[], social:[], baixa:[]}, 
+            hobbies:{corpo:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]}, 
             trains:{puxada:[], empurrada:[], core:[]}, 
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},
-            customCali: JSON.parse(JSON.stringify(POOLS.CALI)),
-            pools: JSON.parse(JSON.stringify({CORPO: POOLS.CORPO, ESPIRITO: POOLS.ESPIRITO})),
-            pers:{bg:'', values:'', principles:''}, journey:[], lvl:1, aura:0 
+            customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},
+            pers:{bg:'', values:'', principles:''}, journey:[], lvl:1, aura:0, aiChat:[] 
         };
         this.genMiss(); this.save(); location.reload();
     },
     check() {
-        let today = new Date().toLocaleDateString();
-        if (this.db.last !== today && this.db.last !== '') {
-            if (this.db.reten < 7) this.db.reten++;
+        let today = new Date().toLocaleDateString('pt-BR');
+        if (this.db.last === '') { this.db.last = today; this.save(); return; }
+        if (this.db.last !== today) {
+            this.db.reten++; 
             if(this.db.routine) this.db.routine.forEach(r => r.done = false);
-            if(this.db.trains) Object.keys(this.db.trains).forEach(k => this.db.trains[k].forEach(ex => ex.done = false));
+            if(this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex.done = false); }); }
             this.db.last = today; this.genMiss(); this.save();
         }
     },
     getRank() { if(this.db.customRank) return this.db.customRank; let cur = RANKS[0].id; for(let r of RANKS) if(this.db.xp >= r.min) cur = r.id; return cur; },
-    weightedPick(pool, count) {
-        let sel = []; let items = [...pool];
-        for(let i=0; i<count; i++) {
-            let totalW = items.reduce((s, x) => s + x.w, 0);
-            let r = Math.random() * totalW, acc = 0;
-            for(let j=0; j<items.length; j++) {
-                acc += items[j].w;
-                if(r <= acc) { sel.push(items[j].t); items.splice(j, 1); break; }
-            }
-        }
-        return sel;
-    },
+    
     genMiss() {
-        let mc = this.weightedPick(this.db.pools.CORPO, 1), me = this.weightedPick(this.db.pools.ESPIRITO, 1);
-        let allH = []; ['criativo', 'conhecimento', 'social', 'baixa'].forEach(c => this.db.hobbies[c].forEach(h => allH.push(h.task)));
+        let cL = (this.db.hobbies.corpo && this.db.hobbies.corpo.length > 0) ? this.db.hobbies.corpo.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Corpo";
+        let eL = (this.db.hobbies.espirito && this.db.hobbies.espirito.length > 0) ? this.db.hobbies.espirito.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Espírito";
+        let allH = []; ['criativo', 'conhecimento', 'social', 'baixa'].forEach(c => { if(this.db.hobbies[c]) this.db.hobbies[c].forEach(h => allH.push(h.task)) });
         let uL = [...new Set(allH)].sort(() => 0.5 - Math.random());
+        
         this.db.miss = [
-            {type:'🧬 CORPO', task: mc[0], done:false, xpG:0, auraG:0},
-            {type:'✝️ ESPÍRITO', task: me[0], done:false, xpG:0, auraG:0},
+            {type:'🧬 CORPO', task: cL, done:false, xpG:0, auraG:0},
+            {type:'✝️ ESPÍRITO', task: eL, done:false, xpG:0, auraG:0},
             {type:'🧠 HOBBY', task: uL[0] || "Cadastre um Hobby", done:false, xpG:0, auraG:0},
             {type:'🧠 HOBBY', task: uL[1] || "Adicione mais Hobbies", done:false, xpG:0, auraG:0}
         ];
     },
     saveJourney() {
-        const text = document.getElementById('jou-text').value;
-        if(!text) return;
+        const text = document.getElementById('jou-text').value; if(!text) return;
         this.db.journey.unshift({ date: document.getElementById('jou-date').value, time: document.getElementById('jou-time').value, text });
         document.getElementById('jou-text').value = ""; this.save(); this.renderJourney();
     },
     renderJourney() {
-        const query = document.getElementById('jou-search').value;
-        let html = "";
+        const query = document.getElementById('jou-search').value; let html = "";
         const filtered = this.db.journey.filter(j => j.date.includes(query));
         filtered.forEach((j, i) => { html += `<div class="log-card"><div class="log-meta"><span>📅 ${j.date}</span><span>🕒 ${j.time}</span><span style="color:red; cursor:pointer" onclick="Sys.delJou(${i})">✕</span></div><div class="log-content">${j.text}</div></div>`; });
         document.getElementById('journey-logs').innerHTML = html || "<div style='text-align:center; font-size:10px; opacity:0.5'>Nenhum registro encontrado.</div>";
     },
     delJou(i) { if(confirm("Apagar registro?")) { this.db.journey.splice(i, 1); this.save(); this.renderJourney(); } },
     
-    // PROTOCOLO EVOLUÇÃO PERMANENTE: DESMARCAR NÃO REMOVE STATUS
     toggleSkill(s, rank, e) {
         if(e.target.tagName === 'B') return; 
         let rIdx = RANKS.findIndex(rk => rk.id === rank), myIdx = RANKS.findIndex(rk => rk.id === this.getRank());
         if(rIdx > myIdx) return;
         if(this.db.skills.includes(s)) { 
             this.db.skills = this.db.skills.filter(i => i !== s); 
-            // XP e Atributos permanecem salvos
         } else { 
-            this.db.skills.push(s); this.db.xp += 1480; this.db.attr.C += 1; 
-            this.pop(e, "+1480 XP / +1 CORPO"); 
+            this.db.skills.push(s); this.db.xp += 1480; this.db.attr.C += 1; this.pop(e, "+1480 XP / +1 CORPO"); 
         }
         this.save(); this.render(); this.renderSkills();
     },
+    addSkill(rank) {
+        let inp = document.getElementById('inp-skill-' + rank);
+        if(!inp.value) return;
+        this.db.customCali[rank].push(inp.value);
+        inp.value = ""; this.save(); this.renderSkills();
+    },
+    delSkill(rank, idx, e) {
+        e.stopPropagation();
+        if(confirm("Remover esta maestria?")) {
+            let name = this.db.customCali[rank][idx];
+            this.db.customCali[rank].splice(idx, 1);
+            this.db.skills = this.db.skills.filter(s => s !== name);
+            this.save(); this.renderSkills();
+        }
+    },
     toggleRoutine(i, e) { 
         let r = this.db.routine[i]; 
-        if (r.done) { 
-            r.done = false; 
-            // Aura permanece salva
-        } else { 
+        if (r.done) { r.done = false; } else { 
             r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25; 
             this.db.aura += r.gain; this.pop(e, `+${r.gain} AURA`); 
         } 
@@ -416,10 +464,7 @@ const Sys = {
     },
     toggleTrain(cat, i, e) { 
         let item = this.db.trains[cat][i]; 
-        if (item.done) { 
-            item.done = false; 
-            // Aura permanece salva
-        } else { 
+        if (item.done) { item.done = false; } else { 
             item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25; 
             this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`); 
         } 
@@ -427,12 +472,8 @@ const Sys = {
     },
     doMiss(i, e) { 
         let m = this.db.miss[i]; 
-        if (m.done) { 
-            m.done = false; 
-            // XP, Aura e Atributos permanecem salvos
-        } else { 
-            m.done = true; 
-            let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
+        if (m.done) { m.done = false; } else { 
+            m.done = true; let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
             m.xpG = Math.floor(10 * mult); m.auraG = Math.floor(25 * mult); 
             this.db.xp += m.xpG; this.db.aura += m.auraG; 
             let txtPop = `+${m.xpG} XP`;
@@ -453,21 +494,33 @@ const Sys = {
         }
     },
     edTrainTitle(cat) { let newT = prompt("Novo nome:", this.db.trainTitles[cat]); if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); } },
-    edMissTask(i, e) {
-        e.stopPropagation(); let m = this.db.miss[i]; let oldTask = m.task;
-        let newVal = prompt("Novo nome (Permanente no Sorteio):", oldTask);
-        if(newVal) {
-            m.task = newVal;
-            if(m.type.includes('CORPO')) { let idx = this.db.pools.CORPO.findIndex(x => x.t === oldTask); if(idx !== -1) this.db.pools.CORPO[idx].t = newVal; } 
-            else if(m.type.includes('ESPÍRITO')) { let idx = this.db.pools.ESPIRITO.findIndex(x => x.t === oldTask); if(idx !== -1) this.db.pools.ESPIRITO[idx].t = newVal; } 
-            else if(m.type.includes('HOBBY')) { for(let cat in this.db.hobbies) { let idx = this.db.hobbies[cat].findIndex(x => x.task === oldTask); if(idx !== -1) this.db.hobbies[cat][idx].task = newVal; } }
+    checkAllTrain(cat, e) {
+        let mult = (this.db.reten >= 3) ? 35 : 25, total = 0;
+        this.db.trains[cat].forEach(item => { if(!item.done) { item.done = true; item.gain = mult; total += mult; } });
+        if(total > 0) { 
+            this.db.aura += total; 
+            this.db.attr.C += 1;
+            this.pop(e, `+${total} AURA / +1 CORPO`);
+            this.checkLvl(); 
+            this.save(); 
+            this.render(); 
+        }
+    },
+    createNewTrainTable() {
+        let name = prompt("Nome do novo grupo de treino (Ex: PERNAS):");
+        if(name) {
+            let id = "tr_" + Date.now();
+            this.db.trains[id] = [];
+            this.db.trainTitles[id] = name.toUpperCase();
             this.save(); this.render();
         }
     },
-    checkAllTrain(cat) {
-        let mult = (this.db.reten >= 3) ? 35 : 25, total = 0;
-        this.db.trains[cat].forEach(item => { if(!item.done) { item.done = true; item.gain = mult; total += mult; } });
-        if(total > 0) { this.db.aura += total; this.checkLvl(); this.save(); this.render(); }
+    delTrainTable(cat) {
+        if(confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) {
+            delete this.db.trains[cat];
+            delete this.db.trainTitles[cat];
+            this.save(); this.render();
+        }
     },
     addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },
     delHobby(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },
@@ -488,20 +541,72 @@ const Sys = {
     shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },
     failReten() { if(confirm("ZERAR SEQUÊNCIA?")) { this.db.reten = 0; this.save(); this.render(); } },
     reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },
+    
+    /* MÉTODOS DA IA */
+    toggleAi() {
+        document.getElementById('ai-window').classList.toggle('open');
+        this.renderAi();
+    },
+    sendAi() {
+        let inp = document.getElementById('ai-text');
+        let text = inp.value.trim();
+        if(!text) return;
+        this.db.aiChat.push({sender: 'user', text: text});
+        inp.value = '';
+        this.save();
+        this.renderAi();
+        
+        setTimeout(() => this.botReply(text), 600);
+    },
+    botReply(userText) {
+        let t = userText.toLowerCase();
+        let reply = "Processando requisição... Compreendido, Monarca. Mantenha o foco e siga o protocolo estruturado.";
+        
+        if(t.includes('trein') || t.includes('exerc')) reply = "Na aba TREINOS, você cria tabelas específicas. Ao clicar em 'Tudo', você ganha Aura e +1 de Corpo.";
+        else if(t.includes('xp') || t.includes('rank') || t.includes('lvl') || t.includes('aura') || t.includes('nivel') || t.includes('nível')) reply = "A Aura upa seu LVL (a cada 100 pontos). O XP define seu RANK na hierarquia. Cumpra missões e rotinas diárias para evoluir.";
+        else if(t.includes('recai') || t.includes('falh')) reply = "Se falhou, use o botão 'RECAÍDA' no seu Status. Seja honesto com o sistema. O reset zera a sequência de dias, mas sua disciplina continua.";
+        else if(t.includes('miss') || t.includes('sorte') || t.includes('quest')) reply = "As missões diárias são sorteadas da sua aba de QUESTS. Alimente as Quests para ter desafios sempre novos e não estagnar.";
+
+        this.db.aiChat.push({sender: 'bot', text: reply});
+        this.save();
+        this.renderAi();
+    },
+    renderAi() {
+        let body = document.getElementById('ai-body');
+        if(!body) return;
+        let html = '';
+        if(this.db && this.db.aiChat) {
+            this.db.aiChat.forEach(m => {
+                let formatted = m.text.replace(/\n/g, '<br>');
+                html += `<div class="ai-msg ${m.sender}">${formatted}</div>`;
+            });
+        }
+        body.innerHTML = html;
+        body.scrollTop = body.scrollHeight;
+    },
+
     renderSkills() {
         let h = ""; let mRI = RANKS.findIndex(rk => rk.id === this.getRank());
-        for(let r in this.db.customCali) {
+        ['E','D','C','B','A','S'].forEach(r => {
             let rI = RANKS.findIndex(rk => rk.id === r), l = rI > mRI;
             h += `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;
-            this.db.customCali[r].forEach((s, idx) => { 
-                const m = this.db.skills.includes(s); 
-                h += `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}" onclick="Sys.toggleSkill('${s}', '${r}', event)">
-                        <b onclick="Sys.edSkillName('${r}', ${idx})">${s}</b>
-                        <div class="check-box">${m?'✓':''}</div>
-                      </div>`; 
-            });
-            h += `</div>`;
-        }
+            if(this.db.customCali[r]) {
+                this.db.customCali[r].forEach((s, idx) => { 
+                    const m = this.db.skills.includes(s); 
+                    h += `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}" onclick="Sys.toggleSkill('${s}', '${r}', event)">
+                            <b onclick="Sys.edSkillName('${r}', ${idx})">${s}</b>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span style="opacity:0.3; font-size:10px;" onclick="Sys.delSkill('${r}', ${idx}, event)">✕</span>
+                                <div class="check-box">${m?'✓':''}</div>
+                            </div>
+                          </div>`; 
+                });
+            }
+            h += `<div class="routine-input-wrap">
+                    <input type="text" id="inp-skill-${r}" class="routine-input" placeholder="Nova Habilidade Rank ${r}...">
+                    <button class="btn-add-rtn" onclick="Sys.addSkill('${r}')">+</button>
+                  </div></div>`;
+        });
         document.getElementById('skills-list-ui').innerHTML = h;
     },
     render() {
@@ -518,17 +623,41 @@ const Sys = {
         document.getElementById('aura-bar').style.width = Math.min(100,(this.db.aura/aR)*100)+"%";
         document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;
         document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";
-        document.getElementById('title-puxada').innerText = this.db.trainTitles.puxada; document.getElementById('title-empurrada').innerText = this.db.trainTitles.empurrada; document.getElementById('title-core').innerText = this.db.trainTitles.core;
 
         let rH = ""; this.db.routine.forEach((r, i) => { rH += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine(${i}, event)"><div class="routine-check">${r.done?'✓':''}</div><span style="flex:1">${r.task}</span><span style="opacity:0.3" onclick="Sys.delRoutine(${i}, event)">✕</span></div>`; });
         document.getElementById('routine-list-ui').innerHTML = rH;
-        ['puxada', 'empurrada', 'core'].forEach(cat => {
-            let tH = ""; this.db.trains[cat].forEach((ex, i) => { tH += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)"><div class="routine-check">${ex.done?'✓':''}</div><span style="flex:1">${ex.task}</span><span style="opacity:0.3" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span></div>`; });
-            document.getElementById(`train-${cat}-ui`).innerHTML = tH;
+        
+        let tTotalH = "";
+        Object.keys(this.db.trains).forEach(cat => {
+            let tItemsH = "";
+            this.db.trains[cat].forEach((ex, i) => {
+                tItemsH += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)">
+                             <div class="routine-check">${ex.done?'✓':''}</div>
+                             <span style="flex:1">${ex.task}</span>
+                             <span style="opacity:0.3" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span>
+                           </div>`;
+            });
+            tTotalH += `
+                <div class="routine-box">
+                    <div class="routine-header">
+                        <span class="stat-label" onclick="Sys.edTrainTitle('${cat}')" style="cursor:pointer">${this.db.trainTitles[cat]}</span>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-all-train" onclick="Sys.checkAllTrain('${cat}', event)">Tudo</button>
+                            <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delTrainTable('${cat}')">Excluir</button>
+                        </div>
+                    </div>
+                    <div id="train-${cat}-ui" class="routine-list">${tItemsH}</div>
+                    <div class="routine-input-wrap">
+                        <input type="text" id="inp-${cat}" class="routine-input" placeholder="Novo...">
+                        <button class="btn-add-rtn" onclick="Sys.addTrain('${cat}')">+</button>
+                    </div>
+                </div>`;
         });
-        ['criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {
-            let hH = ""; this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; });
-            document.getElementById(`hobby-${cat}-ui`).innerHTML = hH;
+        document.getElementById('trains-container').innerHTML = tTotalH;
+        
+        ['corpo', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {
+            let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }
+            let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;
         });
         
         let mH = ""; this.db.miss.forEach((m, i) => { 
@@ -539,12 +668,12 @@ const Sys = {
                             <span class="m-type">${m.type}</span>
                             <span class="m-task">${m.task}</span>
                         </div>
-                        <span style="margin-left:auto; opacity:0.3; font-size:10px; font-weight:900;" onclick="Sys.edMissTask(${i}, event)">[EDITAR]</span>
                     </div>
                    </div>`; 
         });
         document.getElementById('mission-ui').innerHTML = mH;
         this.renderJourney();
+        this.renderAi();
     }
 };
 window.onload = () => Sys.init();
