@@ -54,7 +54,6 @@ input::placeholder, textarea::placeholder{color:var(--b);}
 textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}
 .btn-init{width:100%;padding:15px;background:none;border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase;}
 
-/* Estilo para a dica de classe */
 .arch-hint {
     margin-top: 15px;
     font-size: 11px;
@@ -181,7 +180,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 .quest-division::before { content: '>'; margin-right: 10px; color: var(--state-icon); }
 .division-mente { color: var(--gold); }
 
-/* CSS IA GEMINI */
+/* CSS IA MANUAL */
 .ai-fab { position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:var(--p); border:2px solid var(--a); border-radius:50%; box-shadow:var(--glow); color:var(--a); font-size:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:999; }
 .ai-window { position:fixed; bottom:80px; right:20px; width:300px; height:400px; max-width:90vw; max-height: 70vh; background:var(--p); border:1px solid var(--a); box-shadow:var(--glow); border-radius:8px; display:flex; flex-direction:column; z-index:999; overflow:hidden; transform: scale(0); transform-origin: bottom right; transition: 0.3s ease; }
 .ai-window.open { transform: scale(1); }
@@ -355,12 +354,12 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
 <div class="ai-fab" onclick="Sys.toggleAi()">🧠</div>
 <div id="ai-window" class="ai-window">
     <div class="ai-header">
-        NÚCLEO I.A. GEMINI
+        NÚCLEO I.A. MENTOR
         <span class="ai-close" onclick="Sys.toggleAi()">✕</span>
     </div>
     <div id="ai-body" class="ai-body"></div>
     <div class="ai-input">
-        <input type="text" id="ai-text" placeholder="Fale com a I.A..." onkeypress="if(event.key==='Enter') Sys.sendAi()">
+        <input type="text" id="ai-text" placeholder="Relate ou peça conselho à I.A..." onkeypress="if(event.key==='Enter') Sys.sendAi()">
         <button onclick="Sys.sendAi()">►</button>
     </div>
 </div>
@@ -410,10 +409,10 @@ const Sys = {
             if(!this.db.bosses) this.db.bosses = { defeated: [], activeChallenge: null };
             if(!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };
             
-            if(!this.db.aiChat) {
+            // INICIALIZAÇÃO DA I.A MANUAL
+            if(!this.db.aiChat || this.db.aiChat.length === 0) {
                 this.db.aiChat = [
-                    {sender: 'bot', text: 'Saudações, Monarca. Sou a NÚCLEO I.A., integrada ao Sistema. Conecte sua API Key para ativar minhas funções cognitivas avançadas.'},
-                    {sender: 'bot', text: 'AVISO DE BOSS: A partir do LVL 40, Dungeons de Boss serão desbloqueadas. Falhar em um Boss ativo resultará em regressão de nível.'}
+                    {sender: 'bot', text: 'Saudações, Monarca. Sou a NÚCLEO I.A., sua mentora local implantada no sistema.\n\n📖 COMO USAR SEU NÚCLEO:\n\n1. STATUS: Acompanhe Nível, Rank e Atributos. Cumpra suas "Modificações Diárias" sorteadas. Falhar traz punições severas no seu XP.\n2. PESSOAL: Estabeleça Valores e Princípios. O Diário serve para você relatar suas batalhas (eu posso analisá-las).\n3. TREINOS & MAESTRIA: Cadastre e marque seus exercícios. Músculo é armadura e Calistenia te ensina a dominar o próprio peso.\n4. BOSS: Desafios do mundo real (LVL 40+). Se iniciar uma Raid e falhar, você perde níveis.\n5. QUESTS: Crie banco de hábitos bons para o Sistema sortear nas missões diárias.\n\n🛡️ Mantenha sua Sequência (Streaks) intacta para Buffs. Recaídas zeram tudo.\n\nO Arquétipo Ideal: O equilíbrio perfeito entre força e cuidado. Seja perigoso para os inimigos e um porto seguro para quem você ama. Arise (Erga-se)! Como posso guiá-lo agora? Faça um relato ou peça conselhos.'}
                 ];
                 this.save();
             }
@@ -668,7 +667,7 @@ const Sys = {
     },
     toggleRoutine(i, e) { 
         let r = this.db.routine[i]; 
-        if (r.done) { r.done = false; } else { 
+        if (r.done) { r.done = false; this.db.aura -= r.gain; this.pop(e, `-${r.gain} AURA`); } else { 
             r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25; 
             this.db.aura += r.gain; this.pop(e, `+${r.gain} AURA`); 
         } 
@@ -676,7 +675,7 @@ const Sys = {
     },
     toggleTrain(cat, i, e) { 
         let item = this.db.trains[cat][i]; 
-        if (item.done) { item.done = false; } else { 
+        if (item.done) { item.done = false; this.db.aura -= item.gain; this.pop(e, `-${item.gain} AURA`); } else { 
             item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25; 
             this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`); 
         } 
@@ -684,7 +683,16 @@ const Sys = {
     },
     doMiss(i, e) { 
         let m = this.db.miss[i]; 
-        if (m.done) { m.done = false; } else { 
+        if (m.done) { 
+            m.done = false; 
+            this.db.xp -= m.xpG; 
+            this.db.aura -= m.auraG; 
+            let txtPop = `-${m.xpG} XP`;
+            if (m.type.includes('CORPO')) { this.db.attr.C -= 1; txtPop += " / -1 CORPO"; }
+            if (m.type.includes('ESPÍRITO')) { this.db.attr.E -= 1; txtPop += " / -1 ESPÍRITO"; }
+            if (m.type.includes('HOBBY')) { this.db.attr.M -= 1; txtPop += " / -1 MENTE"; }
+            this.pop(e, txtPop);
+        } else { 
             m.done = true; let mult = (this.db.reten >= 3) ? 1.5 : 1.0; 
             m.xpG = Math.floor(10 * mult); 
             if (this.db.activeBuffs.doubleXP) m.xpG *= 2;
@@ -743,7 +751,7 @@ const Sys = {
     addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },
     delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },
     
-    checkLvl() { let req = this.db.lvl * 100; while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; } },
+    checkLvl() { let req = this.db.lvl * 100; while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; } while(this.db.aura < 0 && this.db.lvl > 1) { this.db.lvl--; let prevReq = this.db.lvl * 100; this.db.aura += prevReq; } if(this.db.lvl <= 1 && this.db.aura < 0) { this.db.lvl = 1; this.db.aura = 0; } },
     pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },
     upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },
     edPers(key) { let val = prompt("Editar:", this.db.pers[key]); if(val !== null) { this.db.pers[key] = val; this.save(); this.render(); } },
@@ -756,12 +764,13 @@ const Sys = {
     failReten() { if(confirm("ZERAR SEQUÊNCIA?")) { this.db.reten = 0; this.save(); this.render(); } },
     reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },
     
-    /* MÉTODOS DA IA INTEGRADA COM API GEMINI */
+    /* MÉTODOS DA IA MANUAL EMBUTIDA */
     toggleAi() {
         document.getElementById('ai-window').classList.toggle('open');
         this.renderAi();
     },
-    async sendAi() {
+    
+    sendAi() {
         let inp = document.getElementById('ai-text');
         let text = inp.value.trim();
         if(!text) return;
@@ -769,65 +778,61 @@ const Sys = {
         this.db.aiChat.push({sender: 'user', text: text});
         inp.value = '';
         
-        // Indicador de "escrevendo..."
         this.db.aiChat.push({sender: 'bot', text: '...', isTyping: true});
         this.save();
         this.renderAi();
         
-        await this.botReply(text);
+        // Simular um pequeno delay de processamento para imersão
+        setTimeout(() => {
+            this.botReply(text);
+        }, 800);
     },
-    async botReply(userText) {
-        // Remove indicador de digitação
+    
+    botReply(userText) {
+        // Remover a mensagem de digitação '...'
         this.db.aiChat = this.db.aiChat.filter(m => !m.isTyping);
+        
+        let t = userText.toLowerCase();
+        let reply = "";
 
-        if (!this.db.geminiKey) {
-            let key = prompt("Para a NÚCLEO I.A. conversar sobre qualquer coisa, conecte a API Key gratuita do Google Gemini (obtenha no Google AI Studio).\n\nInsira sua API Key:");
-            if (key && key.trim() !== '') {
-                this.db.geminiKey = key.trim();
-                this.save();
-            } else {
-                let fallback = "SISTEMA OFFLINE. Sem a API Key, meu processamento neural está limitado. Insira a chave para despertar meu verdadeiro poder.";
-                this.db.aiChat.push({sender: 'bot', text: fallback});
-                this.save();
-                this.renderAi();
-                return;
-            }
+        // Regras de Conhecimento e Respostas da IA
+        if (t.includes('calistenia') || t.includes('treino') || t.includes('músculo') || t.includes('força') || t.includes('shape') || t.includes('físico')) {
+            reply = "🧬 CORPO & CALISTENIA: Na calistenia, a gravidade é sua única adversária. O foco é a sobrecarga progressiva: domine as flexões, barras, agachamentos e dips. Controle a fase excêntrica do movimento e treine até a falha com repetições limpas. Músculo é a armadura do Monarca. Não treine pelo ego, treine para ser útil, ágil e letal no mundo físico.";
+        } else if (t.includes('testosterona') || t.includes('hormônio') || t.includes('energia')) {
+            reply = "⚡ TESTOSTERONA & ENERGIA: Para otimizar os seus níveis naturais, os pilares são absolutos:\n1. Durma de 7 a 8 horas na escuridão completa.\n2. Levante pesos pesados (ou domine o próprio peso).\n3. Tome sol matinal para regular o ciclo circadiano.\n4. Coma limpo (proteína animal, ovos, evite plásticos e industrializados).\n5. Vença. O ato de dominar um desafio na vida real eleva seus níveis hormonais. Rejeite estímulos fracos e retenha sua energia bruta.";
+        } else if (t.includes('estoico') || t.includes('estoicismo') || t.includes('ansiedade') || t.includes('controle') || t.includes('mente')) {
+            reply = "🏛️ MENTE BLINDADA: 'Você tem poder sobre a sua mente, não sobre os eventos externos. Perceba isso, e você encontrará a força.' – Marco Aurélio. No estoicismo, só nos importamos com aquilo que podemos controlar: nossas ações, nosso treino, nossas palavras. Tudo o que está fora disso não merece sua perturbação. Aplique o 'Amor Fati', abrace as adversidades como treinamento da Mente.";
+        } else if (t.includes('mulher') || t.includes('relacionamento') || t.includes('namorada') || t.includes('esposa') || t.includes('cuidado')) {
+            reply = "🦅 ARQUÉTIPO DO MASCULINO: A masculinidade autêntica é o domínio da polaridade: ser altamente perigoso e forte para as ameaças do mundo, e ao mesmo tempo ser a base de segurança e paz para a mulher que caminha ao seu lado. O ideal é a balança impecável entre força e cuidado, poder e humildade. Homens fracos não têm a capacidade de proteger, homens descontrolados destroem. Seja o pilar de ambos.";
+        } else if (t.includes('deus') || t.includes('fé') || t.includes('católico') || t.includes('espírito') || t.includes('oração') || t.includes('igreja')) {
+            reply = "✝️ ESPÍRITO & FÉ: O espírito governa o corpo e a mente. Um Monarca ajoelha-se apenas perante Deus. Busque a vida de virtudes, reze com constância (como o Rosário diário), e rejeite o pecado do mundo moderno. Quando seu corpo estiver destruído e a mente cansada, a Fé é o que vai te manter erguido. Carregue sua cruz diária e não fuja dos sacrifícios.";
+        } else if (t.includes('bonito') || t.includes('aparência') || t.includes('rosto') || t.includes('beleza') || t.includes('looksmax')) {
+            reply = "🗿 PRESENÇA (LOOKSMAX): A beleza masculina deriva do cuidado com a saúde e a postura de imposição.\n1. Reduza o percentual de gordura para que a estrutura de sua mandíbula fique visível.\n2. Cuide da higiene (skincare simples, limpar e hidratar).\n3. Mantenha corte de cabelo e barba impecáveis (higiene pessoal inegociável).\n4. Acima de tudo: mantenha a postura de um rei, peito estufado, olhar focado e sem pressa para falar.";
+        } else if (t.includes('network') || t.includes('comunicação') || t.includes('amigos') || t.includes('contatos')) {
+            reply = "🤝 NETWORK & COMUNICAÇÃO: Você é a média do seu pelotão. Um guerreiro não se mistura com os fracos de espírito. Para criar boas conexões: ouça o dobro do que fala. Preste atenção no olhar das pessoas. Gere valor antes de pedir favor. Um Monarca que se comunica bem e passa força física ganha o respeito do ambiente rapidamente.";
+        } else if (t.includes('recaída') || t.includes('falhei') || t.includes('vício') || t.includes('pornografia') || t.includes('celular') || t.includes('punheta')) {
+            reply = "⚠️ MODO CONTENÇÃO: O Sistema percebeu sua recaída. Picos fáceis de dopamina corroem o seu cérebro e seu potencial vital. Não sinta pena de si mesmo. Perdoe o erro rapidamente e entre em protocolo de guerra hoje: zere a Sequência, tome um banho gelado longo e faça um Jejum completo de dopamina nas próximas horas. O fracasso faz parte, mas permanecer no chão é para os fracos. Erga-se agora mesmo!";
+        } else if (t.includes('solo leveling') || t.includes('fraco') || t.includes('evoluir') || t.includes('monarca') || t.includes('arise') || t.includes('erguer')) {
+            reply = "🗡️ O DESPERTAR: Lembra do início? Você era considerado o Caçador Mais Fraco. O mundo não dava nada por você. Mas o Sistema te selecionou e as Missões Diárias apareceram. 'Arise' (Erga-se). Levantar os seus velhos hábitos e transformá-los em um exército de disciplina. Continue completando suas tarefas secretamente até chegar ao Rank S. O caminho é solitário, mas a glória é eterna.";
+        } else if (t.includes('relato') || t.includes('jornada') || t.includes('hoje foi') || t.includes('consegui') || t.includes('acordei')) {
+            reply = "📜 REGISTRO COMPUTADO: Excelente relato de Jornada. A constância no campo de batalha é o que forja o homem. Ao descrever seus ganhos, você fixa o aprendizado no NÚCLEO. O Sistema honra o seu esforço de hoje. Descanse os músculos e se prepare para os Bosses de amanhã.";
+        } else {
+            // Respostas Genéricas do Sistema
+            let res = [
+                "Entendido, Monarca. A ação cura o medo. Qual será sua próxima missão?",
+                "Interessante. Foque naquilo que está sob seu controle: corpo, mente e espírito. Algo mais?",
+                "O Sistema assimilou suas palavras. Não perca tempo com frivolidades, a Trindade chama.",
+                "Menos palavras, mais flexões. Mantenha seu foco afiado para subir de Rank.",
+                "Seus status indicam que há espaço para melhorias. Foque na disciplina silenciosa, recruta."
+            ];
+            reply = res[Math.floor(Math.random() * res.length)];
         }
 
-        let arch = this.db.arch || "Soldado";
-        let personality = "";
-        
-        if(arch === 'Viking') personality = "Aja como um guerreiro Viking agressivo, enérgico e motivador. Fale sobre glória, batalhas, Valhalla e exploração. Seja direto e selvagem. Chame-o de 'Guerreiro' ou 'Irmão de Escudo'.";
-        else if(arch === 'Samurai') personality = "Aja como um Samurai calmo, disciplinado e filosófico. Use poucas palavras, mas carregadas de sabedoria. Fale sobre honra, foco, e o caminho da espada. Chame-o de 'Senhor' ou 'Guerreiro'.";
-        else if(arch === 'Templário') personality = "Aja como um Cavaleiro Templário justo, formal e devoto. Fale sobre virtude, fé, dever e a luta contra o mal. Use um tom solene. Chame-o de 'Irmão' ou 'Cavaleiro'.";
-        else if(arch === 'Soldado') personality = "Aja como um Soldado pragmático e calejado que busca um propósito. Fale sobre sobrevivência, disciplina nas trincheiras e a busca por sentido no caos. Chame-o de 'Recruta' ou 'Irmão de Armas'.";
-
-        let systemPrompt = `Você é a NÚCLEO I.A., uma inteligência artificial que guia um jogador em um aplicativo de RPG de desenvolvimento pessoal. O jogador escolheu a classe ${arch}. ${personality} Responda sempre em português, de forma extremamente imersiva e não saia do personagem em NENHUM momento. Respostas curtas e motivadoras. O jogador disse: "${userText}"`;
-
-        try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.db.geminiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: systemPrompt }] }]
-                })
-            });
-            const data = await response.json();
-            
-            if(data.error) {
-                throw new Error(data.error.message);
-            }
-            
-            let reply = data.candidates[0].content.parts[0].text;
-            this.db.aiChat.push({sender: 'bot', text: reply});
-        } catch (e) {
-            this.db.aiChat.push({sender: 'bot', text: "⚠️ FALHA NEURAL: " + e.message});
-            if(e.message.includes('API key not valid')) this.db.geminiKey = null; // Reseta a key caso seja inválida
-        }
-        
+        this.db.aiChat.push({sender: 'bot', text: reply});
         this.save();
         this.renderAi();
     },
+
     renderAi() {
         let body = document.getElementById('ai-body');
         if(!body) return;
