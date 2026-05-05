@@ -505,15 +505,7 @@ const Sys = {
                     });
                 }
 
-                if(this.db.trains) {
-                    Object.keys(this.db.trains).forEach(cat => {
-                        if(this.db.trains[cat].length > 0) {
-                            let groupDone = this.db.trains[cat].every(ex => ex.done);
-                            if(!groupDone) { penaltyXP += 25; penaltyC++; }
-                        }
-                    });
-                }
-
+                
                 if(penaltyXP > 0) {
                     this.db.xp = Math.max(0, this.db.xp - penaltyXP);
                     this.db.attr.C = Math.max(0, this.db.attr.C - penaltyC);
