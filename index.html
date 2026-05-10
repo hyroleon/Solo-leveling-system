@@ -1,766 +1,289 @@
-<!DOCTYPE html>    <html lang="pt-br">    
-<head>    
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">    
-<title>SISTEMA DE UPADOR | MONARCA 8.5 - BOSS EDITION</title>    
-<style>    
-:root{    
-    --bg:#00050f;    
-    --p:#050a1a;    
-    --b:#122445;    
-    --a:#00f2ff;    
-    --a-dim:rgba(0, 242, 255, 0.1);    
-    --t:#e0f7ff;    
-    --t-dim:#8fbcd6;    
-    --glow:0 0 12px rgba(0, 242, 255, 0.6);    
-    --locked:#001a2b;    
-    --state-icon: #00ffaa;    
-    --gold:#ffcc00;    
-    --danger: #ff4d4d;    
-    --aura-color: #a066ff;    
-    --boss-color: #ff3c00;    
-}    
-*{box-sizing:border-box;font-family:'Segoe UI','Roboto',sans-serif;transition:0.15s ease-out; outline: none;}    body{
-background:var(--bg);
-color:var(--t);
-margin:0;
-min-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding-bottom:30px;
-overflow-x:hidden;
-font-size: 14px;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Solo Leveling System AI</title>
 
-::-webkit-scrollbar {width: 4px;}
-::-webkit-scrollbar-track {background: var(--bg);}
-::-webkit-scrollbar-thumb {background: var(--b);}
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial, sans-serif;
+    }
 
-.xp-float{position:fixed;color:var(--a);font-weight:900;pointer-events:none;animation:up 1s forwards;z-index:9999;text-shadow:var(--glow);font-size:16px;}
-@keyframes up{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
-@keyframes pulse{0%{opacity:0.7;text-shadow:none;}50%{opacity:1;text-shadow:var(--glow);}100%{opacity:0.7;text-shadow:none;}}
+    body{
+        background:black;
+        color:#00aaff;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        overflow:hidden;
+    }
 
-.setup-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
-.setup-card{background:var(--p);border:1px solid var(--b);padding:30px;width:100%;max-width:400px;text-align:center;box-shadow: 0 10px 30px rgba(0,0,0,0.7);}
-.setup-card h2{color:var(--a);margin:0 0 20px 0;letter-spacing:4px;font-weight:900;text-transform:uppercase;font-size:18px;}
-.arch-opt{border:1px solid var(--b);padding:12px;margin:5px;cursor:pointer;font-size:11px;display:inline-block;width:46%;background:rgba(0,0,0,0.3);text-transform:uppercase;letter-spacing:1px;color:var(--t-dim);}
-.arch-opt.selected{border-color:var(--a);background:var(--a-dim);color:var(--a);box-shadow:var(--glow);}
-input, textarea{width:100%;padding:12px;margin:8px 0;background:rgba(0,0,0,0.5);border:1px solid var(--b);color:var(--a);text-align:center;border-radius:2px;font-weight:bold;}
-input::placeholder, textarea::placeholder{color:var(--b);}
-textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}
-.btn-init{width:100%;padding:15px;background:none;border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase;}
+    .system{
+        width:90%;
+        max-width:900px;
+        height:90vh;
+        border:2px solid #00aaff;
+        background:rgba(0,0,0,0.95);
+        box-shadow:0 0 30px #00aaff;
+        display:flex;
+        flex-direction:column;
+    }
 
-.arch-hint {
-margin-top: 15px;
-font-size: 11px;
-color: var(--t-dim);
-font-style: italic;
-min-height: 40px;
-padding: 10px;
-background: rgba(0,0,0,0.2);
-border: 1px dashed var(--b);
-}
+    .header{
+        padding:15px;
+        border-bottom:1px solid #00aaff;
+        font-size:22px;
+        letter-spacing:2px;
+        text-align:center;
+        font-weight:bold;
+    }
 
-.container{width:100%;max-width:450px;padding:15px;}
-.protocol-banner{background:var(--a-dim);border:1px solid var(--b);color:var(--t);font-size:10px;padding:10px;text-align:center;margin-bottom:15px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;}
+    .chat{
+        flex:1;
+        padding:20px;
+        overflow-y:auto;
+    }
 
-.profile-wrap { display: flex; justify-content: center; margin-bottom: 15px; position: relative; }
-.profile-circle {
-width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--a);
-box-shadow: var(--glow); overflow: hidden; cursor: pointer; background: var(--p);
-display: flex; align-items: center; justify-content: center;
-}
-.profile-circle img { width: 100%; height: 100%; object-fit: cover; }
-.profile-circle i { font-size: 10px; color: var(--a-dim); text-transform: uppercase; }
+    .msg{
+        margin-bottom:15px;
+        line-height:1.5;
+    }
 
-.lvl-badge { position: absolute; bottom: -5px; background: var(--state-icon); color: #000; font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 10px; box-shadow: 0 0 10px var(--state-icon); z-index: 10; border: 1px solid white;}
-.aura-bar-f { height:100%; background:var(--aura-color); width:0%; box-shadow: 0 0 10px var(--aura-color); }
+    .system-msg{
+        color:#00e5ff;
+    }
 
-.nav-tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:15px;width:100%;}
-.nav-btn{background:var(--p);border:1px solid var(--b);color:var(--t-dim);padding:10px 2px;font-size:8px;font-weight:900;letter-spacing:1px;cursor:pointer;text-transform:uppercase;}
-.nav-btn.active{border-color:var(--a);color:var(--a);background:var(--a-dim);box-shadow: inset 0 -2px 0 var(--a);}
+    .user-msg{
+        color:white;
+        text-align:right;
+    }
 
-.panel{background:var(--p);border:1px solid var(--b);padding:20px;margin-bottom:15px;position:relative;}
+    .input-area{
+        display:flex;
+        border-top:1px solid #00aaff;
+    }
 
-#p-name{font-size:24px;font-weight:900;margin-bottom:2px;text-transform:uppercase;letter-spacing:1px; color:var(--a); text-shadow: var(--glow);}
-#p-arch{font-size:10px;color:var(--t-dim);letter-spacing:4px;font-weight:bold;margin-bottom:10px;text-transform:uppercase;}
+    input{
+        flex:1;
+        padding:15px;
+        background:black;
+        color:white;
+        border:none;
+        outline:none;
+        font-size:16px;
+    }
 
-.streak-ui{font-size:12px;color:var(--aura-color);font-weight:bold;margin-bottom:5px;letter-spacing:1px;text-shadow: 0 0 5px rgba(160, 102, 255, 0.4); cursor:pointer;}
+    button{
+        width:120px;
+        border:none;
+        background:#00aaff;
+        color:black;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.2s;
+    }
 
-.buff-active{color:var(--state-icon);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:15px;animation:pulse 2s infinite;min-height:15px;text-transform:uppercase;}
+    button:hover{
+        background:white;
+    }
 
-.stat-box-grid{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; border-top:1px solid var(--b); border-bottom:1px solid var(--b); padding:10px 0;}
-.stat-label{font-size:9px;color:var(--t-dim);text-transform:uppercase;display:block;letter-spacing:2px;margin-bottom:2px;}
-.stat-val{font-size:20px;font-weight:900;color:var(--t);}
-.stat-val.blue{color:var(--a);text-shadow:var(--glow);}
-
-.bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}
-
-.routine-box { margin-top: 5px; text-align: left; border: 1px solid var(--b); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px;}
-.routine-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.routine-list { list-style: none; padding: 0; margin: 0; }
-.routine-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid rgba(18, 36, 69, 0.5); font-size: 13px; color: var(--t-dim); }
-.routine-item.checked { color: var(--a); text-decoration: line-through; opacity: 0.6; }
-.routine-check { width: 16px; height: 16px; border: 1px solid var(--b); margin-right: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px;}
-.routine-item.checked .routine-check { background: var(--a-dim); color: var(--a); border-color: var(--a); }
-.routine-input-wrap { display: flex; gap: 5px; margin-top: 10px; }
-.routine-input { flex: 1; font-size: 11px; text-align: left; padding: 8px; margin: 0; }
-.btn-add-rtn { background: var(--a-dim); border: 1px solid var(--a); color: var(--a); font-size: 16px; width: 35px; cursor: pointer; }
-
-.btn-all-train { background: none; border: 1px solid var(--state-icon); color: var(--state-icon); font-size: 8px; font-weight: 900; padding: 2px 6px; cursor: pointer; text-transform: uppercase; border-radius: 2px; opacity: 0.7; }
-
-.trinity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px;}
-.trinity-card{background:var(--p);border:1px solid var(--b);padding:15px;text-align:center;position:relative;}
-.trinity-card b{font-size:22px;font-weight:900;color:var(--t);}
-.trinity-card::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:var(--a);box-shadow:var(--glow);}
-
-.personal-slot { margin-top: 20px; text-align: left; border-top: 1px solid var(--b); padding-top: 15px;}
-.personal-slot h4 { font-size: 10px; color: var(--a); letter-spacing: 2px; text-transform: uppercase; margin: 10px 0 5px 0;}
-.personal-text { background: rgba(0,0,0,0.3); border: 1px solid var(--b); padding: 10px; font-size: 12px; color: var(--t-dim); min-height: 40px; cursor: pointer; white-space: pre-wrap;}
-
-/* BOSS CSS */
-.boss-card { background: rgba(255, 60, 0, 0.05); border: 1px solid var(--boss-color); padding: 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
-.boss-card.locked { opacity: 0.3; border-color: var(--b); filter: grayscale(1); }
-.boss-card.defeated { border-color: var(--state-icon); background: rgba(0, 255, 170, 0.05); }
-.boss-tag { position: absolute; top: 0; right: 0; background: var(--boss-color); color: #fff; font-size: 8px; padding: 2px 8px; font-weight: 900; text-transform: uppercase;}
-.boss-defeated-tag { background: var(--state-icon); color: #000; }
-.boss-title { font-size: 18px; font-weight: 900; color: var(--boss-color); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
-.boss-desc { font-size: 12px; color: var(--t-dim); margin-bottom: 15px; line-height: 1.4; }
-.btn-boss { width: 100%; padding: 12px; background: none; border: 1px solid var(--boss-color); color: var(--boss-color); font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; }
-.btn-boss.btn-edit { border-color: var(--b); color: var(--t-dim); margin-top: 5px; font-size: 9px; padding: 5px;}
-.btn-boss:disabled { border-color: var(--b); color: var(--b); cursor: default; }
-
-/* JORNADA CSS */
-.journey-section { margin-top: 25px; border-top: 2px solid var(--b); padding-top: 20px; }
-.journey-controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-.journey-input-group { display: flex; gap: 5px; }
-.journey-area { width: 100%; min-height: 120px; background: rgba(0,0,0,0.4); border: 1px solid var(--b); color: var(--t); padding: 12px; font-size: 13px; resize: vertical; margin-bottom: 10px; text-align: left; }
-.search-box { position: relative; width: 100%; margin-bottom: 15px; }
-.search-box input { padding-left: 35px; text-align: left; font-size: 12px; }
-.search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.5; }
-.log-card { background: rgba(18, 36, 69, 0.2); border: 1px solid var(--b); padding: 15px; margin-bottom: 10px; border-left: 3px solid var(--a); }
-.log-meta { font-size: 10px; color: var(--a); font-weight: 900; margin-bottom: 5px; display: flex; justify-content: space-between; }
-.log-content { font-size: 13px; color: var(--t-dim); line-height: 1.5; white-space: pre-wrap; }
-
-.mission-header{display:flex; justify-content:space-between; align-items:center; margin: 20px 0 10px 5px;}
-.mission-header h3{font-size:11px; color:var(--t-dim); letter-spacing:3px; text-transform:uppercase; margin:0;}
-.btn-shuffle{background:none; border:1px solid var(--b); color:var(--a); font-size:9px; font-weight:900; padding:4px 8px; cursor:pointer; text-transform:uppercase; letter-spacing:1px;}
-
-.mission-item{background:var(--p);border:1px solid var(--b);padding:15px;margin-bottom:6px;border-left:2px solid var(--b);cursor:pointer;position:relative; display: flex; flex-direction: column;}
-.mission-item.done{opacity:0.3;filter:grayscale(0.5); border-left-color: var(--state-icon);}
-.m-type{font-size:9px;font-weight:bold;color:var(--a);display:block;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
-.m-task{font-size:14px;color:var(--t);font-weight:bold;}
-
-.skill-category{margin-bottom:25px;}
-.skill-rank-label{font-size:11px;color:var(--a);font-weight:900;margin-bottom:10px;display:block;letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid var(--b);padding-bottom:5px;}
-.skill-item{background:var(--p);border:1px solid var(--b);padding:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-.skill-item.mastered{border-color:var(--a);background:var(--a-dim);}
-.check-box{width:18px;height:18px;border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:11px;}
-
-.btn-reset{width:100%;color:#555;font-size:9px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;}
-.btn-liar{width:100%;padding:15px;background:none;border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:1px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:10px;}
-.hidden{display:none!important}
-
-.quest-division {
-border-bottom: 1px solid var(--b);
-margin: 25px 0 10px 0;
-padding-bottom: 5px;
-color: var(--a);
-font-size: 10px;
-letter-spacing: 4px;
-text-transform: uppercase;
-font-weight: 900;
-text-align: left;
-display: flex;
-align-items: center;
-}
-.quest-division::before { content: '>'; margin-right: 10px; color: var(--state-icon); }
-.division-mente { color: var(--gold); }
+    .status{
+        color:#00ff99;
+        font-size:14px;
+        padding:5px 15px;
+        border-bottom:1px solid #003344;
+    }
 </style>
+</head>
+<body>
 
-</head>    
-<body>    <div id="setup-screen" class="setup-overlay hidden">    
-    <div class="setup-card">    
-        <h2>Você despertou como um Jogador.</h2>    
-        <div id="arch-box">    
-            <div class="arch-opt" onclick="Sys.selArch('Viking',this)">Viking</div>    
-            <div class="arch-opt" onclick="Sys.selArch('Samurai',this)">Samurai</div>    
-            <div class="arch-opt" onclick="Sys.selArch('Templário',this)">Templário</div>    
-            <div class="arch-opt" onclick="Sys.selArch('Soldado',this)">Soldado</div>    
-        </div>    
-        <div id="arch-hint" class="arch-hint">Selecione uma classe para ver suas características...</div>    <input type="text" id="setup-name" placeholder="INSIRA SEU CODINOME">    
-    <button class="btn-init" onclick="Sys.finalize()">INICIALIZAR</button>    
-</div>
+<div class="system">
 
-</div>    <div class="container">    <div class="nav-tabs">    
-    <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>    
-    <button class="nav-btn" id="tab-pessoal-btn" onclick="Sys.switchTab('pessoal')">PESSOAL</button>    
-    <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>    
-    <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">MAESTRIA</button>    
-    <button class="nav-btn" id="tab-boss-btn" onclick="Sys.switchTab('boss')">BOSS</button>    
-    <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>    
-</div>    
+    <div class="header">
+        SYSTEM
+    </div>
 
-<div id="tab-system">    
-    <div class="panel" style="text-align:center">    
-        <div class="profile-wrap">    
-            <div class="profile-circle" onclick="document.getElementById('file-input').click()">    
-                <img id="p-img" src="" class="hidden">    
-                <i id="p-img-placeholder">Upload Foto</i>    
-            </div>    
-            <div id="lvl-ui" class="lvl-badge">LVL 1</div>    
-            <input type="file" id="file-input" class="hidden" accept="image/*" onchange="Sys.upImg(event)">    
-        </div>    
+    <div class="status">
+        [ IA ONLINE ]
+    </div>
 
-        <div id="p-name">--</div>    
-        <div id="p-arch">--</div>    
-        <div id="streak-ui" class="streak-ui" onclick="Sys.edReten()">SEQUÊNCIA: 0 DIAS</div>    
-        <div id="day-buffs" class="buff-active"></div>    
+    <div class="chat" id="chat">
 
-        <div class="stat-box-grid">    
-            <div style="text-align:left"><span class="stat-label">RANK</span><span class="stat-val blue" id="rank-ui" onclick="Sys.edRank()">E</span></div>    
-            <div style="text-align:right"><span class="stat-label">SISTEMA XP</span><span class="stat-val" id="xp-ui" onclick="Sys.edXP()">0 / 5000</span></div>    
-        </div>    
-
-        <div style="text-align:left">    
-            <span class="stat-label" style="color:var(--aura-color)">FARM DE AURA <span id="aura-val" onclick="Sys.edAura()">0 / 100</span></span>    
-            <div class="bar-w"><div id="aura-bar" class="aura-bar-f"></div></div>    
-        </div>    
-
-        <div class="routine-box">    
-            <div class="routine-header"><span class="stat-label">Protocolos de Rotina</span></div>    
-            <div id="routine-list-ui" class="routine-list"></div>    
-            <div class="routine-input-wrap">    
-                <input type="text" id="routine-input" class="routine-input" placeholder="Nova tarefa...">    
-                <button class="btn-add-rtn" onclick="Sys.addRoutine()">+</button>    
-            </div>    
-        </div>    
-    </div>    
-
-    <div class="trinity-grid">    
-        <div class="trinity-card"><span class="stat-label">Corpo</span><b id="v-corpo" onclick="Sys.edSt('corpo')">10</b></div>    
-        <div class="trinity-card"><span class="stat-label">Mente</span><b id="v-mente" onclick="Sys.edSt('mente')">10</b></div>    
-        <div class="trinity-card"><span class="stat-label">Espírito</span><b id="v-espirito" onclick="Sys.edSt('espirito')">10</b></div>    
-    </div>    
-
-    <div class="mission-header">    
-        <h3>Modificações Diárias</h3>    
-        <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio </button>    
-    </div>    
-    <div id="mission-ui"></div>    
-
-    <button class="btn-liar" onclick="Sys.failReten()">⚠️ RECAÍDA (RESET SEQUÊNCIA)</button>    
-    <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>    
-</div>    
-
-<div id="tab-pessoal" class="hidden">    
-    <div class="panel">    
-        <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px;">REGISTROS DO MONARCA</h3>    
-            
-        <div class="personal-slot" style="margin-top:0; border-top:none; padding-top:0;">    
-            <h4>Valores Fins</h4>    
-            <div id="txt-values" class="personal-text" onclick="Sys.edPers('values')">...</div>    
-                
-            <h4>Princípios Inabaláveis</h4>    
-            <div id="txt-principles" class="personal-text" onclick="Sys.edPers('principles')">...</div>    
-
-            <h4>Background / Origem</h4>    
-            <div id="txt-bg" class="personal-text" onclick="Sys.edPers('bg')">...</div>    
-        </div>    
-
-        <div class="journey-section">    
-            <h4 style="color:var(--a); letter-spacing:3px; font-size:11px;">RELATOS DA JORNADA</h4>    
-            <div class="journey-controls">    
-                <div style="display:flex; gap:5px;">    
-                    <input type="date" id="jou-date" style="flex:1; font-size:11px;">    
-                    <input type="time" id="jou-time" style="flex:1; font-size:11px;">    
-                </div>    
-                <textarea id="jou-text" class="journey-area" placeholder="Como foi sua batalha hoje? Escreva aqui..."></textarea>    
-                <button class="btn-init" style="margin:0" onclick="Sys.saveJourney()">REGISTRAR NO DIÁRIO</button>    
-            </div>    
-                
-            <div class="search-box">    
-                <input type="text" id="jou-search" placeholder="Pesquisar por data (AAAA-MM-DD)..." oninput="Sys.renderJourney()">    
-            </div>    
-            <div id="journey-logs"></div>    
-        </div>    
-    </div>    
-</div>    
-
-<div id="tab-train" class="hidden">    
-    <div class="panel">    
-        <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px;">TREINAMENTOS</h3>    
-        <div id="trains-container"></div>    
-        <button class="btn-init" onclick="Sys.createNewTrainTable()">+ CRIAR NOVO GRUPO DE TREINO</button>    
-    </div>    
-</div>    
-
-<div id="tab-skills" class="hidden">    
-    <div class="panel">    
-        <h3 style="text-align:center; color:var(--a);">MAESTRIAS & HABILIDADES</h3>    
-        <div id="skills-list-ui"></div>    
-    </div>    
-</div>    
-
-<div id="tab-boss" class="hidden">    
-    <div class="panel">    
-        <h3 style="text-align:center; color:var(--boss-color); letter-spacing: 5px;">RAID: BOSS DUNGEON</h3>    
-        
-        <!-- EDITOR DE BOSS -->
-        <div class="routine-box" style="border-color: var(--boss-color);">
-            <div class="routine-header"><span class="stat-label" style="color:var(--boss-color)">Invocação de Boss</span></div>
-            <input type="text" id="boss-name-inp" class="routine-input" placeholder="Nome do Boss...">
-            <input type="number" id="boss-lvl-inp" class="routine-input" placeholder="Level Mínimo (ex: 50)">
-            <textarea id="boss-desc-inp" class="routine-input" style="height:60px" placeholder="Descrição do Desafio Mortal..."></textarea>
-            <button class="btn-init" style="border-color:var(--boss-color); color:var(--boss-color); margin-top:10px" onclick="Sys.addBoss()">+ CRIAR NOVO BOSS</button>
+        <div class="msg system-msg">
+            ▶ Sistema iniciado.
         </div>
 
-        <div id="boss-list-ui"></div>    
-    </div>    
-</div>    
+        <div class="msg system-msg">
+            ▶ Digite um comando.
+        </div>
 
-<div id="tab-hobbies" class="hidden">    
-    <div class="panel">    
-        <h3 style="text-align:center; color:var(--a); letter-spacing: 5px;">CENTRAL DE QUESTS</h3>    
-            
-        <div class="quest-division">Corpo</div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧬 Físico</span></div><div id="hobby-corpo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-corpo" class="routine-input" placeholder="Novo Treino..."><button class="btn-add-rtn" onclick="Sys.addHobby('corpo')">+</button></div></div>    
-            
-        <div class="quest-division">Espírito</div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>    
-            
-        <div class="quest-division division-mente">Mente</div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Social</span></div><div id="hobby-social-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-social" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('social')">+</button></div></div>    
-        <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>    
-    </div>    
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="input" placeholder="Digite um comando...">
+        <button onclick="sendMessage()">EXECUTAR</button>
+    </div>
+
 </div>
 
-</div>    <script>    
-const RANKS = [{id:'E', min:0}, {id:'D', min:3330}, {id:'C', min:13300}, {id:'B', min:26600}, {id:'A', min:39900}, {id:'S', min:53250}, {id:'MAX', min:100000}];    
-    
-const VICTORY_PHRASES = [    
-    "Boss derrotado. Você fez o que a maioria evita. Continue.",    
-    "Execução confirmada. Sua disciplina subiu de nível.",    
-    "Você venceu mesmo sem vontade. Isso muda tudo.",    
-    "Mais um limite quebrado. Você não é mais o mesmo.",    
-    "Sistema reconhece: consistência acima de emoção.",    
-    "Você agiu. Isso te separa dos outros."    
-];    
-    
-const GIFTS = [    
-    "Dois dias sem punições (O Sistema será indulgente).",    
-    "XP DUPLO por 24h.",    
-    "Soberania: Você escolhe as missões de amanhã.",    
-    "Privilégio: Um dia sem lavar louça.",    
-    "Recuperação: Um banho longo e relaxante."    
-];    
-    
-const Sys = {    
-    db: null, key: 'monarch_v8_permanent', tA: null,    
-    init() {    
-        let d = localStorage.getItem(this.key);    
-        if (d) {     
-            this.db = JSON.parse(d);     
-            if(!this.db.customCali) this.db.customCali = {E:[], D:[], C:[], B:[], A:[], S:[]};    
-            if(!this.db.trains) this.db.trains = {};    
-            if(!this.db.trainTitles) this.db.trainTitles = {};    
-            if(!this.db.bosses) this.db.bosses = { defeated: [], activeChallenge: null, customList: [] };    
-            if(!this.db.bosses.customList) this.db.bosses.customList = []; // Migração de versão
-            if(!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };    
-                
-            this.check(); this.render(); this.setJourneyDefaults();    
-        } else document.getElementById('setup-screen').classList.remove('hidden');    
-    },    
-    selArch(a, el) {     
-        this.tA = a;     
-        document.querySelectorAll('.arch-opt').forEach(x => x.classList.remove('selected'));     
-        el.classList.add('selected');     
-            
-        const hintEl = document.getElementById('arch-hint');    
-        if (a === 'Viking') {    
-            hintEl.innerText = "VIKING: Desenrolado, determinado e explorador. Energia de ir para frente, selvagem e desapegado. Não suporta rotina monótona.";    
-        } else if (a === 'Samurai') {    
-            hintEl.innerText = "SAMURAI: Silencioso, focado e minimalista. Busca a excelência através do hábito e disciplina. Honra compromissos até o fim.";    
-        } else if (a === 'Templário') {    
-            hintEl.innerText = "TEMPLÁRIO: Regrado, controlado e virtuoso. Prioriza espiritualidade e família. Age pelo que é certo e belo sem relativismo.";    
-        } else if (a === 'Soldado') {    
-            hintEl.innerText = "SOLDADO: Sensível e disposto a lutar, mas em busca de uma causa real. Precisa unificar seus fragmentos e encontrar sua própria guerra.";    
-        }    
-    },    
-    save(){ localStorage.setItem(this.key, JSON.stringify(this.db)); },    
-    setJourneyDefaults() {    
-        const now = new Date();    
-        document.getElementById('jou-date').value = now.toISOString().split('T')[0];    
-        document.getElementById('jou-time').value = now.toTimeString().slice(0,5);    
-    },    
-    switchTab(t) {    
-        ['system', 'pessoal', 'train', 'skills', 'hobbies', 'boss'].forEach(id => {    
-           let el = document.getElementById('tab-'+id);    
-           if(el) el.classList.toggle('hidden', id!==t);    
-        });    
-        ['sys', 'pessoal', 'train', 'skills', 'hobbies', 'boss'].forEach(id => {    
-           let el = document.getElementById('tab-'+id+'-btn');    
-           if(el) el.classList.toggle('active', id===t);    
-        });    
-        if(t==='skills') this.renderSkills();    
-        if(t==='boss') this.renderBosses();    
-        this.render();    
-    },    
-    finalize() {    
-        let n = document.getElementById('setup-name').value;    
-        if (!n || !this.tA) return;    
-            
-        let initialAttr = {C:10, M:10, E:10};    
-        if(this.tA === 'Viking') initialAttr = {C:20, M:10, E:5};    
-        if(this.tA === 'Samurai') initialAttr = {C:10, M:20, E:5};    
-        if(this.tA === 'Templário') initialAttr = {C:5, M:10, E:20};    
-        if(this.tA === 'Soldado') initialAttr = {C:10, M:10, E:10};    
-    
-        this.db = {     
-            name: n.toUpperCase(), arch: this.tA, xp:0, reten:0, last:'',     
-            attr: initialAttr, miss:[], skills:[], routine:[],     
-            hobbies:{corpo:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]},     
-            trains:{puxada:[], empurrada:[], core:[]},     
-            trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},    
-            customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},    
-            pers:{bg:'', values:'', principles:''}, journey:[], lvl:1, aura:0,    
-            bosses: { defeated: [], activeChallenge: null, customList: [] },    
-            activeBuffs: { doubleXP: false, penaltyImmunity: 0 }    
-        };    
-        this.genMiss(); this.save(); location.reload();    
-    },    
-    check() {    
-        let today = new Date().toLocaleDateString('pt-BR');    
-        if (this.db.last === '') { this.db.last = today; this.save(); return; }    
-            
-        if (this.db.last !== today) {    
-            if (this.db.bosses.activeChallenge !== null) {    
-                this.bossDeath();    
-            }    
-    
-            if (this.db.activeBuffs.penaltyImmunity > 0) {    
-                this.db.activeBuffs.penaltyImmunity--;    
-            } else {    
-                let penaltyXP = 0;    
-                let penaltyC = 0, penaltyM = 0, penaltyE = 0;    
-    
-                if(this.db.miss) {    
-                    this.db.miss.forEach(m => {    
-                        if(!m.done) {    
-                            penaltyXP += 25;    
-                            if(m.type.includes('CORPO')) penaltyC++;    
-                            if(m.type.includes('ESPÍRITO')) penaltyE++;    
-                            if(m.type.includes('HOBBY')) penaltyM++;    
-                        }    
-                    });    
-                }    
-    
-                if(penaltyXP > 0) {    
-                    this.db.xp = Math.max(0, this.db.xp - penaltyXP);    
-                    this.db.attr.C = Math.max(0, this.db.attr.C - penaltyC);    
-                    this.db.attr.M = Math.max(0, this.db.attr.M - penaltyM);    
-                    this.db.attr.E = Math.max(0, this.db.attr.E - penaltyE);    
-                    alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS.");    
-                }    
-            }    
-    
-            this.db.activeBuffs.doubleXP = false;    
-            this.db.reten++;     
-            if(this.db.routine) this.db.routine.forEach(r => r.done = false);    
-            if(this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex.done = false); }); }    
-            this.db.last = today; this.genMiss(); this.save();    
-        }    
-    },    
-        
-    bossDeath() {    
-        const activeIdx = this.db.bosses.activeChallenge;    
-        const currentBoss = this.db.bosses.customList.find(b => b.id === activeIdx);
-        // Regressão baseada no último Boss derrotado ou volta pro lvl base
-        const defeatedBosses = this.db.bosses.customList.filter(b => this.db.bosses.defeated.includes(b.id));
-        defeatedBosses.sort((a,b) => b.lvl - a.lvl);
-        
-        const newLvl = defeatedBosses.length > 0 ? defeatedBosses[0].lvl : 1;    
-        this.db.lvl = newLvl;    
-        this.db.aura = 0;    
-        this.db.bosses.activeChallenge = null;    
-        
-        // Perde o status de "Derrotado" do último boss se houver
-        if (defeatedBosses.length > 0) {
-            const lastDefeatedId = defeatedBosses[0].id;
-            this.db.bosses.defeated = this.db.bosses.defeated.filter(id => id !== lastDefeatedId);
+<script>
+
+const chat = document.getElementById("chat");
+
+const memory = {
+    level: 1,
+    xp: 0,
+    strength: 5,
+    agility: 5,
+    intelligence: 5,
+    title: "Jogador"
+};
+
+function systemReply(text){
+    const div = document.createElement("div");
+    div.className = "msg system-msg";
+    div.innerHTML = "▶ " + text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function userReply(text){
+    const div = document.createElement("div");
+    div.className = "msg user-msg";
+    div.innerHTML = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function levelUp(){
+    memory.level++;
+    memory.strength += 2;
+    memory.agility += 2;
+    memory.intelligence += 2;
+
+    systemReply(`
+        LEVEL UP<br>
+        Nível: ${memory.level}<br>
+        FOR: ${memory.strength}<br>
+        AGI: ${memory.agility}<br>
+        INT: ${memory.intelligence}
+    `);
+}
+
+function AI(command){
+
+    command = command.toLowerCase();
+
+    // STATUS
+    if(command.includes("status")){
+        return `
+        STATUS DO JOGADOR<br><br>
+
+        Título: ${memory.title}<br>
+        Nível: ${memory.level}<br>
+        XP: ${memory.xp}<br>
+        FOR: ${memory.strength}<br>
+        AGI: ${memory.agility}<br>
+        INT: ${memory.intelligence}
+        `;
+    }
+
+    // TREINO
+    if(command.includes("treinar")){
+        memory.xp += 20;
+
+        if(memory.xp >= 100){
+            memory.xp = 0;
+            levelUp();
         }
 
-        alert(`💀 MORTE NO BOSS: Você falhou em derrotar "${currentBoss.name}". O Sistema regrediu seu nível para ${newLvl}.`);    
-        this.save(); this.render(); this.renderBosses();
-    },    
-    
-    winBoss(id) {    
-        if(!confirm("CONFIRMAR VITÓRIA SOBRE O BOSS? O Sistema não tolera mentiras.")) return;    
-        this.db.bosses.defeated.push(id);    
-        this.db.bosses.activeChallenge = null;    
-        const phrase = VICTORY_PHRASES[Math.floor(Math.random() * VICTORY_PHRASES.length)];    
-        const giftIdx = Math.floor(Math.random() * GIFTS.length);    
-        const gift = GIFTS[giftIdx];    
-        if(giftIdx === 0) this.db.activeBuffs.penaltyImmunity = 2;    
-        if(giftIdx === 1) this.db.activeBuffs.doubleXP = true;    
-        alert(`🏆 VITÓRIA!\n\n"${phrase}"\n\nPRESENTE DO SISTEMA: ${gift}`);    
-        this.db.xp += 2500;    
-        this.save(); this.render(); this.renderBosses();    
-    },    
-    
-    startBoss(id) {    
-        if(this.db.bosses.activeChallenge !== null) { alert("Você já está em uma Raid ativa!"); return; }    
-        this.db.bosses.activeChallenge = id;    
-        alert("RAID INICIADA. Você tem até o final do dia para completar o desafio ou sofrerá regressão.");    
-        this.save(); this.renderBosses();    
-    },
+        return "Treino concluído. XP +20";
+    }
 
-    addBoss() {
-        const name = document.getElementById('boss-name-inp').value;
-        const lvl = parseInt(document.getElementById('boss-lvl-inp').value);
-        const desc = document.getElementById('boss-desc-inp').value;
+    // MISSÃO
+    if(command.includes("missão")){
+        const missions = [
+            "Elimine 10 inimigos.",
+            "Sobreviva por 3 minutos.",
+            "Derrote o chefe.",
+            "Entre na dungeon.",
+            "Colete 5 núcleos mágicos."
+        ];
 
-        if(!name || isNaN(lvl) || !desc) { alert("Preencha todos os campos do Boss."); return; }
+        return "Nova missão: " +
+            missions[Math.floor(Math.random() * missions.length)];
+    }
 
-        this.db.bosses.customList.push({ id: Date.now(), name, lvl, desc });
-        this.db.bosses.customList.sort((a,b) => a.lvl - b.lvl);
-        
-        document.getElementById('boss-name-inp').value = "";
-        document.getElementById('boss-lvl-inp').value = "";
-        document.getElementById('boss-desc-inp').value = "";
-        
-        this.save(); this.renderBosses();
-    },
+    // SOMBRA
+    if(command.includes("extrair sombra")){
+        return "Extração concluída.";
+    }
 
-    delBoss(id) {
-        if(confirm("Remover este Boss do Sistema?")) {
-            this.db.bosses.customList = this.db.bosses.customList.filter(b => b.id !== id);
-            this.db.bosses.defeated = this.db.bosses.defeated.filter(bid => bid !== id);
-            if(this.db.bosses.activeChallenge === id) this.db.bosses.activeChallenge = null;
-            this.save(); this.renderBosses();
-        }
-    },
-    
-    renderBosses() {    
-        let html = "";    
-        this.db.bosses.customList.forEach(b => {    
-            const isDefeated = this.db.bosses.defeated.includes(b.id);    
-            const isLocked = this.db.lvl < b.lvl && !isDefeated;    
-            const isActive = this.db.bosses.activeChallenge === b.id;    
-            html += `    
-                <div class="boss-card ${isLocked ? 'locked' : ''} ${isDefeated ? 'defeated' : ''}">    
-                    <div class="boss-tag ${isDefeated ? 'boss-defeated-tag' : ''}">${isDefeated ? 'DERROTADO' : 'LEVEL ' + b.lvl}</div>    
-                    <div class="boss-title">${b.name}</div>    
-                    <div class="boss-desc">${b.desc}</div>    
-                    ${!isDefeated && !isLocked ? `    
-                        ${isActive ?     
-                            `<button class="btn-boss" onclick="Sys.winBoss(${b.id})">CONCLUIR DESAFIO</button>` :     
-                            `<button class="btn-boss" style="border-color:var(--a); color:var(--a)" onclick="Sys.startBoss(${b.id})">INICIAR RAID</button>`    
-                        }    
-                    ` : ''}    
-                    ${isLocked ? `<button class="btn-boss" disabled>REQUISITO: LVL ${b.lvl}</button>` : ''}    
-                    ${isDefeated ? `<div style="font-size:10px; color:var(--state-icon); font-weight:900">NÚCLEO DO BOSS ABSORVIDO</div>` : ''}
-                    <button class="btn-boss btn-edit" onclick="Sys.delBoss(${b.id})">EXCLUIR BOSS</button>
-                </div>`;    
-        });    
-        document.getElementById('boss-list-ui').innerHTML = html || "<div style='text-align:center; opacity:0.5; font-size:10px;'>Nenhum Boss invocado na Dungeon.</div>";    
-    },    
-    
-    getRank() { if(this.db.customRank) return this.db.customRank; let cur = RANKS[0].id; for(let r of RANKS) if(this.db.xp >= r.min) cur = r.id; return cur; },    
-        
-    genMiss() {    
-        let cL = (this.db.hobbies.corpo && this.db.hobbies.corpo.length > 0) ? this.db.hobbies.corpo.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Corpo";    
-        let eL = (this.db.hobbies.espirito && this.db.hobbies.espirito.length > 0) ? this.db.hobbies.espirito.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Espírito";    
-            
-        let mindCats = ['criativo', 'conhecimento', 'social', 'baixa'].filter(cat => this.db.hobbies[cat] && this.db.hobbies[cat].length > 0);    
-        mindCats.sort(() => 0.5 - Math.random());    
-            
-        let hobby1 = "Cadastre um Hobby";    
-        let hobby2 = "Adicione mais Hobbies";    
-            
-        if (mindCats.length >= 1) {    
-            let cat1 = mindCats[0];    
-            hobby1 = this.db.hobbies[cat1].sort(() => 0.5 - Math.random())[0].task;    
-        }    
-        if (mindCats.length >= 2) {    
-            let cat2 = mindCats[1];    
-            hobby2 = this.db.hobbies[cat2].sort(() => 0.5 - Math.random())[0].task;    
-        }    
-    
-        this.db.miss = [    
-            {type:'🧬 CORPO', task: cL, done:false, xpG:0, auraG:0},    
-            {type:'✝️ ESPÍRITO', task: eL, done:false, xpG:0, auraG:0},    
-            {type:'🧠 HOBBY', task: hobby1, done:false, xpG:0, auraG:0},    
-            {type:'🧠 HOBBY', task: hobby2, done:false, xpG:0, auraG:0}    
-        ];    
-    },    
-    saveJourney() {    
-        const text = document.getElementById('jou-text').value; if(!text) return;    
-        this.db.journey.unshift({ date: document.getElementById('jou-date').value, time: document.getElementById('jou-time').value, text });    
-        document.getElementById('jou-text').value = ""; this.save(); this.renderJourney();    
-    },    
-    renderJourney() {    
-        const query = document.getElementById('jou-search').value; let html = "";    
-        const filtered = this.db.journey.filter(j => j.date.includes(query));    
-        filtered.forEach((j, i) => { html += `<div class="log-card"><div class="log-meta"><span>📅 ${j.date}</span><span>🕒 ${j.time}</span><span style="color:red; cursor:pointer" onclick="Sys.delJou(${i})">✕</span></div><div class="log-content">${j.text}</div></div>`; });    
-        const container = document.getElementById('journey-logs');    
-        if(container) container.innerHTML = html || "<div style='text-align:center; font-size:10px; opacity:0.5'>Nenhum registro encontrado.</div>";    
-    },    
-    delJou(i) { if(confirm("Apagar registro?")) { this.db.journey.splice(i, 1); this.save(); this.renderJourney(); } },    
-        
-    toggleSkill(s, rank, e) {    
-        if(e.target.tagName === 'B') return;     
-        let rIdx = RANKS.findIndex(rk => rk.id === rank), myIdx = RANKS.findIndex(rk => rk.id === this.getRank());    
-        if(rIdx > myIdx) return;    
-        if(this.db.skills.includes(s)) { this.db.skills = this.db.skills.filter(i => i !== s); } else {     
-            let gain = this.db.activeBuffs.doubleXP ? 2960 : 1480;    
-            this.db.skills.push(s); this.db.xp += gain; this.db.attr.C += 1; this.pop(e, `+${gain} XP / +1 CORPO`);     
-        }    
-        this.save(); this.render(); this.renderSkills();    
-    },    
-    addSkill(rank) {    
-        let inp = document.getElementById('inp-skill-' + rank); if(!inp.value) return;    
-        this.db.customCali[rank].push(inp.value); inp.value = ""; this.save(); this.renderSkills();    
-    },    
-    delSkill(rank, idx, e) {    
-        e.stopPropagation(); if(confirm("Remover esta maestria?")) {    
-            let name = this.db.customCali[rank][idx];    
-            this.db.customCali[rank].splice(idx, 1);    
-            this.db.skills = this.db.skills.filter(s => s !== name);    
-            this.save(); this.renderSkills();    
-        }    
-    },    
-    toggleRoutine(i, e) {     
-        let r = this.db.routine[i];     
-        if (r.done) { r.done = false; this.db.aura -= r.gain; this.pop(e, `-${r.gain} AURA`); } else {     
-            r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25;     
-            this.db.aura += r.gain; this.pop(e, `+${r.gain} AURA`);     
-        }     
-        this.checkLvl(); this.save(); this.render();     
-    },    
-    toggleTrain(cat, i, e) {     
-        let item = this.db.trains[cat][i];     
-        if (item.done) { item.done = false; this.db.aura -= item.gain; this.pop(e, `-${item.gain} AURA`); } else {     
-            item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25;     
-            this.db.aura += item.gain; this.pop(e, `+${item.gain} AURA`);     
-        }     
-        this.checkLvl(); this.save(); this.render();     
-    },    
-    doMiss(i, e) {     
-        let m = this.db.miss[i];     
-        if (m.done) {     
-            m.done = false; this.db.xp -= m.xpG; this.db.aura -= m.auraG;     
-            let txtPop = `-${m.xpG} XP`;    
-            if (m.type.includes('CORPO')) { this.db.attr.C -= 1; txtPop += " / -1 CORPO"; }    
-            if (m.type.includes('ESPÍRITO')) { this.db.attr.E -= 1; txtPop += " / -1 ESPÍRITO"; }    
-            if (m.type.includes('HOBBY')) { this.db.attr.M -= 1; txtPop += " / -1 MENTE"; }    
-            this.pop(e, txtPop);    
-        } else {     
-            m.done = true; let mult = (this.db.reten >= 3) ? 1.5 : 1.0;     
-            m.xpG = Math.floor(10 * mult);     
-            if (this.db.activeBuffs.doubleXP) m.xpG *= 2;    
-            m.auraG = Math.floor(25 * mult);     
-            this.db.xp += m.xpG; this.db.aura += m.auraG;     
-            let txtPop = `+${m.xpG} XP`;    
-            if (m.type.includes('CORPO')) { this.db.attr.C += 1; txtPop += " / +1 CORPO"; }    
-            if (m.type.includes('ESPÍRITO')) { this.db.attr.E += 1; txtPop += " / +1 ESPÍRITO"; }    
-            if (m.type.includes('HOBBY')) { this.db.attr.M += 1; txtPop += " / +1 MENTE"; }    
-            this.pop(e, txtPop);     
-        }     
-        this.checkLvl(); this.save(); this.render();     
-    },    
-    edSkillName(rank, idx) {    
-        let oldName = this.db.customCali[rank][idx];    
-        let newName = prompt("Renomear Habilidade:", oldName);    
-        if(newName) {    
-            if(this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);    
-            this.db.customCali[rank][idx] = newName; this.save(); this.renderSkills();    
-        }    
-    },    
-    edTrainTitle(cat) { let newT = prompt("Novo nome:", this.db.trainTitles[cat]); if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); } },    
-    checkAllTrain(cat, e) {    
-        let mult = (this.db.reten >= 3) ? 35 : 25, total = 0;    
-        this.db.trains[cat].forEach(item => { if(!item.done) { item.done = true; item.gain = mult; total += mult; } });    
-        if(total > 0) { this.db.aura += total; this.db.attr.C += 1; this.pop(e, `+${total} AURA / +1 CORPO`); this.checkLvl(); this.save(); this.render(); }    
-    },    
-    createNewTrainTable() {    
-        let name = prompt("Nome do novo grupo de treino (Ex: PERNAS):");    
-        if(name) { let id = "tr_" + Date.now(); this.db.trains[id] = []; this.db.trainTitles[id] = name.toUpperCase(); this.save(); this.render(); }    
-    },    
-    delTrainTable(cat) { if(confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) { delete this.db.trains[cat]; delete this.db.trainTitles[cat]; this.save(); this.render(); } },    
-    addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },    
-    delHobby(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },    
-    addRoutine() { let inp = document.getElementById('routine-input'); if(!inp.value) return; this.db.routine.push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },    
-    delRoutine(i, e) { e.stopPropagation(); this.db.routine.splice(i, 1); this.save(); this.render(); },    
-    addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },    
-    delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },    
-    checkLvl() { let req = this.db.lvl * 100; while(this.db.aura >= req) { this.db.aura -= req; this.db.lvl++; req = this.db.lvl * 100; } while(this.db.aura < 0 && this.db.lvl > 1) { this.db.lvl--; let prevReq = this.db.lvl * 100; this.db.aura += prevReq; } },    
-    pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },    
-    upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },    
-    edPers(key) { let val = prompt("Editar:", this.db.pers[key]); if(val !== null) { this.db.pers[key] = val; this.save(); this.render(); } },    
-    edXP() { let v = prompt("XP:"); if(v) { this.db.xp = Number(v); this.save(); this.render(); } },    
-    edAura() { let v = prompt("Aura:"); if(v) { this.db.aura = Number(v); this.checkLvl(); this.save(); this.render(); } },    
-    edRank() { let v = prompt("Rank:"); if(v) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },    
-    edReten() { let v = prompt("SEQUÊNCIA:"); if(v) { this.db.reten = Number(v); this.save(); this.render(); } },    
-    edSt(s) { let v = prompt("Ajuste:", this.db.attr[s.charAt(0).toUpperCase()]); if(v) { this.db.attr[s.charAt(0).toUpperCase()] = Number(v); this.save(); this.render(); } },    
-    shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },    
-    failReten() { if(confirm("ZERAR SEQUÊNCIA?")) { this.db.reten = 0; this.save(); this.render(); } },    
-    reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },    
-    renderSkills() {    
-        let h = ""; let mRI = RANKS.findIndex(rk => rk.id === this.getRank());    
-        ['E','D','C','B','A','S'].forEach(r => {    
-            let rI = RANKS.findIndex(rk => rk.id === r), l = rI > mRI;    
-            h += `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;    
-            if(this.db.customCali[r]) {    
-                this.db.customCali[r].forEach((s, idx) => {     
-                    const m = this.db.skills.includes(s);     
-                    h += `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}" onclick="Sys.toggleSkill('${s}', '${r}', event)">    
-                            <b onclick="Sys.edSkillName('${r}', ${idx})">${s}</b>    
-                            <div style="display:flex; align-items:center; gap:10px;"><span style="opacity:0.3; font-size:10px;" onclick="Sys.delSkill('${r}', ${idx}, event)">✕</span><div class="check-box">${m?'✓':''}</div></div>    
-                          </div>`;     
-                });    
-            }    
-            h += `<div class="routine-input-wrap"><input type="text" id="inp-skill-${r}" class="routine-input" placeholder="Nova Habilidade Rank ${r}..."><button class="btn-add-rtn" onclick="Sys.addSkill('${r}')">+</button></div></div>`;    
-        });    
-        document.getElementById('skills-list-ui').innerHTML = h;    
-    },    
-    render() {    
-        if(!this.db) return; const isB = this.db.reten >= 3;    
-        if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }    
-        document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;    
-        document.getElementById('streak-ui').innerText = "SEQUÊNCIA: " + this.db.reten + " DIAS";    
-        document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;    
-        let buffTxt = isB ? "✨ BUFF SEQUÊNCIA" : "";    
-        if(this.db.activeBuffs.doubleXP) buffTxt += " | 🔥 XP DUPLO";    
-        if(this.db.activeBuffs.penaltyImmunity > 0) buffTxt += " | 🛡️ IMUNIDADE";    
-        document.getElementById('day-buffs').innerText = buffTxt;    
-        let rId = this.getRank(), rIdx = RANKS.findIndex(rk => rk.id === rId);    
-        document.getElementById('rank-ui').innerText = rId;    
-        document.getElementById('xp-ui').innerText = this.db.xp + " / " + (RANKS[rIdx+1] ? RANKS[rIdx+1].min : "MAX");    
-        let aR = this.db.lvl * 100; document.getElementById('aura-val').innerText = Math.floor(this.db.aura) + " / " + aR;    
-        document.getElementById('aura-bar').style.width = Math.min(100,(this.db.aura/aR)*100)+"%";    
-        document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;    
-        document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";    
-        let rH = ""; if(this.db.routine) this.db.routine.forEach((r, i) => { rH += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine(${i}, event)"><div class="routine-check">${r.done?'✓':''}</div><span style="flex:1">${r.task}</span><span style="opacity:0.3" onclick="Sys.delRoutine(${i}, event)">✕</span></div>`; });    
-        document.getElementById('routine-list-ui').innerHTML = rH;    
-        let tTotalH = "";    
-        Object.keys(this.db.trains).forEach(cat => {    
-            let tItemsH = "";    
-            this.db.trains[cat].forEach((ex, i) => { tItemsH += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)"><div class="routine-check">${ex.done?'✓':''}</div><span style="flex:1">${ex.task}</span><span style="opacity:0.3" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span></div>`; });    
-            tTotalH += `<div class="routine-box"><div class="routine-header"><span class="stat-label" onclick="Sys.edTrainTitle('${cat}')" style="cursor:pointer">${this.db.trainTitles[cat]}</span><div style="display:flex; gap:5px;"><button class="btn-all-train" onclick="Sys.checkAllTrain('${cat}', event)">Tudo</button><button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delTrainTable('${cat}')">Excluir</button></div></div><div id="train-${cat}-ui" class="routine-list">${tItemsH}</div><div class="routine-input-wrap"><input type="text" id="inp-${cat}" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addTrain('${cat}')">+</button></div></div>`;    
-        });    
-        document.getElementById('trains-container').innerHTML = tTotalH;    
-        ['corpo', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {    
-            let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }    
-            let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;    
-        });    
-        let mH = ""; if(this.db.miss) this.db.miss.forEach((m, i) => { mH += `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)"><div style="display:flex; align-items:center; gap:10px;"><div class="routine-check">${m.done?'✓':''}</div><div style="flex:1"><span class="m-type">${m.type}</span><span class="m-task">${m.task}</span></div></div></div>`; });    
-        document.getElementById('mission-ui').innerHTML = mH;    
-        this.renderJourney();    
-    }    
-};    
-window.onload = () => Sys.init();    
-</script></body></html>
+    // EVOLUÇÃO
+    if(command.includes("evoluir")){
+        levelUp();
+        return "Evolução forçada executada.";
+    }
+
+    // INTELIGÊNCIA SIMULADA
+    if(command.includes("quem é o mais forte")){
+        return "Aquele que continua evoluindo.";
+    }
+
+    if(command.includes("medo")){
+        return "Medo aumenta sobrevivência.";
+    }
+
+    if(command.includes("morte")){
+        return "Morte detectada. Objetivo: evitar.";
+    }
+
+    // DEFAULT
+    const respostas = [
+        "Comando aceito.",
+        "Analisando.",
+        "Objetivo detectado.",
+        "Execução iniciada.",
+        "Você está ficando mais forte.",
+        "Sistema observando.",
+        "Ação registrada.",
+        "Dados atualizados."
+    ];
+
+    return respostas[Math.floor(Math.random() * respostas.length)];
+}
+
+function sendMessage(){
+
+    const input = document.getElementById("input");
+
+    const text = input.value.trim();
+
+    if(text === "") return;
+
+    userReply(text);
+
+    setTimeout(() => {
+        const response = AI(text);
+        systemReply(response);
+    }, 400);
+
+    input.value = "";
+}
+
+document.getElementById("input")
+.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        sendMessage();
+    }
+});
+
+</script>
+
+</body>
+</html>
