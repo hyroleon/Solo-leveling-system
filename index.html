@@ -381,12 +381,18 @@ const Sys = {
         this.genMiss(); this.save(); location.reload();    
     },    
     check() {    
-        let today = new Date().toLocaleDateString('pt-BR');    
+        let now = new Date();
+        let today = now.toLocaleDateString('pt-BR');    
+        let isSunday = now.getDay() === 0;
+
         if (this.db.last === '') { this.db.last = today; this.save(); return; }    
             
         if (this.db.last !== today) {    
-            if (this.db.activeBuffs.penaltyImmunity > 0) {    
-                this.db.activeBuffs.penaltyImmunity--;    
+            if (this.db.activeBuffs.penaltyImmunity > 0 || isSunday) {    
+                if (this.db.activeBuffs.penaltyImmunity > 0 && !isSunday) {
+                    this.db.activeBuffs.penaltyImmunity--;    
+                }
+                // Punições ignoradas no domingo ou com imunidade ativa
             } else {    
                 let penaltyXP = 0;    
                 let penaltyC = 0, penaltyM = 0, penaltyE = 0;    
