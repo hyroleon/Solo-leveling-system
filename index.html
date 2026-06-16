@@ -177,13 +177,7 @@ align-items: center;
 <body>    <div id="setup-screen" class="setup-overlay hidden">          
     <div class="setup-card">          
         <h2>Você despertou como um Jogador.</h2>          
-        <div class="gender-select" style="margin-bottom:15px;">    
-    <div class="arch-opt selected" onclick="Sys.selGender('masc',this)">Masculino</div>    
-    <div class="arch-opt" onclick="Sys.selGender('fem',this)">Feminino</div>    
-</div>    
-    
-<div id="arch-box"></div>    
-        <div id="arch-hint" class="arch-hint">Selecione uma classe para ver suas características...</div>    <input type="text" id="setup-name" placeholder="INSIRA SEU CODINOME">          
+            <input type="text" id="setup-name" placeholder="INSIRA SEU CODINOME">          
     <button class="btn-init" onclick="Sys.finalize()">INICIALIZAR</button>          
 </div>  </div>    <div class="container">    <div class="nav-tabs">          
     <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>          
@@ -208,11 +202,15 @@ align-items: center;
     
     <div class="stat-box-grid">          
         <div style="text-align:left"><span class="stat-label">RANK</span><span class="stat-val blue" id="rank-ui" onclick="Sys.edRank()">E</span></div>          
-        <div style="text-align:right"><span class="stat-label">ENERGIA</span><span class="stat-val" id="points-ui">0</span></div>          
+        <div style="text-align:right"><span class="stat-label">
+    PONTOS DE ATRIBUTO
+    (<span id="daily-limit-ui">0</span>/10)
+</span><span class="stat-val" id="points-ui" onclick="Sys.edPoints()" style="cursor:pointer">0</span></div>          
     </div>          
     
     <div style="text-align:left">          
-        <span class="stat-label" style="color:var(--energy-color)">FARM DE AURA <span id="energy-val" onclick="Sys.edEnergy()">0 / 100</span></span>          
+        <span class="stat-label" style="color:var(--energy-color)">
+    FARM DE ENERGIA <span id="energy-val" onclick="Sys.edEnergy()">0 / 100</span></span>          
         <div class="bar-w"><div id="energy-bar" class="energy-bar-f"></div></div>          
     </div>          
     
@@ -223,17 +221,17 @@ align-items: center;
 <div class="trinity-grid">          
     <div class="trinity-card">
 <span class="stat-label">Corpo</span>
-<b id="v-corpo">10</b>
+<b id="v-corpo" onclick="Sys.edSt('corpo')" style="cursor:pointer">10</b>
 <button class="btn-add-rtn" onclick="Sys.usePoint('C')">+</button>
 </div>          
     <div class="trinity-card">
 <span class="stat-label">Mente</span>
-<b id="v-mente">10</b>
+<b id="v-mente" onclick="Sys.edSt('mente')" style="cursor:pointer">10</b>
 <button class="btn-add-rtn" onclick="Sys.usePoint('M')">+</button>
 </div>          
     <div class="trinity-card">
 <span class="stat-label">Espírito</span>
-<b id="v-espirito">10</b>
+<b id="v-espirito" onclick="Sys.edSt('espirito')" style="cursor:pointer">10</b>
 <button class="btn-add-rtn" onclick="Sys.usePoint('E')">+</button>
 </div>
 </div>          
@@ -253,10 +251,9 @@ align-items: center;
         <h4>Valores Fins</h4>          
         <div id="txt-values" class="personal-text" onclick="Sys.edPers('values')">...</div>          
                   
-        <h4>Princípios Inabaláveis</h4>          
-        <div id="txt-principles" class="personal-text" onclick="Sys.edPers('principles')">...</div>          
+                  
     
-        <h4>Background / Origem</h4>          
+        <h4>Mentalidade</h4>          
         <div id="txt-bg" class="personal-text" onclick="Sys.edPers('bg')">...</div>          
     </div>          
     
@@ -306,30 +303,41 @@ align-items: center;
     
 </div>  </div>    <script>          
 const RANKS = ['E','D','C','B','A','S','SS+'];      const Sys = {   usePoint(attr) {
-    if(this.db.points <= 0) return;
-
+    
+    if (this.db.points <= 0) return;
+    
+    if (this.db.dailyPointsUsed >= 10) {
+        alert("LIMITE DIÁRIO ATINGIDO (10 PONTOS).");
+        return;
+    }
+    
     this.db.points--;
-
-    if(attr === 'C') this.db.attr.C++;
-    if(attr === 'M') this.db.attr.M++;
-    if(attr === 'E') this.db.attr.E++;
-
+    this.db.dailyPointsUsed++;
+    
+    if (attr === 'C') this.db.attr.C++;
+    if (attr === 'M') this.db.attr.M++;
+    if (attr === 'E') this.db.attr.E++;
+    
     this.save();
     this.render();
-}, 
+},
 db: null, key: 'monarch_v8_permanent', tA: null,    
 gender: 'masc',    
 init() {    
 let d = localStorage.getItem(this.key);    
 if (d) {    
-this.db = JSON.parse(d);    
+this.db = JSON.parse(d);if (this.db.dailyPointsUsed === undefined)
+    this.db.dailyPointsUsed = 0;
 if(!this.db.customCali) this.db.customCali = {E:[], D:[], C:[], B:[], A:[], S:[]};    
 if(!this.db.trains) this.db.trains = {};    
 if(!this.db.trainTitles) this.db.trainTitles = {};    
 if(!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };    
 if(!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false };    
-// Migração Aura -> Energia    
-if(this.db.aura !== undefined) { this.db.energy = this.db.aura; delete this.db.aura; }    
+// Migração Energia Antiga -> Energia Nova
+if (this.db.aura !== undefined) {
+    this.db.energy = this.db.aura;
+    delete this.db.aura;
+}    
     
 // Migração de Rotina para Blocos (Compatibilidade)      
         if(Array.isArray(this.db.routine)) {      
@@ -412,24 +420,17 @@ Object.keys(tabsMap).forEach(id => {
     if(t==='skills') this.renderSkills();          
     this.render();          
 },          
-finalize() {          
-    let n = document.getElementById('setup-name').value;          
-    if (!n || !this.tA) return;          
-              
-    let initialAttr = {C:10, M:10, E:10};          
-    if (this.tA === 'Viking' || this.tA === 'Amazona')    
-    initialAttr = { C: 20, M: 10, E: 10 };    
-    
-if (this.tA === 'Samurai' || this.tA === 'Sacerdotisa')    
-    initialAttr = { C: 10, M: 20, E: 10 };    
-    
-if (this.tA === 'Templário' || this.tA === 'Rainha')    
-    initialAttr = { C: 10, M: 10, E: 20 };    
-    
-if (this.tA === 'Soldado' || this.tA === 'Cigana')    
-    initialAttr = { C: 10, M: 10, E: 10 };    
+finalize() {
+        let n = document.getElementById('setup-name').value;
+        if (!n) return;
+        
+        let initialAttr = {
+            C: 10,
+            M: 10,
+            E: 10
+        };    
       
-    this.db = { points: 0,          
+    this.db = { points: 0, dailyPointsUsed: 0,         
         name: n.toUpperCase(), arch: this.tA, reten:0, last:'',           
         attr: initialAttr, miss:[], skills:[],       
         routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},           
@@ -437,20 +438,31 @@ if (this.tA === 'Soldado' || this.tA === 'Cigana')
         trains:{puxada:[], empurrada:[], core:[]},           
         trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},          
         customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},          
-        pers:{bg:'', values:'', principles:''}, journey:[], lvl:1, energy:0,          
+        pers: {
+    bg: '',
+    values: ''
+}, journey:[], lvl:1, energy:0,          
         activeBuffs: { doubleXP: false, penaltyImmunity: 0 },    
         debuffs: { corpo: false, mente: false, espirito: false }    
     };          
     this.genMiss(); this.save(); location.reload();          
 },          
-check() {          
+check() { if(this.db.trains) {
+    Object.keys(this.db.trains).forEach(k => {
+        this.db.trains[k].forEach(ex => {
+            ex.done = false;
+        });
+
+        this.db.trains[k].rewardGiven = false;
+    });
+}         
     let now = new Date();      
     let today = now.toLocaleDateString('pt-BR');          
     let isSunday = now.getDay() === 0;      
     
     if (this.db.last === '') { this.db.last = today; this.save(); return; }          
               
-    if (this.db.last !== today) {          
+    if (this.db.last !== today) {this.db.dailyPointsUsed = 0;
         // LÓGICA DE DECAIMENTO POR ATRIBUTO BAIXO (<10)    
         if(this.db.attr.C < 10 || this.db.attr.M < 10 || this.db.attr.E < 10) {    
             this.db.attr.C = Math.max(0, this.db.attr.C - 1);    
@@ -473,7 +485,13 @@ check() {
                         if(m.skipped) return;          
                         if(m.type.includes('CORPO')) { penaltyC++; this.db.debuffs.corpo = true; }          
                         if(m.type.includes('ESPÍRITO')) { penaltyE++; this.db.debuffs.espirito = true; }          
-                        if(m.type.includes('HOBBY')) { penaltyM++; this.db.debuffs.mente = true; }          
+                        if (
+    m.type.includes('HOBBY') ||
+    m.type.includes('CONHECIMENTO')
+) {
+    penaltyM++;
+    this.db.debuffs.mente = true;
+}          
                     }          
                 });          
             }          
@@ -524,7 +542,14 @@ genMiss() {
     let cL = (this.db.hobbies.corpo && this.db.hobbies.corpo.length > 0) ? this.db.hobbies.corpo.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Corpo";          
     let eL = (this.db.hobbies.espirito && this.db.hobbies.espirito.length > 0) ? this.db.hobbies.espirito.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Espírito";          
               
-    let mindCats = ['criativo', 'conhecimento', 'social', 'baixa'].filter(cat => this.db.hobbies[cat] && this.db.hobbies[cat].length > 0);          
+    let mindCats = [
+    'criativo',
+    'social',
+    'baixa'
+].filter(cat =>
+    this.db.hobbies[cat] &&
+    this.db.hobbies[cat].length > 0
+);          
     mindCats.sort(() => 0.5 - Math.random());          
               
     let hobby1 = "Cadastre um Hobby";          
@@ -539,12 +564,24 @@ genMiss() {
         hobby2 = this.db.hobbies[cat2].sort(() => 0.5 - Math.random())[0].task;          
     }          
       
-    this.db.miss = [          
-        {type:'🧬 CORPO', task: cL, done:false, xpG:0, energyG:0, skipped:false},          
-        {type:'✝️ ESPÍRITO', task: eL, done:false, xpG:0, energyG:0, skipped:false},          
-        {type:'🧠 HOBBY', task: hobby1, done:false, xpG:0, energyG:0, skipped:false},          
-        {type:'🧠 HOBBY', task: hobby2, done:false, xpG:0, energyG:0, skipped:false}          
-    ];          
+    let conhecimentoMissao = "Cadastre uma missão de Conhecimento";
+
+if (
+    this.db.hobbies.conhecimento &&
+    this.db.hobbies.conhecimento.length > 0
+) {
+    conhecimentoMissao =
+        this.db.hobbies.conhecimento
+        .sort(() => 0.5 - Math.random())[0].task;
+}
+
+this.db.miss = [
+    { type: '🧬 CORPO', task: cL, done: false, xpG: 0, energyG: 0, skipped: false },
+    { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false },
+    { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false },
+    { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false },
+    { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false }
+];          
 },          
 saveJourney() {          
     const text = document.getElementById('jou-text').value; if(!text) return;          
@@ -594,23 +631,43 @@ toggleRoutine(blk, i, e) {
     }           
     this.checkLvl(); this.save(); this.render();           
 },          
-toggleTrain(cat, i, e) {           
-    let item = this.db.trains[cat][i];           
-    if (item.done) { item.done = false; this.db.energy -= item.gain; this.pop(e, `-${item.gain} AURA`); } else {           
-        item.done = true; item.gain = (this.db.reten >= 3) ? 35 : 25;           
-        this.db.energy += item.gain; this.db.points += 1;this.pop(e, `+${item.gain} AURA`);           
-    }           
-    this.checkLvl(); this.save(); this.render();           
-},          
+toggleTrain(cat, i, e) {
+    let item = this.db.trains[cat][i];
+    
+    if (item.done) {
+        item.done = false;
+        this.db.energy -= item.gain;
+        this.pop(e, `-${item.gain} AURA`);
+    } else {
+        item.done = true;
+        item.gain = (this.db.reten >= 3) ? 35 : 25;
+        
+        this.db.energy += item.gain;
+        this.db.points += 1;
+        
+        // Verifica se completou todo o treino
+        const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
+        
+        if (treinoCompleto && !this.db.trains[cat].rewardGiven) {
+            this.db.attr.C += 1;
+            this.db.trains[cat].rewardGiven = true;
+            this.pop(e, "+1 CORPO");
+        } else {
+            this.pop(e, `+${item.gain} AURA`);
+        }
+    }
+    
+    this.checkLvl();
+    this.save();
+    this.render();
+},
 doMiss(i, e) {           
     let m = this.db.miss[i];           
     if (m.skipped) return;          
     if (m.done) {           
         m.done = false;  m.xpG; this.db.energy -= m.energyG;           
         let txtPop = "";          
-        if (m.type.includes('CORPO')) { this.db.attr.C -= 1; txtPop += " / -1 CORPO"; }          
-        if (m.type.includes('ESPÍRITO')) { this.db.attr.E -= 1; txtPop += " / -1 ESPÍRITO"; }          
-        if (m.type.includes('HOBBY')) { this.db.attr.M -= 1; txtPop += " / -1 MENTE"; }          
+                 
         this.pop(e, txtPop);          
     } else {           
         m.done = true; let mult = (this.db.reten >= 3) ? 1.5 : 1.0;           
@@ -626,9 +683,20 @@ doMiss(i, e) {
          m.xpG; this.db.energy += m.energyG;      
          this.db.points += 2;
          let txtPop = "";
-        if (m.type.includes('CORPO')) { this.db.attr.C += 1; txtPop += " / +1 CORPO"; this.db.debuffs.corpo = false; }          
-        if (m.type.includes('ESPÍRITO')) { this.db.attr.E += 1; txtPop += " / +1 ESPÍRITO"; this.db.debuffs.espirito = false; }          
-        if (m.type.includes('HOBBY')) { this.db.attr.M += 1; txtPop += " / +1 MENTE"; this.db.debuffs.mente = false; }          
+        if (m.type.includes('CORPO')) {
+    this.db.debuffs.corpo = false;
+}
+
+if (m.type.includes('ESPÍRITO')) {
+    this.db.debuffs.espirito = false;
+}
+
+if (
+    m.type.includes('HOBBY') ||
+    m.type.includes('CONHECIMENTO')
+) {
+    this.db.debuffs.mente = false;
+}          
         this.pop(e, txtPop);           
     }           
     this.checkLvl(); this.save(); this.render();           
@@ -706,10 +774,29 @@ pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.classNam
 upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },          
 edPers(key) { let val = prompt("Editar:", this.db.pers[key]); if(val !== null) { this.db.pers[key] = val; this.save(); this.render(); } },          
           
-edEnergy() { let v = prompt("Aura:"); if(v) { this.db.energy = Number(v); this.checkLvl(); this.save(); this.render(); } },          
+edEnergy() { let v = prompt("Aura:"); if(v) { this.db.energy = Number(v); this.checkLvl(); this.save(); this.render(); } }, 
+edPoints() {
+    let v = prompt("Pontos de Atributo:", this.db.points);
+
+    if(v !== null){
+        this.db.points = Number(v) || 0;
+        this.save();
+        this.render();
+    }
+},
 edRank() { let v = prompt("Rank:"); if(v) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },          
 edReten() { let v = prompt("SEQUÊNCIA:"); if(v) { this.db.reten = Number(v); this.save(); this.render(); } },          
-edSt(s) { let v = prompt("Ajuste:", this.db.attr[s.charAt(0).toUpperCase()]); if(v) { this.db.attr[s.charAt(0).toUpperCase()] = Number(v); this.save(); this.render(); } },          
+edSt(s) { let v = prompt("Ajuste:", this.db.attr[s.charAt(0).toUpperCase()]); if(v) { this.db.attr[s.charAt(0).toUpperCase()] = Number(v); this.save(); this.render(); } },      
+edSt(s) {
+    let key = s.charAt(0).toUpperCase();
+    let v = prompt("Ajustar atributo:", this.db.attr[key]);
+
+    if(v !== null){
+        this.db.attr[key] = Number(v) || 0;
+        this.save();
+        this.render();
+    }
+},
 shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },          
 failReten() { if(confirm("ZERAR SEQUÊNCIA?")) { this.db.reten = 0; this.save(); this.render(); } },          
 reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },          
@@ -731,7 +818,8 @@ renderSkills() {
     });          
     document.getElementById('skills-list-ui').innerHTML = h;          
 },          
-render() {          
+render() {document.getElementById('daily-limit-ui').innerText =
+    this.db.dailyPointsUsed;
     if(!this.db) return; const isB = this.db.reten >= 3;          
     if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }          
     document.getElementById('p-name').innerText = this.db.name; document.getElementById('p-arch').innerText = this.db.arch;          
@@ -759,7 +847,7 @@ document.getElementById('points-ui').innerText = this.db.points;
     let aR = this.db.lvl * 100; document.getElementById('energy-val').innerText = Math.floor(this.db.energy) + " / " + aR;          
     document.getElementById('energy-bar').style.width = Math.min(100,(this.db.energy/aR)*100)+"%";          
     document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;          
-    document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; document.getElementById('txt-principles').innerText = this.db.pers.principles || "...";          
+    document.getElementById('txt-bg').innerText = this.db.pers.bg || "..."; document.getElementById('txt-values').innerText = this.db.pers.values || "..."; 
           
     // Render Routine Blocks      
     let rBH = "";      
