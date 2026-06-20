@@ -624,11 +624,16 @@ delSkill(rank, idx, e) {
 },          
 toggleRoutine(blk, i, e) {           
     let r = this.db.routine[blk].tasks[i];           
-    if (r.done) { r.done = false; this.db.energy -= r.gain; this.pop(e, `-${r.gain} AURA`); } else {           
-        r.done = true; r.gain = (this.db.reten >= 3) ? 35 : 25;           
-        this.db.energy += r.gain;
-        this.db.points += 1;this.pop(e, `+${r.gain} AURA`);           
-    }           
+    if (r.done) {
+    r.done = false;
+    this.db.energy -= r.gain;
+    this.pop(e, `-${r.gain} AURA`);
+} else {
+    r.done = true;
+    r.gain = (this.db.reten >= 3) ? 35 : 25;
+    this.db.energy += r.gain;
+    this.pop(e, `+${r.gain} AURA`);
+}           
     this.checkLvl(); this.save(); this.render();           
 },          
 toggleTrain(cat, i, e) {
