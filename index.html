@@ -283,6 +283,10 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             <div id="trains-container"></div>
             <button class="btn-init" onclick="Sys.createNewTrainTable()">+ CRIAR NOVO GRUPO DE TREINO</button>
         </div>
+        <div style="margin-top:10px; font-size:9px; line-height:1.4; color:var(--t-dim); opacity:0.55; text-align:left;">
+    Isometrias: avance aos 15–20 segundos de forma perfeita.<br>
+    Exercícios dinâmicos: avance quando fizer 8–12 repetições com controle total, sem roubar o movimento.
+</div>
     </div>
 
     <div id="tab-skills" class="hidden">
@@ -730,7 +734,29 @@ const Sys = {
     },
     
     shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },
-    failReten() { if(confirm("ZERAR SEQUÊNCIA?")) { this.db.reten = 0; this.save(); this.render(); } },
+    failReten() {
+    if (confirm("ZERAR SEQUÊNCIA?")) {
+        this.db.reten = 0;
+        this.db.points = 0;
+        this.db.energy = 0;
+        this.db.lvl = 1;
+        this.db.dailyPointsUsed = 10;
+        
+        this.db.activeBuffs.doubleXP = false;
+        this.db.activeBuffs.penaltyImmunity = 0;
+        
+        this.db.debuffs.corpo = true;
+        this.db.debuffs.mente = true;
+        this.db.debuffs.espirito = true;
+        
+        this.db.attr.C = Math.max(1, this.db.attr.C - 5);
+        this.db.attr.M = Math.max(1, this.db.attr.M - 5);
+        this.db.attr.E = Math.max(1, this.db.attr.E - 5);
+        
+        this.save();
+        this.render();
+    }
+},
     reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },
     
     renderSkills() {
