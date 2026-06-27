@@ -311,6 +311,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Social</span></div><div id="hobby-social-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-social" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('social')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Prazer</span></div><div id="hobby-prazer-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-prazer" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('prazer')">+</button></div></div>
         </div>
     </div>
 </div>
@@ -364,6 +365,7 @@ const Sys = {
             if (!this.db.trainTitles) this.db.trainTitles = {};
             if (!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };
             if (!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false };
+            if (!this.db.hobbies.prazer) this.db.hobbies.prazer = [];
             
             if (this.db.aura !== undefined) {
                 this.db.energy = this.db.aura;
@@ -418,7 +420,7 @@ const Sys = {
             attr: initialAttr, miss:[], skills:[],
             routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},
             weeklyRoutine:{"wblk_init": {title: "ROTINA SEMANAL", tasks: []}},
-            hobbies:{corpo:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]},
+            hobbies:{corpo:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[], prazer:[]},
             trains:{puxada:[], empurrada:[], core:[]},
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},
             customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},
@@ -431,12 +433,6 @@ const Sys = {
     },
     
     check() {
-        if(this.db.trains) {
-            Object.keys(this.db.trains).forEach(k => {
-                this.db.trains[k].forEach(ex => { ex.done = false; });
-                this.db.trains[k].rewardGiven = false;
-            });
-        }
         let now = new Date();
         let today = now.toLocaleDateString('pt-BR');
         let isSunday = now.getDay() === 0;
@@ -497,7 +493,7 @@ const Sys = {
                     this.db.routine[blk].tasks.forEach(t => t.done = false);
                 });
             }
-            if(this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex.done = false); }); }
+            if(this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex.done = false); this.db.trains[k].rewardGiven = false; }); }
             this.db.last = today; this.genMiss(); this.save();
         }
     },
@@ -529,13 +525,19 @@ const Sys = {
         if (this.db.hobbies.conhecimento && this.db.hobbies.conhecimento.length > 0) {
             conhecimentoMissao = this.db.hobbies.conhecimento.sort(() => 0.5 - Math.random())[0].task;
         }
+
+        let prazerMissao = "Cadastre uma missão de Prazer";
+        if (this.db.hobbies.prazer && this.db.hobbies.prazer.length > 0) {
+            prazerMissao = this.db.hobbies.prazer.sort(() => 0.5 - Math.random())[0].task;
+        }
         
         this.db.miss = [
             { type: '🧬 CORPO', task: cL, done: false, xpG: 0, energyG: 0, skipped: false },
             { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false },
             { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false },
             { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false },
-            { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false }
+            { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false },
+            { type: '🎮 PRAZER', task: prazerMissao, done: false, xpG: 0, energyG: 0, skipped: false }
         ];
     },
     
@@ -651,7 +653,7 @@ const Sys = {
             this.db.points += 2;
             if (m.type.includes('CORPO')) this.db.debuffs.corpo = false;
             if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;
-            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) this.db.debuffs.mente = false;
+            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('PRAZER')) this.db.debuffs.mente = false;
             this.pop(e, "");
         }
         this.checkLvl(); this.save(); this.render();
@@ -717,6 +719,8 @@ const Sys = {
     
     addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },
     delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },
+    edTrainName(cat, i, e) { e.stopPropagation(); let old = this.db.trains[cat][i].task; let n = prompt("Editar Exercício:", old); if(n) { this.db.trains[cat][i].task = n; this.save(); this.render(); } },
+    moveTrain(cat, i, dir, e) { e.stopPropagation(); let arr = this.db.trains[cat]; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },
     
     checkLvl() { let req = this.db.lvl * 100; while(this.db.energy >= req) { this.db.energy -= req; this.db.lvl++; req = this.db.lvl * 100; } while(this.db.energy < 0 && this.db.lvl > 1) { this.db.lvl--; let prevReq = this.db.lvl * 100; this.db.energy += prevReq; } },
     pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },
@@ -871,12 +875,23 @@ const Sys = {
         let tTotalH = "";
         Object.keys(this.db.trains).forEach(cat => {
             let tItemsH = "";
-            this.db.trains[cat].forEach((ex, i) => { tItemsH += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)"><div class="routine-check">${ex.done?'✓':''}</div><span style="flex:1">${ex.task}</span><span style="opacity:0.3" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span></div>`; });
+            this.db.trains[cat].forEach((ex, i) => { 
+                tItemsH += `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)">
+                    <div class="routine-check">${ex.done?'✓':''}</div>
+                    <span style="flex:1">${ex.task}</span>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-order" onclick="Sys.moveTrain('${cat}',${i},-1,event)">▲</button>
+                        <button class="btn-order" onclick="Sys.moveTrain('${cat}',${i},1,event)">▼</button>
+                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edTrainName('${cat}', ${i}, event)">✎</span>
+                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span>
+                    </div>
+                </div>`; 
+            });
             tTotalH += `<div class="routine-box"><div class="routine-header"><span class="stat-label" onclick="Sys.edTrainTitle('${cat}')" style="cursor:pointer">${this.db.trainTitles[cat]}</span><div style="display:flex; gap:5px;"><button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delTrainTable('${cat}')">Excluir</button></div></div><div id="train-${cat}-ui" class="routine-list">${tItemsH}</div><div class="routine-input-wrap"><input type="text" id="inp-${cat}" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addTrain('${cat}')">+</button></div></div>`;
         });
         document.getElementById('trains-container').innerHTML = tTotalH;
         
-        ['corpo', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {
+        ['corpo', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa', 'prazer'].forEach(cat => {
             let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }
             let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;
         });
