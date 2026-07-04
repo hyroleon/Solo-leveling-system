@@ -78,7 +78,8 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
   
 .panel{background:var(--p);border:1px solid var(--b);padding:20px;margin-bottom:15px;position:relative;}  
   
-#p-name{font-size:24px;font-weight:900;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px; color:var(--a); text-shadow: var(--glow);}  
+#p-name{font-size:24px;font-weight:900;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px; color:var(--a); text-shadow: var(--glow);}  
+#essences-ui{color:var(--t-dim); font-size:10px; letter-spacing:2px; text-transform:uppercase; margin-bottom:15px; cursor:pointer;}
   
 .streak-ui{font-size:12px;color:var(--energy-color);font-weight:bold;margin-bottom:5px;letter-spacing:1px;text-shadow: 0 0 5px rgba(157, 78, 221, 0.4); cursor:pointer;}  
   
@@ -183,6 +184,8 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             </div>  
               
             <div id="p-name">--</div>  
+            <div id="essences-ui" onclick="Sys.edEssences()">[ INSERIR 3 ESSÊNCIAS ]</div>
+            
             <div id="prestige-ui" style="color:var(--gold); font-size:12px; font-weight:900; letter-spacing: 2px; margin-bottom:5px; text-transform: uppercase;"></div>
             <div id="titles-ui" style="font-size:10px; color:var(--a); margin-bottom:10px; letter-spacing: 1px; min-height: 15px;"></div>
 
@@ -208,19 +211,34 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
   
         <div class="trinity-grid">  
             <div class="trinity-card">  
-                <span class="stat-label">Corpo</span>  
-                <b id="v-corpo" onclick="Sys.edSt('corpo')" style="cursor:pointer">10</b>  
-                <button class="btn-add-rtn" onclick="Sys.usePoint('C')">+</button>  
+                <span class="stat-label">Força</span>  
+                <b id="v-for" onclick="Sys.edSt('FOR')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('FOR')">+</button>  
             </div>  
             <div class="trinity-card">  
-                <span class="stat-label">Mente</span>  
-                <b id="v-mente" onclick="Sys.edSt('mente')" style="cursor:pointer">10</b>  
-                <button class="btn-add-rtn" onclick="Sys.usePoint('M')">+</button>  
+                <span class="stat-label">Mentalidade</span>  
+                <b id="v-men" onclick="Sys.edSt('MEN')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('MEN')">+</button>  
             </div>  
             <div class="trinity-card">  
-                <span class="stat-label">Espírito</span>  
-                <b id="v-espirito" onclick="Sys.edSt('espirito')" style="cursor:pointer">10</b>  
-                <button class="btn-add-rtn" onclick="Sys.usePoint('E')">+</button>  
+                <span class="stat-label">Resistência</span>  
+                <b id="v-res" onclick="Sys.edSt('RES')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('RES')">+</button>  
+            </div>  
+            <div class="trinity-card">  
+                <span class="stat-label">Inteligência</span>  
+                <b id="v-int" onclick="Sys.edSt('INT')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('INT')">+</button>  
+            </div>  
+            <div class="trinity-card">  
+                <span class="stat-label">Fé</span>  
+                <b id="v-fe" onclick="Sys.edSt('FE')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('FE')">+</button>  
+            </div>  
+            <div class="trinity-card">  
+                <span class="stat-label">Coragem</span>  
+                <b id="v-cor" onclick="Sys.edSt('COR')" style="cursor:pointer">10</b>  
+                <button class="btn-add-rtn" onclick="Sys.usePoint('COR')">+</button>  
             </div>  
         </div>  
   
@@ -290,7 +308,8 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             <h3 style="text-align:center; color:var(--a); letter-spacing: 5px;">CENTRAL DE QUESTS</h3>  
               
             <div class="quest-division">Corpo</div>  
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧬 Físico</span></div><div id="hobby-corpo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-corpo" class="routine-input" placeholder="Novo Treino..."><button class="btn-add-rtn" onclick="Sys.addHobby('corpo')">+</button></div></div>  
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>  
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Resistência</span></div><div id="hobby-resist-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-resist" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('resist')">+</button></div></div>  
               
             <div class="quest-division">Espírito</div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>  
@@ -325,9 +344,12 @@ const Sys = {
         this.db.points--;  
         this.db.dailyPointsUsed++;  
           
-        if (attr === 'C') this.db.attr.C++;  
-        if (attr === 'M') this.db.attr.M++;  
-        if (attr === 'E') this.db.attr.E++;  
+        if (attr === 'FOR') this.db.attr.FOR++;  
+        if (attr === 'MEN') this.db.attr.MEN++;  
+        if (attr === 'RES') this.db.attr.RES++;  
+        if (attr === 'INT') this.db.attr.INT++;  
+        if (attr === 'FE') this.db.attr.FE++;  
+        if (attr === 'COR') this.db.attr.COR++;  
           
         this.save();  
         this.render();  
@@ -375,7 +397,23 @@ const Sys = {
             }  
             if (!this.db.weeklyRoutine) this.db.weeklyRoutine = {"wblk_default": {title: "ROTINA SEMANAL", tasks: []}};  
             if (!this.db.lastWeek) this.db.lastWeek = this.getWeekKey(new Date());  
-              
+            
+            // Migração de Atributos e Missões (Corpo -> Força/Resistência)
+            if (this.db.attr.C !== undefined) {
+                this.db.attr = { FOR: this.db.attr.C, MEN: this.db.attr.M, RES: this.db.attr.C, INT: this.db.attr.M, FE: this.db.attr.E, COR: this.db.attr.E };
+            }
+            if (this.db.hobbies.corpo) {
+                this.db.hobbies.forca = this.db.hobbies.corpo;
+                this.db.hobbies.resist = [];
+                delete this.db.hobbies.corpo;
+            }
+
+            if (!this.db.hobbies.forca) this.db.hobbies.forca = [];
+            if (!this.db.hobbies.resist) this.db.hobbies.resist = [];
+
+            if (!this.db.lastPhysical) this.db.lastPhysical = { forca: "", resist: "" };
+            if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
+
             this.initTimer();
             this.check();  
             this.render();  
@@ -407,14 +445,14 @@ const Sys = {
     finalize() {  
         let n = document.getElementById('setup-name').value;  
         if (!n) return;  
-        let initialAttr = { C: 10, M: 10, E: 10 };  
+        let initialAttr = { FOR: 10, MEN: 10, RES: 10, INT: 10, FE: 10, COR: 10 };  
         this.db = {  
             points: 0, dailyPointsUsed: 0, name: n.toUpperCase(), reten:0, last:'',  
             attr: initialAttr, miss:[], skills:[],  
             routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},  
             weeklyRoutine:{"wblk_init": {title: "ROTINA SEMANAL", tasks: []}},  
             agenda: {}, lists: {},
-            hobbies:{corpo:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[], prazer:[]},  
+            hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[], prazer:[]},  
             trains:{puxada:[], empurrada:[], core:[]},  
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},  
             customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},  
@@ -422,7 +460,8 @@ const Sys = {
             activeBuffs: { doubleXP: false, penaltyImmunity: 0 },  
             debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
             stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
-            prestige: 0, titles: [], eventToday: false, seasonMonth: new Date().getMonth()
+            prestige: 0, titles: [], eventToday: false, seasonMonth: new Date().getMonth(),
+            lastPhysical: { forca: "", resist: "" }, essences: "[ INSERIR 3 ESSÊNCIAS ]"
         };  
         this.genMiss(); this.save(); location.reload();  
     },  
@@ -460,15 +499,19 @@ const Sys = {
 
             // Emboscada Check
             if (this.db.debuffs.emboscada) {
-                this.db.attr.C = Math.max(0, this.db.attr.C - 2);
-                alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino ontem. -2 CORPO");
+                this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 2);
+                this.db.attr.RES = Math.max(0, this.db.attr.RES - 2);
+                alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 FOR e -2 RES");
                 this.db.debuffs.emboscada = false;
             }
 
-            if(this.db.attr.C < 10 || this.db.attr.M < 10 || this.db.attr.E < 10) {  
-                this.db.attr.C = Math.max(0, this.db.attr.C - 1);  
-                this.db.attr.M = Math.max(0, this.db.attr.M - 1);  
-                this.db.attr.E = Math.max(0, this.db.attr.E - 1);  
+            if(this.db.attr.FOR < 10 || this.db.attr.MEN < 10 || this.db.attr.RES < 10 || this.db.attr.INT < 10 || this.db.attr.FE < 10 || this.db.attr.COR < 10) {  
+                this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 1);  
+                this.db.attr.MEN = Math.max(0, this.db.attr.MEN - 1);  
+                this.db.attr.RES = Math.max(0, this.db.attr.RES - 1);  
+                this.db.attr.INT = Math.max(0, this.db.attr.INT - 1);  
+                this.db.attr.FE = Math.max(0, this.db.attr.FE - 1);  
+                this.db.attr.COR = Math.max(0, this.db.attr.COR - 1);  
                 alert("AVISO DO SISTEMA: ATRIBUTOS ABAIXO DO LIMITE (10). DECAIMENTO SISTÊMICO EM CURSO.");  
             }  
               
@@ -482,16 +525,19 @@ const Sys = {
                     this.db.miss.forEach(m => {  
                         if(!m.done) {  
                             if(m.skipped) return;  
-                            if(m.type.includes('CORPO')) { penaltyC++; this.db.debuffs.corpo = true; }  
+                            if(m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) { penaltyC++; this.db.debuffs.corpo = true; }  
                             if(m.type.includes('ESPÍRITO')) { penaltyE++; this.db.debuffs.espirito = true; }  
                             if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('PRAZER')) { penaltyM++; this.db.debuffs.mente = true; }  
                         }  
                     });  
                 }  
                 if(penaltyC > 0 || penaltyM > 0 || penaltyE > 0) {  
-                    this.db.attr.C = Math.max(0, this.db.attr.C - penaltyC);  
-                    this.db.attr.M = Math.max(0, this.db.attr.M - penaltyM);  
-                    this.db.attr.E = Math.max(0, this.db.attr.E - penaltyE);  
+                    this.db.attr.FOR = Math.max(0, this.db.attr.FOR - penaltyC);  
+                    this.db.attr.RES = Math.max(0, this.db.attr.RES - penaltyC);  
+                    this.db.attr.MEN = Math.max(0, this.db.attr.MEN - penaltyM);  
+                    this.db.attr.INT = Math.max(0, this.db.attr.INT - penaltyM);  
+                    this.db.attr.FE = Math.max(0, this.db.attr.FE - penaltyE);  
+                    this.db.attr.COR = Math.max(0, this.db.attr.COR - penaltyE);  
                     alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES E DEBUFFS APLICADOS.");  
                 }  
             }  
@@ -528,7 +574,7 @@ const Sys = {
         } else if (r < 0.35) { 
             this.db.activeBuffs.doubleXP = true; msg = "✨ BÊNÇÃO DOS DEUSES: Todas as missões renderão EXP dobrado hoje!";
         } else if (r < 0.60) { 
-            this.db.debuffs.emboscada = true; msg = "⚔️ EMBOSCADA DETECTADA: O inimigo espreita. Complete um treino de Boss hoje ou perca 2 Corpo amanhã.";
+            this.db.debuffs.emboscada = true; msg = "⚔️ EMBOSCADA DETECTADA: O inimigo espreita. Complete um treino de Boss hoje ou perca Força e Resistência amanhã.";
         } else if (r < 0.70) { 
             if(this.db.points > 0) { this.db.points--; msg = "👺 GOBLIN LADRÃO! Uma criatura esguia roubou 1 Ponto de Atributo seu durante a noite."; }
             else { msg = "👺 GOBLIN LADRÃO apareceu, mas você não tinha pontos para ele roubar."; }
@@ -603,7 +649,15 @@ const Sys = {
     },  
       
     genMiss() {  
-        let cL = (this.db.hobbies.corpo && this.db.hobbies.corpo.length > 0) ? this.db.hobbies.corpo.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Corpo";  
+        // Sistema Anti-Repetição Físico
+        let fPool = (this.db.hobbies.forca || []).filter(h => h.task !== this.db.lastPhysical.forca);
+        if (fPool.length === 0 && this.db.hobbies.forca && this.db.hobbies.forca.length > 0) fPool = this.db.hobbies.forca;
+        let fL = (fPool.length > 0) ? fPool.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Força";
+
+        let rPool = (this.db.hobbies.resist || []).filter(h => h.task !== this.db.lastPhysical.resist);
+        if (rPool.length === 0 && this.db.hobbies.resist && this.db.hobbies.resist.length > 0) rPool = this.db.hobbies.resist;
+        let rL = (rPool.length > 0) ? rPool.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Resistência";
+
         let eL = (this.db.hobbies.espirito && this.db.hobbies.espirito.length > 0) ? this.db.hobbies.espirito.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Espírito";  
         let mindCats = ['criativo', 'social', 'baixa'].filter(cat => this.db.hobbies[cat] && this.db.hobbies[cat].length > 0);  
         mindCats.sort(() => 0.5 - Math.random());  
@@ -624,13 +678,17 @@ const Sys = {
         }  
           
         this.db.miss = [  
-            { type: '🧬 CORPO', task: cL, done: false, xpG: 0, energyG: 0, skipped: false },  
+            { type: '💪 FORÇA', task: fL, done: false, xpG: 0, energyG: 0, skipped: false },  
+            { type: '🛡️ RESISTÊNCIA', task: rL, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🎮 PRAZER', task: prazerMissao, done: false, xpG: 0, energyG: 0, skipped: false }  
         ];  
+
+        this.db.lastPhysical.forca = fL;
+        this.db.lastPhysical.resist = rL;
     },  
       
     getMultiplier() {
@@ -703,9 +761,10 @@ const Sys = {
               
             const treinoCompleto = this.db.trains[cat].every(ex => ex.done);  
             if (!treinoCompleto && this.db.trains[cat].rewardGiven) {  
-                this.db.attr.C = Math.max(0, this.db.attr.C - 1);  
+                this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 1);  
+                this.db.attr.RES = Math.max(0, this.db.attr.RES - 1);  
                 this.db.trains[cat].rewardGiven = false;  
-                this.pop(e, "-1 CORPO");  
+                this.pop(e, "-1 FOR/RES");  
             }  
         } else {  
             item.done = true;  
@@ -722,9 +781,10 @@ const Sys = {
               
             const treinoCompleto = this.db.trains[cat].every(ex => ex.done);  
             if (treinoCompleto && !this.db.trains[cat].rewardGiven) {  
-                this.db.attr.C += 1;  
+                this.db.attr.FOR += 1;  
+                this.db.attr.RES += 1;  
                 this.db.trains[cat].rewardGiven = true;  
-                this.pop(e, `+${item.gain} AURA\n+1 CORPO`);  
+                this.pop(e, `+${item.gain} AURA\n+1 FOR/RES`);  
             } else {  
                 this.pop(e, `+${item.gain} AURA`);  
             }  
@@ -753,7 +813,7 @@ const Sys = {
             }  
             this.db.energy += m.energyG;  
             this.db.points += 2;  
-            if (m.type.includes('CORPO')) this.db.debuffs.corpo = false;  
+            if (m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;  
             if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;  
             if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('PRAZER')) this.db.debuffs.mente = false;  
             this.pop(e, "");  
@@ -786,7 +846,7 @@ const Sys = {
     },  
       
     delTrainTable(cat) { if(confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) { delete this.db.trains[cat]; delete this.db.trainTitles[cat]; this.save(); this.render(); } },  
-    addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },  
+    addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; if(!this.db.hobbies[cat]) this.db.hobbies[cat] = []; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },  
     delHobby(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },  
       
     // --- AGENDA PERMANENTE ---
@@ -919,11 +979,11 @@ const Sys = {
     edPoints() { let v = prompt("Pontos de Atributo:", this.db.points); if(v !== null){ this.db.points = Number(v) || 0; this.save(); this.render(); } },  
     edRank() { let v = prompt("Rank:"); if(v) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },  
     edReten() { let v = prompt("SEQUÊNCIA:"); if(v) { this.db.reten = Number(v); this.save(); this.render(); } },  
+    edEssences() { let v = prompt("Insira suas 3 essências:", this.db.essences); if(v) { this.db.essences = v.toUpperCase(); this.save(); this.render(); } },
       
     edSt(s) {  
-        let key = s.charAt(0).toUpperCase();  
-        let v = prompt("Ajustar atributo:", this.db.attr[key]);  
-        if(v !== null){ this.db.attr[key] = Number(v) || 0; this.save(); this.render(); }  
+        let v = prompt("Ajustar atributo:", this.db.attr[s]);  
+        if(v !== null){ this.db.attr[s] = Number(v) || 0; this.save(); this.render(); }  
     },  
       
     shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },  
@@ -942,9 +1002,12 @@ const Sys = {
         this.db.debuffs.mente = true;  
         this.db.debuffs.espirito = true;  
           
-        this.db.attr.C = Math.max(1, this.db.attr.C - 5);  
-        this.db.attr.M = Math.max(1, this.db.attr.M - 5);  
-        this.db.attr.E = Math.max(1, this.db.attr.E - 5);  
+        this.db.attr.FOR = Math.max(1, this.db.attr.FOR - 5);  
+        this.db.attr.MEN = Math.max(1, this.db.attr.MEN - 5);  
+        this.db.attr.RES = Math.max(1, this.db.attr.RES - 5);  
+        this.db.attr.INT = Math.max(1, this.db.attr.INT - 5);  
+        this.db.attr.FE = Math.max(1, this.db.attr.FE - 5);  
+        this.db.attr.COR = Math.max(1, this.db.attr.COR - 5);  
           
         this.checkTitles();
         this.save();  
@@ -1014,6 +1077,7 @@ const Sys = {
         if(!this.db) return; const isB = this.db.reten >= 3;  
         if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }  
         document.getElementById('p-name').innerText = this.db.name;  
+        document.getElementById('essences-ui').innerText = this.db.essences;
         document.getElementById('streak-ui').innerText = "SEQUÊNCIA: " + this.db.reten + " DIAS";  
         document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;  
 
@@ -1051,7 +1115,13 @@ const Sys = {
         document.getElementById('points-ui').innerText = this.db.points;  
         let aR = this.db.lvl * 100; document.getElementById('energy-val').innerText = Math.floor(this.db.energy) + " / " + aR;  
         document.getElementById('energy-bar').style.width = Math.min(100,(this.db.energy/aR)*100)+"%";  
-        document.getElementById('v-corpo').innerText=this.db.attr.C; document.getElementById('v-mente').innerText=this.db.attr.M; document.getElementById('v-espirito').innerText=this.db.attr.E;  
+        
+        document.getElementById('v-for').innerText=this.db.attr.FOR; 
+        document.getElementById('v-men').innerText=this.db.attr.MEN; 
+        document.getElementById('v-res').innerText=this.db.attr.RES;
+        document.getElementById('v-int').innerText=this.db.attr.INT; 
+        document.getElementById('v-fe').innerText=this.db.attr.FE; 
+        document.getElementById('v-cor').innerText=this.db.attr.COR;
           
         // AGENDA PERMANENTE
         let aBH = "";
@@ -1167,7 +1237,7 @@ const Sys = {
         });  
         document.getElementById('trains-container').innerHTML = tTotalH;  
           
-        ['corpo', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa', 'prazer'].forEach(cat => {  
+        ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa', 'prazer'].forEach(cat => {  
             let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }  
             let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;  
         });  
