@@ -5,152 +5,184 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">  
 <title>SISTEMA DE UPADOR | MONARCA 8.5</title>  
 <style>  
-:root{  
-    --bg: #1a1a1e;          
-    --p: #25252b;           
-    --b: #3a3a44;           
-    --a: #5bc0eb;           
-    --a-dim: rgba(91, 192, 235, 0.1);  
-    --t: #ffffff;           
-    --t-dim: #9e9ea7;       
-    --glow: 0 0 12px rgba(91, 192, 235, 0.6);  
-    --locked: #1f1f24;  
-    --state-icon: #5bc0eb;  
-    --gold: #9d4edd;        
-    --danger: #ff4d4d;  
-    --energy-color: #9d4edd;
+:root {  
+    /* Paleta de Cores Estilo Solo Leveling */
+    --bg: #03060d; /* Azul extremamente escuro/preto para o fundo */         
+    --p: rgba(12, 22, 38, 0.85); /* Fundo dos painéis translúcido */          
+    --b: #0f3854; /* Bordas inativas escurecidas */          
+    --a: #00e5ff; /* Ciano Neon (Cor principal do sistema) */          
+    --a-dim: rgba(0, 229, 255, 0.15);  
+    --t: #e0f7fa; /* Texto branco levemente azulado */          
+    --t-dim: #6b8c9e; /* Texto secundário mutado */      
+    --glow: 0 0 12px rgba(0, 229, 255, 0.7); /* Brilho neon do texto/ícones */ 
+    --glow-box: 0 0 15px rgba(0, 229, 255, 0.25), inset 0 0 20px rgba(0, 229, 255, 0.1); /* Brilho interno/externo das janelas */ 
+    --locked: rgba(10, 15, 25, 0.9);  
+    --state-icon: #00e5ff;  
+    --gold: #ffb700; /* Laranja/Dourado para avisos de Sistema e Missões Lendárias */       
+    --danger: #ff2a2a; /* Vermelho para penalidades */ 
+    --energy-color: #00e5ff; /* Modificado de roxo para o Ciano do Sistema */
 }  
-*{box-sizing:border-box;font-family:'Segoe UI','Roboto',sans-serif;transition:0.15s ease-out; outline: none;}  
-body{  
-    background:var(--bg);  
-    color:var(--t);  
-    margin:0;  
-    min-height:100vh;  
-    display:flex;  
-    flex-direction:column;  
-    align-items:center;  
-    padding-bottom:30px;  
-    overflow-x:hidden;  
+
+*{box-sizing:border-box;font-family:'Segoe UI','Roboto',sans-serif;transition:0.2s ease-out; outline: none;}  
+
+body {  
+    background: radial-gradient(circle at center, #0a1220 0%, var(--bg) 100%);  
+    color: var(--t);  
+    margin: 0;  
+    min-height: 100vh;  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    padding-bottom: 30px;  
+    overflow-x: hidden;  
     font-size: 14px;  
 }  
+
+/* Efeito Holográfico / Scanlines do Sistema */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 229, 255, 0.03) 2px, rgba(0, 229, 255, 0.03) 4px);
+    pointer-events: none;
+    z-index: 9998;
+}
+
 ::-webkit-scrollbar {width: 4px;}  
 ::-webkit-scrollbar-track {background: var(--bg);}  
-::-webkit-scrollbar-thumb {background: var(--b);}  
+::-webkit-scrollbar-thumb {background: var(--a); box-shadow: var(--glow);}  
   
-.xp-float{position:fixed;color:var(--a);font-weight:900;pointer-events:none;animation:up 1s forwards;z-index:9999;text-shadow:var(--glow);font-size:16px; white-space:pre-wrap; text-align:center;}  
-@keyframes up{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}  
-@keyframes pulse{0%{opacity:0.7;text-shadow:none;}50%{opacity:1;text-shadow:var(--glow);}100%{opacity:0.7;text-shadow:none;}}  
+.xp-float {position:fixed;color:var(--a);font-weight:900;pointer-events:none;animation:up 1s forwards;z-index:9999;text-shadow:var(--glow);font-size:16px; white-space:pre-wrap; text-align:center;}  
+@keyframes up {0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.2)}}  
+@keyframes pulse {0%{opacity:0.7;text-shadow:none;}50%{opacity:1;text-shadow:var(--glow);}100%{opacity:0.7;text-shadow:none;}}  
+@keyframes systemWarning {0%{box-shadow: 0 0 10px rgba(255,183,0,0.2);}50%{box-shadow: 0 0 20px rgba(255,183,0,0.6);}100%{box-shadow: 0 0 10px rgba(255,183,0,0.2);}}
   
-.setup-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}  
-.setup-card{background:var(--p);border:1px solid var(--b);padding:30px;width:100%;max-width:400px;text-align:center;box-shadow: 0 10px 30px rgba(0,0,0,0.7);}  
-.setup-card h2{color:var(--a);margin:0 0 20px 0;letter-spacing:4px;font-weight:900;text-transform:uppercase;font-size:18px;}  
+.setup-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;}  
+.setup-card {background:var(--p);border:1px solid var(--a);padding:30px;width:100%;max-width:400px;text-align:center;box-shadow:var(--glow-box); border-radius: 4px;}  
+.setup-card h2 {color:var(--a);margin:0 0 20px 0;letter-spacing:4px;font-weight:900;text-transform:uppercase;font-size:18px; text-shadow: var(--glow);}  
   
-input, textarea{width:100%;padding:12px;margin:8px 0;background:rgba(0,0,0,0.5);border:1px solid var(--b);color:var(--a);text-align:center;border-radius:2px;font-weight:bold;}  
-input::placeholder, textarea::placeholder{color:var(--b);}  
-textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}  
-.btn-init{width:100%;padding:15px;background:none;border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase;}  
+input, textarea {width:100%;padding:12px;margin:8px 0;background:rgba(0,0,0,0.6);border:1px solid var(--b);color:var(--a);text-align:center;border-radius:2px;font-weight:bold;}  
+input:focus, textarea:focus {border-color: var(--a); box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);}
+input::placeholder, textarea::placeholder {color:var(--t-dim); opacity: 0.5;}  
+textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}  
+.btn-init {width:100%;padding:15px;background:rgba(0, 229, 255, 0.05);border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase; box-shadow: 0 0 10px rgba(0,229,255,0.15);}  
+.btn-init:hover {background:var(--a-dim); box-shadow:var(--glow); text-shadow:var(--glow);}
   
-.container{width:100%;max-width:450px;padding:15px;}  
-.protocol-banner{background:var(--a-dim);border:1px solid var(--b);color:var(--t);font-size:10px;padding:10px;text-align:center;margin-bottom:15px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;}  
+.container {width:100%;max-width:450px;padding:15px; z-index: 1;}  
+.protocol-banner {background:var(--a-dim);border:1px solid var(--a);color:var(--a);font-size:10px;padding:10px;text-align:center;margin-bottom:15px;font-weight:bold;letter-spacing:1px;text-transform:uppercase; text-shadow: var(--glow);}  
   
 .profile-wrap { display: flex; justify-content: center; margin-bottom: 15px; position: relative; }  
 .profile-circle {  
     width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--a);  
-    box-shadow: var(--glow); overflow: hidden; cursor: pointer; background: var(--p);  
+    box-shadow: var(--glow); overflow: hidden; cursor: pointer; background: rgba(0,0,0,0.5);  
     display: flex; align-items: center; justify-content: center;  
 }  
-.profile-circle img { width: 100%; height: 100%; object-fit: cover; }  
-.profile-circle i { font-size: 10px; color: var(--a-dim); text-transform: uppercase; }  
+.profile-circle img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1) brightness(0.9); }  
+.profile-circle i { font-size: 10px; color: var(--a); text-transform: uppercase; text-shadow: var(--glow); opacity: 0.7;}  
   
-.lvl-badge { position: absolute; bottom: -5px; background: var(--state-icon); color: #000; font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 10px; box-shadow: 0 0 10px var(--state-icon); z-index: 10; border: 1px solid white;}  
-.energy-bar-f { height:100%; background:var(--energy-color); width:0%; box-shadow: 0 0 10px var(--energy-color); }  
+.lvl-badge { position: absolute; bottom: -5px; background: var(--bg); color: var(--a); font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 2px; box-shadow: var(--glow); z-index: 10; border: 1px solid var(--a); text-shadow: var(--glow); letter-spacing: 1px;}  
+.energy-bar-f { height:100%; background:var(--energy-color); width:0%; box-shadow: 0 0 12px var(--energy-color); }  
   
-.nav-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:15px;width:100%;}  
-.nav-btn{background:var(--p);border:1px solid var(--b);color:var(--t-dim);padding:10px 2px;font-size:8px;font-weight:900;letter-spacing:1px;cursor:pointer;text-transform:uppercase;}  
-.nav-btn.active{  
+.nav-tabs {display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:15px;width:100%;}  
+.nav-btn {background:rgba(10, 18, 30, 0.6);border:1px solid var(--b);color:var(--t-dim);padding:10px 2px;font-size:8px;font-weight:900;letter-spacing:1px;cursor:pointer;text-transform:uppercase; border-radius: 2px;}  
+.nav-btn:hover {border-color: rgba(0, 229, 255, 0.5); color: var(--t);}
+.nav-btn.active {  
     border-color:var(--a);  
-    color:var(--a);  
+    color:var(--t);  
     background:var(--a-dim);  
-    box-shadow:  
-    inset 0 -2px 0 var(--a),  
-    0 0 10px rgba(91,192,235,0.35);  
+    box-shadow: inset 0 -2px 0 var(--a), 0 0 15px rgba(0, 229, 255, 0.3);  
+    text-shadow: 0 0 5px var(--a);
 }  
   
-.panel{background:var(--p);border:1px solid var(--b);padding:20px;margin-bottom:15px;position:relative;}  
+.panel {background:var(--p);border:1px solid var(--b);padding:20px;margin-bottom:15px;position:relative; box-shadow: var(--glow-box); backdrop-filter: blur(5px); border-radius: 4px;}  
   
-#p-name{font-size:24px;font-weight:900;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px; color:var(--a); text-shadow: var(--glow);}  
-#essences-ui{color:var(--t-dim); font-size:10px; letter-spacing:2px; text-transform:uppercase; margin-bottom:15px; cursor:pointer;}
+#p-name {font-size:24px;font-weight:900;margin-bottom:5px;text-transform:uppercase;letter-spacing:2px; color:var(--t); text-shadow: var(--glow);}  
+#essences-ui {color:var(--a); font-size:10px; letter-spacing:2px; text-transform:uppercase; margin-bottom:15px; cursor:pointer; opacity: 0.8;}
   
-.streak-ui{font-size:12px;color:var(--energy-color);font-weight:bold;margin-bottom:5px;letter-spacing:1px;text-shadow: 0 0 5px rgba(157, 78, 221, 0.4); cursor:pointer;}  
+.streak-ui {font-size:12px;color:var(--energy-color);font-weight:bold;margin-bottom:5px;letter-spacing:1px;text-shadow: 0 0 8px rgba(0, 229, 255, 0.6); cursor:pointer;}  
   
-.buff-active{color:var(--state-icon);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:5px;animation:pulse 2s infinite;min-height:15px;text-transform:uppercase;}  
-.debuff-active{color:var(--danger);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:15px;text-transform:uppercase;}  
+.buff-active {color:var(--state-icon);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:5px;animation:pulse 2s infinite;min-height:15px;text-transform:uppercase;}  
+.debuff-active {color:var(--danger);font-size:10px;font-weight:bold;letter-spacing:1px;display:block;margin-bottom:15px;text-transform:uppercase; text-shadow: 0 0 5px var(--danger);}  
   
-.stat-box-grid{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; border-top:1px solid var(--b); border-bottom:1px solid var(--b); padding:10px 0;}  
-.stat-label{font-size:9px;color:var(--t-dim);text-transform:uppercase;display:block;letter-spacing:2px;margin-bottom:2px;}  
-.stat-val{font-size:20px;font-weight:900;color:var(--t);}  
-.stat-val.blue{color:var(--a);text-shadow:var(--glow);}  
+.stat-box-grid {display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; border-top:1px solid var(--b); border-bottom:1px solid var(--b); padding:12px 0;}  
+.stat-label {font-size:9px;color:var(--t-dim);text-transform:uppercase;display:block;letter-spacing:2px;margin-bottom:4px;}  
+.stat-val {font-size:22px;font-weight:900;color:var(--t);}  
+.stat-val.blue {color:var(--a);text-shadow:var(--glow);}  
   
-.bar-w{width:100%;height:4px;background:rgba(0,0,0,0.5);margin:10px 0;overflow:hidden;border-radius:2px;}  
+.bar-w {width:100%;height:6px;background:rgba(0,0,0,0.8);margin:10px 0;overflow:hidden;border-radius:1px; border: 1px solid var(--b);}  
   
-.routine-box { margin-top: 5px; text-align: left; border: 1px solid var(--b); background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px;}  
-.routine-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }  
+.routine-box { margin-top: 5px; text-align: left; border: 1px solid var(--b); background: rgba(5, 10, 18, 0.6); padding: 15px; margin-bottom: 12px; border-left: 2px solid var(--b);}  
+.routine-box:hover { border-color: rgba(0, 229, 255, 0.4); border-left-color: var(--a); box-shadow: 0 0 10px rgba(0, 229, 255, 0.05); }
+.routine-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
 .routine-list { list-style: none; padding: 0; margin: 0; }  
-.routine-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid rgba(58, 58, 68, 0.5); font-size: 13px; color: var(--t-dim); }  
-.routine-item.checked { color: var(--a); text-decoration: line-through; opacity: 0.6; }  
-.routine-check { width: 16px; height: 16px; border: 1px solid var(--b); margin-right: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px;}  
-.routine-item.checked .routine-check { background: var(--a-dim); color: var(--a); border-color: var(--a); }  
+.routine-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid rgba(15, 56, 84, 0.5); font-size: 13px; color: var(--t); background: rgba(0,0,0,0.2); margin-bottom: 2px;}  
+.routine-item:hover { background: rgba(0, 229, 255, 0.05); }
+.routine-item.checked { color: var(--t-dim); text-decoration: line-through; opacity: 0.5; border-left: 2px solid var(--state-icon); }  
+.routine-check { width: 16px; height: 16px; border: 1px solid var(--b); margin-right: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; box-shadow: inset 0 0 5px rgba(0,0,0,0.5);}  
+.routine-item.checked .routine-check { background: var(--a-dim); color: var(--a); border-color: var(--a); box-shadow: 0 0 5px var(--a);}  
 .routine-input-wrap { display: flex; gap: 5px; margin-top: 10px; }  
 .routine-input { flex: 1; font-size: 11px; text-align: left; padding: 8px; margin: 0; }  
-.btn-add-rtn { background: var(--a-dim); border: 1px solid var(--a); color: var(--a); font-size: 16px; width: 35px; cursor: pointer; }  
+.btn-add-rtn { background: var(--a-dim); border: 1px solid var(--a); color: var(--a); font-size: 16px; width: 35px; cursor: pointer; text-shadow: var(--glow); box-shadow: 0 0 5px rgba(0,229,255,0.2);}  
+.btn-add-rtn:hover { background: var(--a); color: #000; box-shadow: var(--glow); }
   
-.btn-all-train { background: none; border: 1px solid var(--state-icon); color: var(--state-icon); font-size: 8px; font-weight: 900; padding: 2px 6px; cursor: pointer; text-transform: uppercase; border-radius: 2px; opacity: 0.7; }  
+.btn-all-train { background: rgba(0,0,0,0.5); border: 1px solid var(--state-icon); color: var(--state-icon); font-size: 8px; font-weight: 900; padding: 4px 8px; cursor: pointer; text-transform: uppercase; border-radius: 2px; opacity: 0.8; letter-spacing: 1px;}  
+.btn-all-train:hover { opacity: 1; box-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
 .btn-order { background: none; border: none; color: var(--t-dim); font-size: 10px; cursor: pointer; padding: 2px 5px; }  
-.btn-order:hover { color: var(--a); }  
+.btn-order:hover { color: var(--a); text-shadow: var(--glow);}  
   
-.trinity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px;}  
-.trinity-card{background:var(--p);border:1px solid var(--b);padding:15px;text-align:center;position:relative;}  
-.trinity-card b{font-size:22px;font-weight:900;color:var(--t);}  
-.trinity-card::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:var(--a);box-shadow:var(--glow);}  
+.trinity-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:15px; width:100%;}  
+.trinity-card {background: rgba(0,0,0,0.4); border:1px solid var(--b); border-top: 2px solid var(--a); padding:15px 4px; text-align:center; position:relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); min-width: 0;}  
+.trinity-card:hover { border-color: var(--a); box-shadow: var(--glow-box); }
+.trinity-card .stat-label {font-size: 8px; letter-spacing: 1px; word-wrap: break-word;}
+.trinity-card b {font-size:24px;font-weight:900;color:var(--t); text-shadow: 0 0 5px rgba(255,255,255,0.3);}  
+.trinity-card::after {content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:var(--a);box-shadow:var(--glow); opacity: 0.5;}  
   
-.mission-header{display:flex; justify-content:space-between; align-items:center; margin: 20px 0 10px 5px;}  
-.mission-header h3{font-size:11px; color:var(--t-dim); letter-spacing:3px; text-transform:uppercase; margin:0;}  
-.btn-shuffle{background:none; border:1px solid var(--b); color:var(--a); font-size:9px; font-weight:900; padding:4px 8px; cursor:pointer; text-transform:uppercase; letter-spacing:1px;}  
+.mission-header {display:flex; justify-content:space-between; align-items:center; margin: 25px 0 15px 5px;}  
+.mission-header h3 {font-size:12px; color:var(--a); letter-spacing:3px; text-transform:uppercase; margin:0; text-shadow: var(--glow);}  
+.btn-shuffle {background:rgba(0,0,0,0.5); border:1px solid var(--b); color:var(--t-dim); font-size:9px; font-weight:900; padding:5px 10px; cursor:pointer; text-transform:uppercase; letter-spacing:1px;}  
+.btn-shuffle:hover { border-color: var(--a); color: var(--a); box-shadow: 0 0 5px rgba(0,229,255,0.3);}
   
-.mission-item{background:var(--p);border:1px solid var(--b);padding:15px;margin-bottom:6px;border-left:2px solid var(--b);cursor:pointer;position:relative; display: flex; flex-direction: column;}  
-.mission-item.done{opacity:0.3;filter:grayscale(0.5); border-left-color: var(--state-icon);}  
-.m-type{font-size:9px;font-weight:bold;color:var(--a);display:block;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}  
-.m-task{font-size:14px;color:var(--t);font-weight:bold;}  
+/* Estilo das Missões Diárias parecendo as Notificações do SL */
+.mission-item {background:rgba(5, 10, 18, 0.8); border:1px solid var(--b); padding:15px; margin-bottom:8px; border-left:3px solid var(--a); cursor:pointer; position:relative; display: flex; flex-direction: column; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}  
+.mission-item:hover { background: rgba(0, 229, 255, 0.05); border-color: rgba(0, 229, 255, 0.5); }
+.mission-item.done {opacity:0.4; filter:grayscale(0.8); border-left-color: var(--t-dim); background: rgba(0,0,0,0.4);}  
+.m-type {font-size:10px;font-weight:900;color:var(--a);display:block;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px; text-shadow: 0 0 5px rgba(0, 229, 255, 0.4);}  
+.m-task {font-size:14px;color:var(--t);font-weight:bold; letter-spacing: 0.5px;}  
   
-.skill-category{margin-bottom:25px;}  
-.skill-rank-label{font-size:11px;color:var(--a);font-weight:900;margin-bottom:10px;display:block;letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid var(--b);padding-bottom:5px;}  
-.skill-item{background:var(--p);border:1px solid var(--b);padding:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}  
-.skill-item.mastered{border-color:var(--a);background:var(--a-dim);}  
-.check-box{width:18px;height:18px;border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:11px; cursor:pointer;}  
+.skill-category {margin-bottom:25px;}  
+.skill-rank-label {font-size:12px;color:var(--a);font-weight:900;margin-bottom:12px;display:block;letter-spacing:4px;text-transform:uppercase;border-bottom:1px solid var(--b);padding-bottom:5px; text-shadow: var(--glow);}  
+.skill-item {background:rgba(0,0,0,0.3); border:1px solid var(--b); padding:12px; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;}  
+.skill-item:hover { border-color: var(--a); }
+.skill-item.mastered {border-color:var(--a); background:var(--a-dim); box-shadow: inset 0 0 10px rgba(0,229,255,0.1);}  
+.check-box {width:18px;height:18px;border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:11px; cursor:pointer; background: rgba(0,0,0,0.5);}  
+.skill-item.mastered .check-box { color: var(--a); border-color: var(--a); text-shadow: var(--glow); }
   
-.btn-reset{width:100%;color:#555;font-size:9px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;}  
-.btn-liar{width:100%;padding:15px;background:none;border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:1px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:10px;}  
-.hidden{display:none!important}  
+.btn-reset {width:100%;color:var(--t-dim);font-size:10px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:2px; opacity: 0.5;}  
+.btn-reset:hover {color: var(--danger); opacity: 1; text-shadow: 0 0 5px var(--danger);}
+.btn-liar {width:100%;padding:15px;background:rgba(255, 42, 42, 0.05);border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:11px; box-shadow: 0 0 10px rgba(255,42,42,0.2);}  
+.btn-liar:hover { background: rgba(255, 42, 42, 0.15); box-shadow: 0 0 15px rgba(255,42,42,0.5); text-shadow: 0 0 5px var(--danger); }
+.hidden {display:none!important}  
   
 .quest-division {  
     border-bottom: 1px solid var(--b);  
-    margin: 25px 0 10px 0;  
+    margin: 30px 0 15px 0;  
     padding-bottom: 5px;  
     color: var(--a);  
-    font-size: 10px;  
-    letter-spacing: 4px;  
+    font-size: 11px;  
+    letter-spacing: 5px;  
     text-transform: uppercase;  
     font-weight: 900;  
     text-align: left;  
     display: flex;  
     align-items: center;  
+    text-shadow: var(--glow);
 }  
-.quest-division::before { content: '>'; margin-right: 10px; color: var(--state-icon); }  
-.division-mente { color: var(--gold); }  
+.quest-division::before { content: '[ ! ]'; margin-right: 10px; color: var(--gold); text-shadow: 0 0 5px var(--gold); }  
+.division-mente { color: var(--gold); text-shadow: 0 0 8px rgba(255,183,0,0.5); border-bottom-color: rgba(255,183,0,0.3);}  
   
-#timer-display { font-family: monospace; font-size: 30px; font-weight: bold; color: var(--a); text-shadow: var(--glow); margin: 15px 0; letter-spacing: 3px; }
-.timer-btn { background: none; border: 1px solid var(--b); color: var(--t); padding: 8px 15px; font-size: 10px; text-transform: uppercase; font-weight: bold; cursor: pointer; margin: 0 5px; }
-.timer-btn:hover { border-color: var(--a); color: var(--a); }
+#timer-display { font-family: 'Courier New', Courier, monospace; font-size: 34px; font-weight: bold; color: var(--a); text-shadow: var(--glow); margin: 15px 0; letter-spacing: 4px; }
+.timer-btn { background: rgba(0,0,0,0.5); border: 1px solid var(--b); color: var(--t-dim); padding: 10px 18px; font-size: 11px; text-transform: uppercase; font-weight: bold; cursor: pointer; margin: 0 5px; box-shadow: inset 0 0 5px rgba(0,0,0,0.8);}
+.timer-btn:hover { border-color: var(--a); color: var(--t); box-shadow: 0 0 10px rgba(0,229,255,0.2); text-shadow: var(--glow);}
 </style>  
 </head>  
 <body>  
@@ -206,7 +238,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
                 <div class="bar-w"><div id="energy-bar" class="energy-bar-f"></div></div>  
             </div>  
             
-            <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(157, 78, 221, 0.4); margin-bottom: 20px;" onclick="Sys.doPrestige()">👑 RENASCER (PRESTÍGIO)</button>
+            <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(255, 183, 0, 0.4); margin-bottom: 20px;" onclick="Sys.doPrestige()">👑 RENASCER (PRESTÍGIO)</button>
         </div>  
   
         <div class="trinity-grid">  
@@ -254,7 +286,7 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
   
     <div id="tab-org" class="hidden">  
         <div class="panel" style="text-align:center">
-            <div class="quest-division" style="color:#fff; border-bottom-color:#fff; margin-top:30px;">Agenda Permanente</div>  
+            <div class="quest-division" style="color:#fff; border-bottom-color:rgba(255,255,255,0.3); margin-top:30px;">Agenda Permanente</div>  
             <div id="agenda-list-ui"></div>  
             <button class="btn-init" style="border-color:#fff; color:#fff;" onclick="Sys.addAgendaBlock()">+ NOVO BLOCO DE AGENDA</button>
 
@@ -262,31 +294,31 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
             <div id="routine-list-ui"></div>  
             <button class="btn-init" onclick="Sys.addRoutineBlock()">+ NOVO BLOCO DE ROTINA</button>  
       
-            <div class="quest-division" style="color:var(--gold); border-bottom-color:var(--gold); margin-top:30px;">Rotina Semanal</div>  
+            <div class="quest-division" style="color:var(--gold); border-bottom-color:rgba(255,183,0,0.3); margin-top:30px;">Rotina Semanal</div>  
             <div id="weekly-routine-list-ui"></div>  
             <button class="btn-init" style="border-color:var(--gold); color:var(--gold);" onclick="Sys.addWeeklyRoutineBlock()">+ NOVO BLOCO SEMANAL</button>  
         </div>
 
         <div class="panel">  
-            <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px;">LISTAS</h3>  
+            <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px; text-shadow: var(--glow);">LISTAS</h3>  
             <div id="lists-container"></div>
             <button class="btn-init" onclick="Sys.addList()">+ CRIAR NOVA LISTA</button>
         </div>  
     </div>  
   
     <div id="tab-train" class="hidden">  
-        <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold);">
-            <h3 style="color:var(--gold); font-size:12px; letter-spacing:3px; margin:0 0 5px 0;">CRONÔMETRO</h3>
+        <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold); box-shadow: 0 0 15px rgba(255,183,0,0.15), inset 0 0 20px rgba(255,183,0,0.05);">
+            <h3 style="color:var(--gold); font-size:12px; letter-spacing:3px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(255,183,0,0.5);">CRONÔMETRO</h3>
             <div id="timer-display">00:00:00</div>
             <div>
-                <button class="timer-btn" onclick="Sys.startTimer()" style="color:#5bc0eb; border-color:#5bc0eb;">▶ Play</button>
+                <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
                 <button class="timer-btn" onclick="Sys.pauseTimer()">⏸ Pause</button>
                 <button class="timer-btn" onclick="Sys.resetTimer()" style="color:var(--danger); border-color:var(--danger);">⏹ Reset</button>
             </div>
         </div>
 
         <div class="panel">  
-            <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px;">TREINAMENTOS</h3>  
+            <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px; text-shadow: var(--glow);">TREINAMENTOS</h3>  
             <div id="trains-container"></div>  
             <button class="btn-init" onclick="Sys.createNewTrainTable()">+ CRIAR NOVO GRUPO DE TREINO</button>  
         </div>  
@@ -298,14 +330,14 @@ textarea{text-align:left; font-size:12px; font-weight:normal; resize: none; heig
   
     <div id="tab-skills" class="hidden">  
         <div class="panel">  
-            <h3 style="text-align:center; color:var(--a);">BOSS</h3>  
+            <h3 style="text-align:center; color:var(--a); text-shadow: var(--glow); letter-spacing: 5px;">BOSS</h3>  
             <div id="skills-list-ui"></div>  
         </div>  
     </div>  
   
     <div id="tab-hobbies" class="hidden">  
         <div class="panel">  
-            <h3 style="text-align:center; color:var(--a); letter-spacing: 5px;">CENTRAL DE QUESTS</h3>  
+            <h3 style="text-align:center; color:var(--a); letter-spacing: 5px; text-shadow: var(--glow);">CENTRAL DE QUESTS</h3>  
               
             <div class="quest-division">Corpo</div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>  
@@ -1203,7 +1235,7 @@ const Sys = {
                         </div>  
                     </div>`;  
                 });  
-                wBH += `<div class="routine-box" style="border-color:rgba(157, 78, 221, 0.3)">  
+                wBH += `<div class="routine-box" style="border-color:rgba(255, 183, 0, 0.3)">  
                     <div class="routine-header">  
                         <span class="stat-label" style="cursor:pointer; color:var(--gold)" onclick="Sys.edWeeklyRoutineBlockTitle('${blkId}')">${blk.title}</span>  
                         <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delWeeklyRoutineBlock('${blkId}')">Remover Bloco</button>  
@@ -1211,7 +1243,7 @@ const Sys = {
                     <div class="routine-list">${tasksH}</div>  
                     <div class="routine-input-wrap">  
                         <input type="text" id="inp-w-${blkId}" class="routine-input" placeholder="Nova tarefa semanal...">  
-                        <button class="btn-add-rtn" style="color:var(--gold); border-color:var(--gold)" onclick="Sys.addWeeklyRoutine('${blkId}')">+</button>  
+                        <button class="btn-add-rtn" style="color:var(--gold); border-color:var(--gold); box-shadow: 0 0 5px rgba(255,183,0,0.2)" onclick="Sys.addWeeklyRoutine('${blkId}')">+</button>  
                     </div>  
                 </div>`;  
             });  
@@ -1242,7 +1274,7 @@ const Sys = {
             let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;  
         });  
           
-        let mH = ""; if(this.db.miss) this.db.miss.forEach((m, i) => { mH += `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.4; border-left-color:var(--danger);':''}"><div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;"><div style="display:flex; align-items:center; gap:10px; flex:1;"><div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div><div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div></div>${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:2px 6px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}</div></div>`; });  
+        let mH = ""; if(this.db.miss) this.db.miss.forEach((m, i) => { mH += `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}"><div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;"><div style="display:flex; align-items:center; gap:10px; flex:1;"><div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div><div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div></div>${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}</div></div>`; });  
         document.getElementById('mission-ui').innerHTML = mH;  
     }  
 };  
