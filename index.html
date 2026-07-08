@@ -311,10 +311,6 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
   
     <div id="tab-org" class="hidden">  
         <div class="panel" style="text-align:center">
-            <div class="quest-division" style="color:#fff; border-bottom-color:rgba(255,255,255,0.3); margin-top:30px;">Agenda Permanente</div>  
-            <div id="agenda-list-ui"></div>  
-            <button class="btn-init" style="border-color:#fff; color:#fff;" onclick="Sys.addAgendaBlock()">+ NOVO BLOCO DE AGENDA</button>
-
             <div class="quest-division" style="margin-top:30px;">Rotina Diária</div>
             <div id="routine-list-ui"></div>  
             <button class="btn-init" onclick="Sys.addRoutineBlock()">+ NOVO BLOCO DE ROTINA</button>  
@@ -537,10 +533,10 @@ const Sys = {
             if (!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false, emboscada: false };  
               
             if (!this.db.stats) this.db.stats = { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 };
-            if (!this.db.agenda) this.db.agenda = {};
             if (!this.db.lists) this.db.lists = {};
             if (this.db.prestige === undefined) this.db.prestige = 0;
             if (!this.db.titles) this.db.titles = [];
+            if (!this.db.earnedTitles) this.db.earnedTitles = [];
             if (this.db.seasonMonth === undefined) this.db.seasonMonth = new Date().getMonth();
             if (this.db.eventToday === undefined) this.db.eventToday = false;
             
@@ -617,7 +613,7 @@ const Sys = {
             attr: initialAttr, miss:[], skills:[],  
             routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},  
             weeklyRoutine:{"wblk_init": {title: "ROTINA SEMANAL", tasks: []}},  
-            agenda: {}, lists: {}, selectedSkills: {}, missionBlockUntil: 0,
+            lists: {}, selectedSkills: {}, missionBlockUntil: 0,
             hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]},  
             trains:{puxada:[], empurrada:[], core:[]},  
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},  
@@ -626,7 +622,7 @@ const Sys = {
             activeBuffs: { doubleXP: false, penaltyImmunity: 0 },  
             debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
             stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
-            prestige: 0, titles: [], eventToday: false, seasonMonth: new Date().getMonth(),
+            prestige: 0, titles: [], earnedTitles: [], eventToday: false, seasonMonth: new Date().getMonth(),
             lastPhysical: { forca: "", resist: "" }, essences: "[ INSERIR 3 ESSÊNCIAS ]"
         };  
         this.genMiss(); this.save(); location.reload();  
@@ -787,23 +783,54 @@ const Sys = {
 
     async checkTitles() {
         let t = this.db.titles || [];
+        let earned = this.db.earnedTitles || [];
         
-        if(this.db.reten >= 30 && !t.includes("O DISCIPLINADO")) { t.push("O DISCIPLINADO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: O DISCIPLINADO"); }
-        else if (this.db.reten < 30 && t.includes("O DISCIPLINADO")) { t = t.filter(x => x !== "O DISCIPLINADO"); }
+        if(this.db.reten >= 30 && !t.includes("O DISCIPLINADO")) { 
+            t.push("O DISCIPLINADO"); 
+            if(!earned.includes("O DISCIPLINADO")) {
+                earned.push("O DISCIPLINADO");
+                await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: O DISCIPLINADO");
+            }
+        } else if (this.db.reten < 30 && t.includes("O DISCIPLINADO")) { 
+            t = t.filter(x => x !== "O DISCIPLINADO"); 
+        }
 
-        if(this.db.reten >= 365 && !t.includes("INQUEBRÁVEL")) { t.push("INQUEBRÁVEL"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: INQUEBRÁVEL"); }
-        else if (this.db.reten < 365 && t.includes("INQUEBRÁVEL")) { t = t.filter(x => x !== "INQUEBRÁVEL"); }
+        if(this.db.reten >= 365 && !t.includes("INQUEBRÁVEL")) { 
+            t.push("INQUEBRÁVEL"); 
+            if(!earned.includes("INQUEBRÁVEL")) {
+                earned.push("INQUEBRÁVEL");
+                await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: INQUEBRÁVEL");
+            }
+        } else if (this.db.reten < 365 && t.includes("INQUEBRÁVEL")) { 
+            t = t.filter(x => x !== "INQUEBRÁVEL"); 
+        }
 
-        if(this.db.stats.totalTrains >= 100 && !t.includes("MONGE DE FERRO")) { t.push("MONGE DE FERRO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: MONGE DE FERRO"); }
-        if(this.db.stats.totalKnowledge >= 50 && !t.includes("SÁBIO")) { t.push("SÁBIO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: SÁBIO"); }
+        if(this.db.stats.totalTrains >= 100 && !t.includes("MONGE DE FERRO")) { 
+            t.push("MONGE DE FERRO"); 
+            if(!earned.includes("MONGE DE FERRO")) {
+                earned.push("MONGE DE FERRO");
+                await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: MONGE DE FERRO");
+            }
+        }
+        if(this.db.stats.totalKnowledge >= 50 && !t.includes("SÁBIO")) { 
+            t.push("SÁBIO"); 
+            if(!earned.includes("SÁBIO")) {
+                earned.push("SÁBIO");
+                await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: SÁBIO");
+            }
+        }
         
         if(this.db.stats.totalBosses >= 10 && !t.includes("CAÇADOR DE CHEFES")) { 
-            t.push("CAÇADOR DE CHEFES"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: CAÇADOR DE CHEFES"); 
-        } else if (this.db.skills.length === 0 && t.includes("CAÇADOR DE CHEFES")) { 
-            t = t.filter(x => x !== "CAÇADOR DE CHEFES"); 
+            t.push("CAÇADOR DE CHEFES"); 
+            if(!earned.includes("CAÇADOR DE CHEFES")) {
+                earned.push("CAÇADOR DE CHEFES");
+                await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: CAÇADOR DE CHEFES");
+            }
         }
 
         this.db.titles = t;
+        this.db.earnedTitles = earned;
+        this.save();
     },
 
     getRank() {  
@@ -1011,19 +1038,6 @@ const Sys = {
     async delTrainTable(cat) { if(await SystemModal.confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) { delete this.db.trains[cat]; delete this.db.trainTitles[cat]; this.save(); this.render(); } },  
     addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; if(!this.db.hobbies[cat]) this.db.hobbies[cat] = []; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },  
     async delHobby(cat, i, e) { e.stopPropagation(); if(await SystemModal.confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },  
-      
-    async addAgendaBlock() { let name = await SystemModal.prompt("Nome do Bloco de Agenda:"); if(name) { let id = "ag_" + Date.now(); this.db.agenda[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },
-    async delAgendaBlock(id) { if(await SystemModal.confirm("Excluir este bloco de agenda?")) { delete this.db.agenda[id]; this.save(); this.render(); } },
-    async edAgendaBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.agenda[id].title); if(n) { this.db.agenda[id].title = n.toUpperCase(); this.save(); this.render(); } },
-    addAgenda(blkId) { let inp = document.getElementById('inp-ag-'+blkId); if(!inp.value) return; this.db.agenda[blkId].tasks.push({task: inp.value, done: false}); inp.value = ""; this.save(); this.render(); },
-    delAgenda(blkId, i, e) { e.stopPropagation(); this.db.agenda[blkId].tasks.splice(i, 1); this.save(); this.render(); },
-    async edAgendaName(blkId, i, e) { e.stopPropagation(); let old = this.db.agenda[blkId].tasks[i].task; let n = await SystemModal.prompt("Editar Tarefa:", old); if(n) { this.db.agenda[blkId].tasks[i].task = n; this.save(); this.render(); } },
-    moveAgenda(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.agenda[blkId].tasks; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },
-    toggleAgenda(blk, i, e) {
-        let r = this.db.agenda[blk].tasks[i];
-        r.done = !r.done;
-        this.save(); this.render();
-    },
 
     async addList() { let n = await SystemModal.prompt("Nome da Lista:"); if(n) { this.db.lists['lst_'+Date.now()] = { title: n.toUpperCase(), items: [] }; this.save(); this.renderLists(); } },
     async delList(id) { if(await SystemModal.confirm("Apagar Lista Inteira?")) { delete this.db.lists[id]; this.save(); this.renderLists(); } },
@@ -1344,38 +1358,6 @@ const Sys = {
             });
         }
         document.getElementById('skills-choice-ui').innerHTML = skillsHtml;
-
-        let aBH = "";
-        if(this.db.agenda) {
-            Object.keys(this.db.agenda).forEach(blkId => {
-                let blk = this.db.agenda[blkId];
-                let tasksH = "";
-                blk.tasks.forEach((r, i) => {
-                    tasksH += `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleAgenda('${blkId}', ${i}, event)">  
-                        <div class="routine-check">${r.done?'✓':''}</div>  
-                        <span style="flex:1">${r.task}</span>  
-                        <div style="display:flex; gap:8px;">  
-                            <button class="btn-order" onclick="Sys.moveAgenda('${blkId}',${i},-1,event)">▲</button>  
-                            <button class="btn-order" onclick="Sys.moveAgenda('${blkId}',${i},1,event)">▼</button>  
-                            <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edAgendaName('${blkId}', ${i}, event)">✎</span>  
-                            <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delAgenda('${blkId}', ${i}, event)">✕</span>  
-                        </div>  
-                    </div>`;
-                });
-                aBH += `<div class="routine-box" style="border-color:rgba(255,255,255,0.3)">  
-                    <div class="routine-header">  
-                        <span class="stat-label" style="cursor:pointer; color:#fff" onclick="Sys.edAgendaBlockTitle('${blkId}')">${blk.title}</span>  
-                        <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delAgendaBlock('${blkId}')">Remover Bloco</button>  
-                    </div>  
-                    <div class="routine-list">${tasksH}</div>  
-                    <div class="routine-input-wrap">  
-                        <input type="text" id="inp-ag-${blkId}" class="routine-input" placeholder="Nova tarefa na agenda...">  
-                        <button class="btn-add-rtn" style="color:#fff; border-color:#fff" onclick="Sys.addAgenda('${blkId}')">+</button>  
-                    </div>  
-                </div>`;
-            });
-        }
-        document.getElementById('agenda-list-ui').innerHTML = aBH;
 
         let rBH = "";  
         Object.keys(this.db.routine).forEach(blkId => {  
