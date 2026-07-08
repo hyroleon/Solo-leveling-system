@@ -66,7 +66,7 @@ input:focus, textarea:focus {border-color: var(--a); box-shadow: 0 0 8px rgba(0,
 input::placeholder, textarea::placeholder {color:var(--t-dim); opacity: 0.5;}  
 textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; height: 80px;}  
 .btn-init {width:100%;padding:15px;background:rgba(0, 229, 255, 0.05);border:1px solid var(--a);color:var(--a);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase; box-shadow: 0 0 10px rgba(0,229,255,0.15);}  
-.btn-init:hover {background:var(--a-dim); box-shadow:var(--glow); text-shadow:var(--glow);}
+.btn-init:hover {background:var(--a-dim); box-shadow:var(--glow); text-shadow:var(--glow);}  
   
 .container {width:100%;max-width:450px;padding:15px; z-index: 1;}  
 .protocol-banner {background:var(--a-dim);border:1px solid var(--a);color:var(--a);font-size:10px;padding:10px;text-align:center;margin-bottom:15px;font-weight:bold;letter-spacing:1px;text-transform:uppercase; text-shadow: var(--glow);}  
@@ -351,7 +351,6 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Social</span></div><div id="hobby-social-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-social" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('social')">+</button></div></div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>  
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Prazer</span></div><div id="hobby-prazer-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-prazer" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('prazer')">+</button></div></div>  
         </div>  
     </div>  
 </div>  
@@ -409,7 +408,6 @@ const Sys = {
             if (!this.db.trainTitles) this.db.trainTitles = {};  
             if (!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };  
             if (!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false, emboscada: false };  
-            if (!this.db.hobbies.prazer) this.db.hobbies.prazer = [];  
               
             if (!this.db.stats) this.db.stats = { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 };
             if (!this.db.agenda) this.db.agenda = {};
@@ -484,7 +482,7 @@ const Sys = {
             routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},  
             weeklyRoutine:{"wblk_init": {title: "ROTINA SEMANAL", tasks: []}},  
             agenda: {}, lists: {},
-            hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[], prazer:[]},  
+            hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]},  
             trains:{puxada:[], empurrada:[], core:[]},  
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},  
             customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},  
@@ -559,7 +557,7 @@ const Sys = {
                             if(m.skipped) return;  
                             if(m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) { penaltyC++; this.db.debuffs.corpo = true; }  
                             if(m.type.includes('ESPÍRITO')) { penaltyE++; this.db.debuffs.espirito = true; }  
-                            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('PRAZER')) { penaltyM++; this.db.debuffs.mente = true; }  
+                            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) { penaltyM++; this.db.debuffs.mente = true; }  
                         }  
                     });  
                 }  
@@ -611,7 +609,7 @@ const Sys = {
             if(this.db.points > 0) { this.db.points--; msg = "👺 GOBLIN LADRÃO! Uma criatura esguia roubou 1 Ponto de Atributo seu durante a noite."; }
             else { msg = "👺 GOBLIN LADRÃO apareceu, mas você não tinha pontos para ele roubar."; }
         } else if (r < 0.85) { 
-            this.db.activeBuffs.penaltyImmunity = 1; msg = "♨️ FONTE TERMAL: Você descansou. Imunidade total a penalidades amanhã.";
+            this.db.activeBuffs.penaltyImmunity = 1; msg = "Camp; FONTE TERMAL: Você descansou. Imunidade total a penalidades amanhã.";
         } else if (r < 0.95) { 
             this.db.points++; this.db.energy = Math.max(0, this.db.energy - 20); msg = "🏺 RELÍQUIA QUEBRADA: O artefato consumiu -20 Energia, mas concedeu +1 Ponto de Atributo.";
         } else { 
@@ -703,11 +701,6 @@ const Sys = {
         if (this.db.hobbies.conhecimento && this.db.hobbies.conhecimento.length > 0) {  
             conhecimentoMissao = this.db.hobbies.conhecimento.sort(() => 0.5 - Math.random())[0].task;  
         }  
-  
-        let prazerMissao = "Cadastre uma missão de Prazer";  
-        if (this.db.hobbies.prazer && this.db.hobbies.prazer.length > 0) {  
-            prazerMissao = this.db.hobbies.prazer.sort(() => 0.5 - Math.random())[0].task;  
-        }  
           
         this.db.miss = [  
             { type: '💪 FORÇA', task: fL, done: false, xpG: 0, energyG: 0, skipped: false },  
@@ -715,8 +708,7 @@ const Sys = {
             { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false },  
-            { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false },  
-            { type: '🎮 PRAZER', task: prazerMissao, done: false, xpG: 0, energyG: 0, skipped: false }  
+            { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false }  
         ];  
 
         this.db.lastPhysical.forca = fL;
@@ -847,7 +839,7 @@ const Sys = {
             this.db.points += 2;  
             if (m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;  
             if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;  
-            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('PRAZER')) this.db.debuffs.mente = false;  
+            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) this.db.debuffs.mente = false;  
             this.pop(e, "");  
         }  
         this.checkTitles(); this.checkLvl(); this.save(); this.render();  
@@ -1269,7 +1261,7 @@ const Sys = {
         });  
         document.getElementById('trains-container').innerHTML = tTotalH;  
           
-        ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa', 'prazer'].forEach(cat => {  
+        ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {  
             let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }  
             let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;  
         });  
