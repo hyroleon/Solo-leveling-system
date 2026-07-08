@@ -18,9 +18,9 @@
     --glow-box: 0 0 15px rgba(0, 229, 255, 0.25), inset 0 0 20px rgba(0, 229, 255, 0.1); /* Brilho interno/externo das janelas */ 
     --locked: rgba(10, 15, 25, 0.9);  
     --state-icon: #00e5ff;  
-    --gold: #ffb700; /* Laranja/Dourado para avisos de Sistema e Missões Lendárias */       
-    --danger: #ff2a2a; /* Vermelho para penalidades */ 
-    --energy-color: #00e5ff; /* Modificado de roxo para o Ciano do Sistema */
+    --gold: #b026ff; /* Roxo brilhante (substituindo Laranja/Dourado) */       
+    --danger: #bd00ff; /* Roxo escuro intenso (substituindo Vermelho) */ 
+    --energy-color: #00e5ff; 
 }  
 
 *{box-sizing:border-box;font-family:'Segoe UI','Roboto',sans-serif;transition:0.2s ease-out; outline: none;}  
@@ -55,7 +55,7 @@ body::before {
 .xp-float {position:fixed;color:var(--a);font-weight:900;pointer-events:none;animation:up 1s forwards;z-index:9999;text-shadow:var(--glow);font-size:16px; white-space:pre-wrap; text-align:center;}  
 @keyframes up {0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.2)}}  
 @keyframes pulse {0%{opacity:0.7;text-shadow:none;}50%{opacity:1;text-shadow:var(--glow);}100%{opacity:0.7;text-shadow:none;}}  
-@keyframes systemWarning {0%{box-shadow: 0 0 10px rgba(255,183,0,0.2);}50%{box-shadow: 0 0 20px rgba(255,183,0,0.6);}100%{box-shadow: 0 0 10px rgba(255,183,0,0.2);}}
+@keyframes systemWarning {0%{box-shadow: 0 0 10px rgba(176,38,255,0.2);}50%{box-shadow: 0 0 20px rgba(176,38,255,0.6);}100%{box-shadow: 0 0 10px rgba(176,38,255,0.2);}}
   
 .setup-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;}  
 .setup-card {background:var(--p);border:1px solid var(--a);padding:30px;width:100%;max-width:400px;text-align:center;box-shadow:var(--glow-box); border-radius: 4px;}  
@@ -167,10 +167,10 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
   
 .btn-reset {width:100%;color:var(--t-dim);font-size:10px;background:none;border:none;margin-top:40px;cursor:pointer;text-transform:uppercase;letter-spacing:2px; opacity: 0.5;}  
 .btn-reset:hover {color: var(--danger); opacity: 1; text-shadow: 0 0 5px var(--danger);}
-.btn-liar {width:100%;padding:15px;background:rgba(255, 42, 42, 0.05);border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:11px; box-shadow: 0 0 10px rgba(255,42,42,0.2);}  
-.btn-liar:hover { background: rgba(255, 42, 42, 0.15); box-shadow: 0 0 15px rgba(255,42,42,0.5); text-shadow: 0 0 5px var(--danger); }
-.btn-dishonest {width:100%;padding:15px;background:rgba(255, 150, 0, 0.05);border:1px solid #ff9600;color:#ff9600;font-weight:900;letter-spacing:2px;margin-top:10px;cursor:pointer;text-transform:uppercase; font-size:11px; box-shadow: 0 0 10px rgba(255,150,0,0.2);}
-.btn-dishonest:hover { background: rgba(255, 150, 0, 0.15); box-shadow: 0 0 15px rgba(255,150,0,0.5); text-shadow: 0 0 5px #ff9600; }
+.btn-liar {width:100%;padding:15px;background:rgba(189, 0, 255, 0.05);border:1px solid var(--danger);color:var(--danger);font-weight:900;letter-spacing:2px;margin-top:20px;cursor:pointer;text-transform:uppercase; font-size:11px; box-shadow: 0 0 10px rgba(189,0,255,0.2);}  
+.btn-liar:hover { background: rgba(189, 0, 255, 0.15); box-shadow: 0 0 15px rgba(189,0,255,0.5); text-shadow: 0 0 5px var(--danger); }
+.btn-dishonest {width:100%;padding:15px;background:rgba(157, 0, 255, 0.05);border:1px solid #9d00ff;color:#9d00ff;font-weight:900;letter-spacing:2px;margin-top:10px;cursor:pointer;text-transform:uppercase; font-size:11px; box-shadow: 0 0 10px rgba(157,0,255,0.2);}
+.btn-dishonest:hover { background: rgba(157, 0, 255, 0.15); box-shadow: 0 0 15px rgba(157,0,255,0.5); text-shadow: 0 0 5px #9d00ff; }
 .hidden {display:none!important}  
   
 .quest-division {  
@@ -188,7 +188,7 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
     text-shadow: var(--glow);
 }  
 .quest-division::before { content: '[ ! ]'; margin-right: 10px; color: var(--gold); text-shadow: 0 0 5px var(--gold); }  
-.division-mente { color: var(--gold); text-shadow: 0 0 8px rgba(255,183,0,0.5); border-bottom-color: rgba(255,183,0,0.3);}  
+.division-mente { color: var(--gold); text-shadow: 0 0 8px rgba(176,38,255,0.5); border-bottom-color: rgba(176,38,255,0.3);}  
   
 #timer-display { font-family: 'Courier New', Courier, monospace; font-size: 34px; font-weight: bold; color: var(--a); text-shadow: var(--glow); margin: 15px 0; letter-spacing: 4px; }
 .timer-btn { background: rgba(0,0,0,0.5); border: 1px solid var(--b); color: var(--t-dim); padding: 10px 18px; font-size: 11px; text-transform: uppercase; font-weight: bold; cursor: pointer; margin: 0 5px; box-shadow: inset 0 0 5px rgba(0,0,0,0.8);}
@@ -204,6 +204,18 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
         <button class="btn-init" onclick="Sys.finalize()">INICIALIZAR</button>  
     </div>  
 </div>  
+
+<div id="sys-modal-overlay" class="setup-overlay hidden" style="z-index: 10001;">
+    <div class="setup-card" style="max-width: 350px;">
+        <h2 id="sys-modal-title" style="color:var(--a); font-size:16px;">AVISO</h2>
+        <div id="sys-modal-msg" style="margin-bottom: 20px; font-size: 13px; font-weight: bold; color:var(--t); white-space: pre-wrap;"></div>
+        <input type="text" id="sys-modal-input" class="hidden" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+            <button id="sys-modal-cancel" class="btn-init hidden" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
+            <button id="sys-modal-confirm" class="btn-init" style="margin-top:0;">CONFIRMAR</button>
+        </div>
+    </div>
+</div>
   
 <div class="container">  
     <div class="nav-tabs">  
@@ -248,7 +260,7 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
                 <div class="bar-w"><div id="energy-bar" class="energy-bar-f"></div></div>  
             </div>  
             
-            <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(255, 183, 0, 0.4); margin-bottom: 20px;" onclick="Sys.doPrestige()">👑 RENASCER (PRESTÍGIO)</button>
+            <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); margin-bottom: 20px;" onclick="Sys.doPrestige()">👑 RENASCER (PRESTÍGIO)</button>
         </div>  
   
         <div class="trinity-grid">  
@@ -284,14 +296,14 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
             </div>  
         </div>  
   
-        <div id="skills-choice-ui"></div>
-
         <div class="mission-header">  
             <h3>Modificações Diárias</h3>  
             <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>  
         </div>  
         <div id="mission-ui"></div>  
-  
+        
+        <div id="skills-choice-ui"></div>
+
         <button class="btn-liar" onclick="Sys.failReten()">⚠️ RECAÍDA (RESET SEQUÊNCIA)</button>  
         <button class="btn-dishonest" onclick="Sys.applyDishonestyPenalty()">⚠️ FUI DESONESTO (BLOQUEAR MISSÕE)</button>
         <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>  
@@ -307,7 +319,7 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
             <div id="routine-list-ui"></div>  
             <button class="btn-init" onclick="Sys.addRoutineBlock()">+ NOVO BLOCO DE ROTINA</button>  
       
-            <div class="quest-division" style="color:var(--gold); border-bottom-color:rgba(255,183,0,0.3); margin-top:30px;">Rotina Semanal</div>  
+            <div class="quest-division" style="color:var(--gold); border-bottom-color:rgba(176,38,255,0.3); margin-top:30px;">Rotina Semanal</div>  
             <div id="weekly-routine-list-ui"></div>  
             <button class="btn-init" style="border-color:var(--gold); color:var(--gold);" onclick="Sys.addWeeklyRoutineBlock()">+ NOVO BLOCO SEMANAL</button>  
         </div>
@@ -320,8 +332,8 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
     </div>  
   
     <div id="tab-train" class="hidden">  
-        <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold); box-shadow: 0 0 15px rgba(255,183,0,0.15), inset 0 0 20px rgba(255,183,0,0.05);">
-            <h3 style="color:var(--gold); font-size:12px; letter-spacing:3px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(255,183,0,0.5);">CRONÔMETRO</h3>
+        <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
+            <h3 style="color:var(--gold); font-size:12px; letter-spacing:3px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5);">CRONÔMETRO</h3>
             <div id="timer-display">00:00:00</div>
             <div>
                 <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
@@ -369,6 +381,55 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
 </div>  
   
 <script>  
+const SystemModal = {
+    resolve: null,
+    init() {
+        document.getElementById('sys-modal-confirm').onclick = () => {
+            let val = true;
+            let inp = document.getElementById('sys-modal-input');
+            if (!inp.classList.contains('hidden')) val = inp.value;
+            this.close(val);
+        };
+        document.getElementById('sys-modal-cancel').onclick = () => {
+            this.close(false);
+        };
+    },
+    open(title, msg, type, def = '') {
+        return new Promise(res => {
+            this.resolve = res;
+            document.getElementById('sys-modal-title').innerText = title;
+            document.getElementById('sys-modal-msg').innerText = msg;
+            let inp = document.getElementById('sys-modal-input');
+            let cancel = document.getElementById('sys-modal-cancel');
+            
+            if(type === 'prompt') {
+                inp.classList.remove('hidden'); inp.value = def; setTimeout(() => inp.focus(), 10);
+            } else {
+                inp.classList.add('hidden'); inp.value = '';
+            }
+            
+            if(type === 'alert') cancel.classList.add('hidden');
+            else cancel.classList.remove('hidden');
+            
+            document.getElementById('sys-modal-overlay').classList.remove('hidden');
+        });
+    },
+    alert(msg) { return this.open('AVISO DO SISTEMA', msg, 'alert'); },
+    confirm(msg) { return this.open('DECISÃO NECESSÁRIA', msg, 'confirm'); },
+    prompt(msg, def = '') { return this.open('ENTRADA DE DADOS', msg, 'prompt', def); },
+    close(val) {
+        document.getElementById('sys-modal-overlay').classList.add('hidden');
+        if(this.resolve) {
+            let res = this.resolve; this.resolve = null;
+            if(val === false && !document.getElementById('sys-modal-input').classList.contains('hidden')) {
+                res(null);
+            } else {
+                res(val);
+            }
+        }
+    }
+};
+
 const RANKS = ['E','D','C','B','A','S','SS+'];  
 
 const SYSTEM_SKILLS = [
@@ -432,10 +493,10 @@ const Sys = {
     timerElapsed: 0,
     timerInterval: null,
       
-    usePoint(attr) {  
+    async usePoint(attr) {  
         if (this.db.points <= 0) return;  
         if (this.db.dailyPointsUsed >= 10) {  
-            alert("LIMITE DIÁRIO ATINGIDO (10 PONTOS).");  
+            await SystemModal.alert("LIMITE DIÁRIO ATINGIDO (10 PONTOS).");  
             return;  
         }  
         this.db.points--;  
@@ -464,7 +525,7 @@ const Sys = {
         return `${yyyy}-${mm}-${dd}`;  
     },  
       
-    init() {  
+    async init() {  
         let d = localStorage.getItem(this.key);  
         if (d) {  
             this.db = JSON.parse(d);  
@@ -483,7 +544,6 @@ const Sys = {
             if (this.db.seasonMonth === undefined) this.db.seasonMonth = new Date().getMonth();
             if (this.db.eventToday === undefined) this.db.eventToday = false;
             
-            // Novos Atributos e Lógica de Skills
             if (!this.db.selectedSkills) this.db.selectedSkills = {};
             if (this.db.missionBlockUntil === undefined) this.db.missionBlockUntil = 0;
 
@@ -498,16 +558,13 @@ const Sys = {
             if (!this.db.weeklyRoutine) this.db.weeklyRoutine = {"wblk_default": {title: "ROTINA SEMANAL", tasks: []}};  
             if (!this.db.lastWeek) this.db.lastWeek = this.getWeekKey(new Date());  
             
-            // Migração de Atributos Antigos para os Novos
             if (this.db.attr.MEN !== undefined || this.db.attr.C !== undefined) {
-                // Se ainda tiver os antigos
                 let oldFor = this.db.attr.FOR || this.db.attr.C || 10;
                 let oldRes = this.db.attr.RES || this.db.attr.C || 10;
                 let oldInt = this.db.attr.INT || this.db.attr.M || 10;
                 let oldMen = this.db.attr.MEN || this.db.attr.M || 10;
                 let oldCor = this.db.attr.COR || this.db.attr.E || 10;
                 let oldFe  = this.db.attr.FE || this.db.attr.E || 10;
-
                 this.db.attr = { FOR: oldFor, VIT: oldRes, INT: oldInt, CON: oldMen, VON: oldCor, ESS: oldFe };
             }
 
@@ -524,7 +581,7 @@ const Sys = {
             if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
 
             this.initTimer();
-            this.check();  
+            await this.check();  
             this.render();  
         } else {  
             document.getElementById('setup-screen').classList.remove('hidden');  
@@ -575,15 +632,14 @@ const Sys = {
         this.genMiss(); this.save(); location.reload();  
     },  
       
-    check() {  
+    async check() {  
         let now = new Date();  
         let today = now.toLocaleDateString('pt-BR');  
         let isSunday = now.getDay() === 0;  
         let currentMonth = now.getMonth();
 
-        // Season Check
         if (this.db.seasonMonth !== currentMonth && this.db.last !== '') {
-            this.endSeason();
+            await this.endSeason();
             this.db.seasonMonth = currentMonth;
         }
           
@@ -606,11 +662,10 @@ const Sys = {
         if (this.db.last !== today) {  
             this.db.dailyPointsUsed = 0;  
 
-            // Emboscada Check
             if (this.db.debuffs.emboscada) {
                 this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 2);
                 this.db.attr.VIT = Math.max(0, this.db.attr.VIT - 2);
-                alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 FOR e -2 VIT");
+                await SystemModal.alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 FOR e -2 VIT");
                 this.db.debuffs.emboscada = false;
             }
 
@@ -621,7 +676,7 @@ const Sys = {
                 this.db.attr.CON = Math.max(0, this.db.attr.CON - 1);  
                 this.db.attr.VON = Math.max(0, this.db.attr.VON - 1);  
                 this.db.attr.ESS = Math.max(0, this.db.attr.ESS - 1);  
-                alert("AVISO DO SISTEMA: ATRIBUTOS ABAIXO DO LIMITE (10). DECAIMENTO SISTÊMICO EM CURSO.");  
+                await SystemModal.alert("AVISO DO SISTEMA: ATRIBUTOS ABAIXO DO LIMITE (10). DECAIMENTO SISTÊMICO EM CURSO.");  
             }  
               
             if (this.db.activeBuffs.penaltyImmunity > 0 || isSunday) {  
@@ -630,7 +685,6 @@ const Sys = {
                 }  
             } else {  
                 let penaltyC = 0, penaltyM = 0, penaltyE = 0;  
-                // Somente aplica punição por falta de missão se não estiver bloqueado por punição de desonestidade
                 if(this.db.miss && Date.now() > this.db.missionBlockUntil) {  
                     this.db.miss.forEach(m => {  
                         if(!m.done) {  
@@ -648,7 +702,7 @@ const Sys = {
                     this.db.attr.CON = Math.max(0, this.db.attr.CON - penaltyM);  
                     this.db.attr.VON = Math.max(0, this.db.attr.VON - penaltyE);  
                     this.db.attr.ESS = Math.max(0, this.db.attr.ESS - penaltyE);  
-                    alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES E DEBUFFS APLICADOS.");  
+                    await SystemModal.alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES E DEBUFFS APLICADOS.");  
                 }  
             }  
               
@@ -668,13 +722,13 @@ const Sys = {
         }  
 
         if (!this.db.eventToday) {
-            this.rollEvent();
+            await this.rollEvent();
         }
 
-        this.checkTitles();
+        await this.checkTitles();
     },  
 
-    rollEvent() {
+    async rollEvent() {
         this.db.eventToday = true;
         let r = Math.random();
         let msg = "";
@@ -698,11 +752,11 @@ const Sys = {
         
         this.checkLvl();
         this.save();
-        if(msg) alert("EVENTO DIÁRIO:\n\n" + msg);
+        if(msg) await SystemModal.alert("EVENTO DIÁRIO:\n\n" + msg);
         this.render();
     },
 
-    endSeason() {
+    async endSeason() {
         let score = "C";
         let t = this.db.stats.seasonTrains || 0;
         let q = this.db.stats.seasonQuests || 0;
@@ -723,7 +777,7 @@ const Sys = {
         \n- Chefes Derrotados: ${b}
         \n>>> NOTA FINAL: [ ${score} ] <<<`;
 
-        alert(rep);
+        await SystemModal.alert(rep);
 
         this.db.stats.seasonTrains = 0;
         this.db.stats.seasonQuests = 0;
@@ -731,18 +785,23 @@ const Sys = {
         this.save();
     },
 
-    checkTitles() {
+    async checkTitles() {
         let t = this.db.titles || [];
         
-        if(this.db.reten >= 30 && !t.includes("O DISCIPLINADO")) { t.push("O DISCIPLINADO"); alert("🏆 NOVO TÍTULO DESBLOQUEADO: O DISCIPLINADO"); }
+        if(this.db.reten >= 30 && !t.includes("O DISCIPLINADO")) { t.push("O DISCIPLINADO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: O DISCIPLINADO"); }
         else if (this.db.reten < 30 && t.includes("O DISCIPLINADO")) { t = t.filter(x => x !== "O DISCIPLINADO"); }
 
-        if(this.db.reten >= 365 && !t.includes("INQUEBRÁVEL")) { t.push("INQUEBRÁVEL"); alert("🏆 NOVO TÍTULO DESBLOQUEADO: INQUEBRÁVEL"); }
+        if(this.db.reten >= 365 && !t.includes("INQUEBRÁVEL")) { t.push("INQUEBRÁVEL"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: INQUEBRÁVEL"); }
         else if (this.db.reten < 365 && t.includes("INQUEBRÁVEL")) { t = t.filter(x => x !== "INQUEBRÁVEL"); }
 
-        if(this.db.stats.totalTrains >= 100 && !t.includes("MONGE DE FERRO")) { t.push("MONGE DE FERRO"); alert("🏆 NOVO TÍTULO DESBLOQUEADO: MONGE DE FERRO"); }
-        if(this.db.stats.totalKnowledge >= 50 && !t.includes("SÁBIO")) { t.push("SÁBIO"); alert("🏆 NOVO TÍTULO DESBLOQUEADO: SÁBIO"); }
-        if(this.db.stats.totalBosses >= 10 && !t.includes("CAÇADOR DE CHEFES")) { t.push("CAÇADOR DE CHEFES"); alert("🏆 NOVO TÍTULO DESBLOQUEADO: CAÇADOR DE CHEFES"); }
+        if(this.db.stats.totalTrains >= 100 && !t.includes("MONGE DE FERRO")) { t.push("MONGE DE FERRO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: MONGE DE FERRO"); }
+        if(this.db.stats.totalKnowledge >= 50 && !t.includes("SÁBIO")) { t.push("SÁBIO"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: SÁBIO"); }
+        
+        if(this.db.stats.totalBosses >= 10 && !t.includes("CAÇADOR DE CHEFES")) { 
+            t.push("CAÇADOR DE CHEFES"); await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: CAÇADOR DE CHEFES"); 
+        } else if (this.db.skills.length === 0 && t.includes("CAÇADOR DE CHEFES")) { 
+            t = t.filter(x => x !== "CAÇADOR DE CHEFES"); 
+        }
 
         this.db.titles = t;
     },
@@ -760,7 +819,6 @@ const Sys = {
     },  
       
     genMiss() {  
-        // Sistema Anti-Repetição Físico
         let fPool = (this.db.hobbies.forca || []).filter(h => h.task !== this.db.lastPhysical.forca);
         if (fPool.length === 0 && this.db.hobbies.forca && this.db.hobbies.forca.length > 0) fPool = this.db.hobbies.forca;
         let fL = (fPool.length > 0) ? fPool.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Força";
@@ -799,11 +857,11 @@ const Sys = {
     getMultiplier() {
         let mult = (this.db.reten >= 3) ? 1.5 : 1.0;
         if(this.db.activeBuffs && this.db.activeBuffs.doubleXP) mult *= 2;
-        let presBonus = 1 + ((this.db.prestige || 0) * 0.10); // +10% per prestige
+        let presBonus = 1 + ((this.db.prestige || 0) * 0.10);
         return mult * presBonus;
     },
 
-    toggleSkill(s, rank, e) {  
+    async toggleSkill(s, rank, e) {  
         if(e.target.tagName === 'B') return;   
         let rIdx = RANKS.findIndex(rk => rk.id === rank), myIdx = RANKS.findIndex(rk => rk.id === this.getRank());  
         if(rIdx > myIdx) return;  
@@ -817,7 +875,7 @@ const Sys = {
             this.db.stats.seasonBosses++;
             this.pop(e, `+5 ENERGIA\nBOSS ABATIDO`);  
         }  
-        this.checkTitles(); this.save(); this.render(); this.renderSkills();  
+        await this.checkTitles(); this.save(); this.render(); this.renderSkills();  
     },  
       
     addSkill(rank) {  
@@ -825,8 +883,8 @@ const Sys = {
         this.db.customCali[rank].push(inp.value); inp.value = ""; this.save(); this.renderSkills();  
     },  
       
-    delSkill(rank, idx, e) {  
-        e.stopPropagation(); if(confirm("Remover esta maestria?")) {  
+    async delSkill(rank, idx, e) {  
+        e.stopPropagation(); if(await SystemModal.confirm("Remover esta maestria?")) {  
             let name = this.db.customCali[rank][idx];  
             this.db.customCali[rank].splice(idx, 1);  
             this.db.skills = this.db.skills.filter(s => s !== name);  
@@ -842,7 +900,7 @@ const Sys = {
         this.save(); this.renderSkills(); 
     },
       
-    toggleRoutine(blk, i, e) {   
+    async toggleRoutine(blk, i, e) {   
         let r = this.db.routine[blk].tasks[i];   
         if (r.done) {  
             r.done = false;  
@@ -857,7 +915,7 @@ const Sys = {
         this.checkLvl(); this.save(); this.render();   
     },  
       
-    toggleTrain(cat, i, e) {  
+    async toggleTrain(cat, i, e) {  
         let item = this.db.trains[cat][i];  
         if (item.done) {  
             item.done = false;  
@@ -894,10 +952,10 @@ const Sys = {
                 this.pop(e, `+${item.gain} AURA`);  
             }  
         }  
-        this.checkTitles(); this.checkLvl(); this.save(); this.render();  
+        await this.checkTitles(); this.checkLvl(); this.save(); this.render();  
     },  
       
-    doMiss(i, e) {  
+    async doMiss(i, e) {  
         let m = this.db.miss[i];  
         if (m.skipped) return;  
         if (m.done) {  
@@ -923,44 +981,43 @@ const Sys = {
             if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) this.db.debuffs.mente = false;  
             this.pop(e, "");  
         }  
-        this.checkTitles(); this.checkLvl(); this.save(); this.render();  
+        await this.checkTitles(); this.checkLvl(); this.save(); this.render();  
     },  
       
-    skipMiss(i, e) {  
+    async skipMiss(i, e) {  
         e.stopPropagation();  
-        if(confirm("Deseja pular esta missão sem receber punição?")) {  
+        if(await SystemModal.confirm("Deseja pular esta missão sem receber punição?")) {  
             this.db.miss[i].skipped = true;  
             this.save(); this.render();  
         }  
     },  
       
-    edSkillName(rank, idx) {  
+    async edSkillName(rank, idx) {  
         let oldName = this.db.customCali[rank][idx];  
-        let newName = prompt("Renomear Habilidade:", oldName);  
+        let newName = await SystemModal.prompt("Renomear Habilidade:", oldName);  
         if(newName) {  
             if(this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);  
             this.db.customCali[rank][idx] = newName; this.save(); this.renderSkills();  
         }  
     },  
       
-    edTrainTitle(cat) { let newT = prompt("Novo nome:", this.db.trainTitles[cat]); if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); } },  
+    async edTrainTitle(cat) { let newT = await SystemModal.prompt("Novo nome:", this.db.trainTitles[cat]); if(newT) { this.db.trainTitles[cat] = newT; this.save(); this.render(); } },  
       
-    createNewTrainTable() {  
-        let name = prompt("Nome do novo grupo de treino (Ex: PERNAS):");  
+    async createNewTrainTable() {  
+        let name = await SystemModal.prompt("Nome do novo grupo de treino (Ex: PERNAS):");  
         if(name) { let id = "tr_" + Date.now(); this.db.trains[id] = []; this.db.trainTitles[id] = name.toUpperCase(); this.save(); this.render(); }  
     },  
       
-    delTrainTable(cat) { if(confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) { delete this.db.trains[cat]; delete this.db.trainTitles[cat]; this.save(); this.render(); } },  
+    async delTrainTable(cat) { if(await SystemModal.confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) { delete this.db.trains[cat]; delete this.db.trainTitles[cat]; this.save(); this.render(); } },  
     addHobby(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; if(!this.db.hobbies[cat]) this.db.hobbies[cat] = []; this.db.hobbies[cat].push({task: inp.value}); inp.value = ""; this.save(); this.render(); },  
-    delHobby(cat, i, e) { e.stopPropagation(); if(confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },  
+    async delHobby(cat, i, e) { e.stopPropagation(); if(await SystemModal.confirm("Remover?")) { this.db.hobbies[cat].splice(i, 1); this.save(); this.render(); } },  
       
-    // --- AGENDA PERMANENTE ---
-    addAgendaBlock() { let name = prompt("Nome do Bloco de Agenda:"); if(name) { let id = "ag_" + Date.now(); this.db.agenda[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },
-    delAgendaBlock(id) { if(confirm("Excluir este bloco de agenda?")) { delete this.db.agenda[id]; this.save(); this.render(); } },
-    edAgendaBlockTitle(id) { let n = prompt("Novo nome:", this.db.agenda[id].title); if(n) { this.db.agenda[id].title = n.toUpperCase(); this.save(); this.render(); } },
+    async addAgendaBlock() { let name = await SystemModal.prompt("Nome do Bloco de Agenda:"); if(name) { let id = "ag_" + Date.now(); this.db.agenda[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },
+    async delAgendaBlock(id) { if(await SystemModal.confirm("Excluir este bloco de agenda?")) { delete this.db.agenda[id]; this.save(); this.render(); } },
+    async edAgendaBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.agenda[id].title); if(n) { this.db.agenda[id].title = n.toUpperCase(); this.save(); this.render(); } },
     addAgenda(blkId) { let inp = document.getElementById('inp-ag-'+blkId); if(!inp.value) return; this.db.agenda[blkId].tasks.push({task: inp.value, done: false}); inp.value = ""; this.save(); this.render(); },
     delAgenda(blkId, i, e) { e.stopPropagation(); this.db.agenda[blkId].tasks.splice(i, 1); this.save(); this.render(); },
-    edAgendaName(blkId, i, e) { e.stopPropagation(); let old = this.db.agenda[blkId].tasks[i].task; let n = prompt("Editar Tarefa:", old); if(n) { this.db.agenda[blkId].tasks[i].task = n; this.save(); this.render(); } },
+    async edAgendaName(blkId, i, e) { e.stopPropagation(); let old = this.db.agenda[blkId].tasks[i].task; let n = await SystemModal.prompt("Editar Tarefa:", old); if(n) { this.db.agenda[blkId].tasks[i].task = n; this.save(); this.render(); } },
     moveAgenda(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.agenda[blkId].tasks; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },
     toggleAgenda(blk, i, e) {
         let r = this.db.agenda[blk].tasks[i];
@@ -968,34 +1025,32 @@ const Sys = {
         this.save(); this.render();
     },
 
-    // --- LISTAS DE ORGANIZAÇÃO ---
-    addList() { let n = prompt("Nome da Lista:"); if(n) { this.db.lists['lst_'+Date.now()] = { title: n.toUpperCase(), items: [] }; this.save(); this.renderLists(); } },
-    delList(id) { if(confirm("Apagar Lista Inteira?")) { delete this.db.lists[id]; this.save(); this.renderLists(); } },
-    edListTitle(id) { let n = prompt("Novo nome:", this.db.lists[id].title); if(n) { this.db.lists[id].title = n.toUpperCase(); this.save(); this.renderLists(); } },
+    async addList() { let n = await SystemModal.prompt("Nome da Lista:"); if(n) { this.db.lists['lst_'+Date.now()] = { title: n.toUpperCase(), items: [] }; this.save(); this.renderLists(); } },
+    async delList(id) { if(await SystemModal.confirm("Apagar Lista Inteira?")) { delete this.db.lists[id]; this.save(); this.renderLists(); } },
+    async edListTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.lists[id].title); if(n) { this.db.lists[id].title = n.toUpperCase(); this.save(); this.renderLists(); } },
     addListItem(id) { let inp = document.getElementById('inp-lst-'+id); if(!inp.value) return; this.db.lists[id].items.push({task: inp.value, done: false}); inp.value = ""; this.save(); this.renderLists(); },
     delListItem(id, i, e) { e.stopPropagation(); this.db.lists[id].items.splice(i, 1); this.save(); this.renderLists(); },
-    edListItem(id, i, e) { e.stopPropagation(); let old = this.db.lists[id].items[i].task; let n = prompt("Editar:", old); if(n) { this.db.lists[id].items[i].task = n; this.save(); this.renderLists(); } },
+    async edListItem(id, i, e) { e.stopPropagation(); let old = this.db.lists[id].items[i].task; let n = await SystemModal.prompt("Editar:", old); if(n) { this.db.lists[id].items[i].task = n; this.save(); this.renderLists(); } },
     moveListItem(id, i, dir, e) { e.stopPropagation(); let arr = this.db.lists[id].items; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.renderLists(); },
     toggleListItem(id, i) { this.db.lists[id].items[i].done = !this.db.lists[id].items[i].done; this.save(); this.renderLists(); },
 
-    // --- ROTINAS E TREINOS EXISTENTES ---
-    addRoutineBlock() { let name = prompt("Nome do Bloco de Rotina:"); if(name) { let id = "blk_" + Date.now(); this.db.routine[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },  
-    delRoutineBlock(id) { if(confirm("Excluir este bloco de rotina?")) { delete this.db.routine[id]; this.save(); this.render(); } },  
-    edRoutineBlockTitle(id) { let n = prompt("Novo nome:", this.db.routine[id].title); if(n) { this.db.routine[id].title = n.toUpperCase(); this.save(); this.render(); } },  
+    async addRoutineBlock() { let name = await SystemModal.prompt("Nome do Bloco de Rotina:"); if(name) { let id = "blk_" + Date.now(); this.db.routine[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },  
+    async delRoutineBlock(id) { if(await SystemModal.confirm("Excluir este bloco de rotina?")) { delete this.db.routine[id]; this.save(); this.render(); } },  
+    async edRoutineBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.routine[id].title); if(n) { this.db.routine[id].title = n.toUpperCase(); this.save(); this.render(); } },  
     addRoutine(blkId) { let inp = document.getElementById('inp-'+blkId); if(!inp.value) return; this.db.routine[blkId].tasks.push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },  
     delRoutine(blkId, i, e) { e.stopPropagation(); this.db.routine[blkId].tasks.splice(i, 1); this.save(); this.render(); },  
-    edRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.routine[blkId].tasks[i].task; let n = prompt("Editar Tarefa:", old); if(n) { this.db.routine[blkId].tasks[i].task = n; this.save(); this.render(); } },  
+    async edRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.routine[blkId].tasks[i].task; let n = await SystemModal.prompt("Editar Tarefa:", old); if(n) { this.db.routine[blkId].tasks[i].task = n; this.save(); this.render(); } },  
     moveRoutine(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.routine[blkId].tasks; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },  
       
-    addWeeklyRoutineBlock() { let name = prompt("Nome do Bloco Semanal:"); if(name) { let id = "wblk_" + Date.now(); this.db.weeklyRoutine[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },  
-    delWeeklyRoutineBlock(id) { if(confirm("Excluir este bloco semanal?")) { delete this.db.weeklyRoutine[id]; this.save(); this.render(); } },  
-    edWeeklyRoutineBlockTitle(id) { let n = prompt("Novo nome:", this.db.weeklyRoutine[id].title); if(n) { this.db.weeklyRoutine[id].title = n.toUpperCase(); this.save(); this.render(); } },  
+    async addWeeklyRoutineBlock() { let name = await SystemModal.prompt("Nome do Bloco Semanal:"); if(name) { let id = "wblk_" + Date.now(); this.db.weeklyRoutine[id] = {title: name.toUpperCase(), tasks: []}; this.save(); this.render(); } },  
+    async delWeeklyRoutineBlock(id) { if(await SystemModal.confirm("Excluir este bloco semanal?")) { delete this.db.weeklyRoutine[id]; this.save(); this.render(); } },  
+    async edWeeklyRoutineBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.weeklyRoutine[id].title); if(n) { this.db.weeklyRoutine[id].title = n.toUpperCase(); this.save(); this.render(); } },  
     addWeeklyRoutine(blkId) { let inp = document.getElementById('inp-w-'+blkId); if(!inp.value) return; this.db.weeklyRoutine[blkId].tasks.push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },  
     delWeeklyRoutine(blkId, i, e) { e.stopPropagation(); this.db.weeklyRoutine[blkId].tasks.splice(i, 1); this.save(); this.render(); },  
-    edWeeklyRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.weeklyRoutine[blkId].tasks[i].task; let n = prompt("Editar Tarefa Semanal:", old); if(n) { this.db.weeklyRoutine[blkId].tasks[i].task = n; this.save(); this.render(); } },  
+    async edWeeklyRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.weeklyRoutine[blkId].tasks[i].task; let n = await SystemModal.prompt("Editar Tarefa Semanal:", old); if(n) { this.db.weeklyRoutine[blkId].tasks[i].task = n; this.save(); this.render(); } },  
     moveWeeklyRoutine(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.weeklyRoutine[blkId].tasks; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },  
       
-    toggleWeeklyRoutine(blk, i, e) {  
+    async toggleWeeklyRoutine(blk, i, e) {  
         let r = this.db.weeklyRoutine[blk].tasks[i];  
         if (r.done) {  
             r.done = false; this.db.energy -= r.gain; this.pop(e, `-${r.gain} AURA`);  
@@ -1007,7 +1062,7 @@ const Sys = {
       
     addTrain(cat) { let inp = document.getElementById('inp-' + cat); if(!inp.value) return; this.db.trains[cat].push({task: inp.value, done: false, gain: 0}); inp.value = ""; this.save(); this.render(); },  
     delTrain(cat, i, e) { e.stopPropagation(); this.db.trains[cat].splice(i,1); this.save(); this.render(); },  
-    edTrainName(cat, i, e) { e.stopPropagation(); let old = this.db.trains[cat][i].task; let n = prompt("Editar Exercício:", old); if(n) { this.db.trains[cat][i].task = n; this.save(); this.render(); } },  
+    async edTrainName(cat, i, e) { e.stopPropagation(); let old = this.db.trains[cat][i].task; let n = await SystemModal.prompt("Editar Exercício:", old); if(n) { this.db.trains[cat][i].task = n; this.save(); this.render(); } },  
     moveTrain(cat, i, dir, e) { e.stopPropagation(); let arr = this.db.trains[cat]; if(dir === -1 && i > 0) [arr[i], arr[i-1]] = [arr[i-1], arr[i]]; if(dir === 1 && i < arr.length-1) [arr[i], arr[i+1]] = [arr[i+1], arr[i]]; this.save(); this.render(); },  
       
     checkLvl() { 
@@ -1027,44 +1082,43 @@ const Sys = {
         } 
     },  
     
-    doPrestige() {
+    async doPrestige() {
         if(this.db.lvl < 100) return;
-        if(confirm("RENASCER? Você perderá seu Nível e Energia, mas receberá um Multiplicador de +10% Aura e manterá seus Bosses, Atributos e Conquistas.")) {
+        if(await SystemModal.confirm("RENASCER? Você perderá seu Nível e Energia, mas receberá um Multiplicador de +10% Aura e manterá seus Bosses, Atributos e Conquistas.")) {
             this.db.prestige = (this.db.prestige || 0) + 1;
             this.db.lvl = 1;
             this.db.energy = 0;
-            this.db.selectedSkills = {}; // Reseta habilidades passivas para recompra a cada 10 níveis
+            this.db.selectedSkills = {}; 
             this.save();
             this.render();
-            alert("🌌 VOCÊ RENASCEU. O CICLO RECOMEÇA, MAS VOCÊ ESTÁ MAIS FORTE.");
+            await SystemModal.alert("🌌 VOCÊ RENASCEU. O CICLO RECOMEÇA, MAS VOCÊ ESTÁ MAIS FORTE.");
         }
     },
 
-    applyDishonestyPenalty() {
-        if(confirm("Você admitiu desonestidade/mentira. A penalidade bloqueará suas missões (e qualquer ganho com elas) por 48 HORAS por falta de credibilidade. Tem certeza?")) {
-            this.db.missionBlockUntil = Date.now() + (48 * 60 * 60 * 1000); // 48 horas em milissegundos
+    async applyDishonestyPenalty() {
+        if(await SystemModal.confirm("Você admitiu desonestidade/mentira. A penalidade bloqueará suas missões (e qualquer ganho com elas) por 48 HORAS por falta de credibilidade. Tem certeza?")) {
+            this.db.missionBlockUntil = Date.now() + (48 * 60 * 60 * 1000); 
             this.save();
             this.render();
-            alert(" PENALIDADE APLICADA. Suas missões sumiram do radar do Sistema por 48h.");
+            await SystemModal.alert(" PENALIDADE APLICADA. Suas missões sumiram do radar do Sistema por 48h.");
         }
     },
 
-    interactSkill(tierLvl, tIdx, sIdx) {
+    async interactSkill(tierLvl, tIdx, sIdx) {
         let sk = SYSTEM_SKILLS[tIdx][sIdx];
         let currentChoice = this.db.selectedSkills[tierLvl];
         
         if (currentChoice === undefined) {
-            if (confirm(`HABILIDADE: ${sk.name}\n\nEFEITO: ${sk.desc}\n\nDeseja adquirir esta habilidade permanentemente?\n(Ao confirmar, as outras opções do Lvl ${tierLvl} serão bloqueadas)`)) {
+            if (await SystemModal.confirm(`HABILIDADE: ${sk.name}\n\nEFEITO: ${sk.desc}\n\nDeseja adquirir esta habilidade permanentemente?\n(Ao confirmar, as outras opções do Lvl ${tierLvl} serão bloqueadas)`)) {
                 this.db.selectedSkills[tierLvl] = sIdx;
                 this.save();
                 this.render();
             }
         } else {
-            alert(`HABILIDADE: ${sk.name}\n\nEFEITO: ${sk.desc}`);
+            await SystemModal.alert(`HABILIDADE: ${sk.name}\n\nEFEITO: ${sk.desc}`);
         }
     },
 
-    // --- TIMER SYSTEM ---
     startTimer() {
         if(this.timerState === 1) return;
         this.timerStart = Date.now() - this.timerElapsed;
@@ -1116,26 +1170,26 @@ const Sys = {
 
     pop(e, txt) { if(!e) return; const p = document.createElement('div'); p.className = 'xp-float'; p.innerText = txt; p.style.left = (e.clientX||0) + 'px'; p.style.top = (e.clientY||0) + 'px'; document.body.appendChild(p); setTimeout(() => p.remove(), 1000); },  
     upImg(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { this.db.pic = ev.target.result; this.save(); this.render(); }; reader.readAsDataURL(file); } },  
-    edEnergy() { let v = prompt("Aura:"); if(v) { this.db.energy = Number(v); this.checkLvl(); this.save(); this.render(); } },  
-    edPoints() { let v = prompt("Pontos de Atributo:", this.db.points); if(v !== null){ this.db.points = Number(v) || 0; this.save(); this.render(); } },  
-    edRank() { let v = prompt("Rank:"); if(v) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },  
-    edReten() { let v = prompt("SEQUÊNCIA:"); if(v) { this.db.reten = Number(v); this.save(); this.render(); } },  
-    edEssences() { let v = prompt("Insira suas 3 essências:", this.db.essences); if(v) { this.db.essences = v.toUpperCase(); this.save(); this.render(); } },
+    async edEnergy() { let v = await SystemModal.prompt("Aura:"); if(v) { this.db.energy = Number(v); this.checkLvl(); this.save(); this.render(); } },  
+    async edPoints() { let v = await SystemModal.prompt("Pontos de Atributo:", this.db.points); if(v !== null){ this.db.points = Number(v) || 0; this.save(); this.render(); } },  
+    async edRank() { let v = await SystemModal.prompt("Rank:"); if(v) { this.db.customRank = v.toUpperCase(); this.save(); this.render(); } },  
+    async edReten() { let v = await SystemModal.prompt("SEQUÊNCIA:"); if(v) { this.db.reten = Number(v); this.save(); this.render(); } },  
+    async edEssences() { let v = await SystemModal.prompt("Insira suas 3 essências:", this.db.essences); if(v) { this.db.essences = v.toUpperCase(); this.save(); this.render(); } },
       
-    edSt(s) {  
-        let v = prompt("Ajustar atributo:", this.db.attr[s]);  
+    async edSt(s) {  
+        let v = await SystemModal.prompt("Ajustar atributo:", this.db.attr[s]);  
         if(v !== null){ this.db.attr[s] = Number(v) || 0; this.save(); this.render(); }  
     },  
       
-    shuffleMiss() { if(confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },  
-    failReten() {  
-        if (confirm("ZERAR SEQUÊNCIA?")) {  
+    async shuffleMiss() { if(await SystemModal.confirm("Sortear novas?")) { this.genMiss(); this.save(); this.render(); } },  
+    async failReten() {  
+        if (await SystemModal.confirm("ZERAR SEQUÊNCIA?")) {  
             this.db.reten = 0;  
             this.db.points = 0;  
             this.db.energy = 0;  
             this.db.lvl = 1;  
             this.db.dailyPointsUsed = 10;  
-            this.db.selectedSkills = {}; // Reseta skills de classe no decaimento severo
+            this.db.selectedSkills = {}; 
               
             this.db.activeBuffs.doubleXP = false;  
             this.db.activeBuffs.penaltyImmunity = 0;  
@@ -1151,12 +1205,12 @@ const Sys = {
             this.db.attr.VON = Math.max(1, this.db.attr.VON - 5);  
             this.db.attr.ESS = Math.max(1, this.db.attr.ESS - 5);  
               
-            this.checkTitles();
+            await this.checkTitles();
             this.save();  
             this.render();  
         }  
     },  
-    reset(){ if(confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },  
+    async reset(){ if(await SystemModal.confirm("FORMATAR TUDO?")) { localStorage.clear(); location.reload(); } },  
       
     renderSkills() {  
         let h = ""; let mRI = RANKS.findIndex(rk => rk.id === this.getRank());  
@@ -1265,7 +1319,6 @@ const Sys = {
         document.getElementById('v-von').innerText=this.db.attr.VON; 
         document.getElementById('v-ess').innerText=this.db.attr.ESS;
           
-        // RENDERIZAÇÃO SKILLS PASSIVAS (Classes)
         let skillsHtml = "";
         if (this.db.lvl >= 10) {
             skillsHtml += `<div class="quest-division">Habilidades de Classe</div>`;
@@ -1292,7 +1345,6 @@ const Sys = {
         }
         document.getElementById('skills-choice-ui').innerHTML = skillsHtml;
 
-        // AGENDA PERMANENTE
         let aBH = "";
         if(this.db.agenda) {
             Object.keys(this.db.agenda).forEach(blkId => {
@@ -1372,7 +1424,7 @@ const Sys = {
                         </div>  
                     </div>`;  
                 });  
-                wBH += `<div class="routine-box" style="border-color:rgba(255, 183, 0, 0.3)">  
+                wBH += `<div class="routine-box" style="border-color:rgba(176, 38, 255, 0.3)">  
                     <div class="routine-header">  
                         <span class="stat-label" style="cursor:pointer; color:var(--gold)" onclick="Sys.edWeeklyRoutineBlockTitle('${blkId}')">${blk.title}</span>  
                         <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delWeeklyRoutineBlock('${blkId}')">Remover Bloco</button>  
@@ -1380,7 +1432,7 @@ const Sys = {
                     <div class="routine-list">${tasksH}</div>  
                     <div class="routine-input-wrap">  
                         <input type="text" id="inp-w-${blkId}" class="routine-input" placeholder="Nova tarefa semanal...">  
-                        <button class="btn-add-rtn" style="color:var(--gold); border-color:var(--gold); box-shadow: 0 0 5px rgba(255,183,0,0.2)" onclick="Sys.addWeeklyRoutine('${blkId}')">+</button>  
+                        <button class="btn-add-rtn" style="color:var(--gold); border-color:var(--gold); box-shadow: 0 0 5px rgba(176,38,255,0.2)" onclick="Sys.addWeeklyRoutine('${blkId}')">+</button>  
                     </div>  
                 </div>`;  
             });  
@@ -1415,7 +1467,7 @@ const Sys = {
         let nowTs = Date.now();
         if (this.db.missionBlockUntil > nowTs) {
             let hoursLeft = Math.ceil((this.db.missionBlockUntil - nowTs) / (1000 * 60 * 60));
-            mH = `<div style="text-align:center; padding: 25px; margin: 10px 0; border: 1px solid #ff9600; background: rgba(255, 150, 0, 0.1); color: #ff9600; font-weight: bold; letter-spacing: 1px; box-shadow: 0 0 15px rgba(255, 150, 0, 0.2);">
+            mH = `<div style="text-align:center; padding: 25px; margin: 10px 0; border: 1px solid #9d00ff; background: rgba(157, 0, 255, 0.1); color: #9d00ff; font-weight: bold; letter-spacing: 1px; box-shadow: 0 0 15px rgba(157, 0, 255, 0.2);">
                     🔒 MISSÕES BLOQUEADAS<br><br>
                     <span style="font-size: 11px; opacity: 0.8; font-weight: normal;">Falta de credibilidade com o Sistema devido à desonestidade.</span><br><br>
                     TEMPO RESTANTE: ${hoursLeft} HORAS
@@ -1427,7 +1479,10 @@ const Sys = {
     }  
 };  
   
-window.onload = () => Sys.init();  
+window.onload = () => {
+    SystemModal.init();
+    Sys.init();
+};  
 </script>  
 </body>  
 </html>
