@@ -250,7 +250,7 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
             <div class="stat-box-grid">  
                 <div style="text-align:left"><span class="stat-label">RANK</span><span class="stat-val blue" id="rank-ui" onclick="Sys.edRank()">E</span></div>  
                 <div style="text-align:right">  
-                    <span class="stat-label">PONTOS DE ATRIBUTO (<span id="daily-limit-ui">0</span>/10)</span>  
+                    <span class="stat-label">PONTOS DE ATRIBUTO</span>  
                     <span class="stat-val" id="points-ui" onclick="Sys.edPoints()" style="cursor:pointer">0</span>  
                 </div>  
             </div>  
@@ -370,7 +370,7 @@ textarea {text-align:left; font-size:12px; font-weight:normal; resize: none; hei
             <div class="quest-division division-mente">Mente</div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>  
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Social</span></div><div id="hobby-social-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-social" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('social')">+</button></div></div>  
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Concentração</span></div><div id="hobby-concentracao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-concentracao" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('concentracao')">+</button></div></div>  
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>  
         </div>  
     </div>  
@@ -491,12 +491,7 @@ const Sys = {
       
     async usePoint(attr) {  
         if (this.db.points <= 0) return;  
-        if (this.db.dailyPointsUsed >= 10) {  
-            await SystemModal.alert("LIMITE DIÁRIO ATINGIDO (10 PONTOS).");  
-            return;  
-        }  
         this.db.points--;  
-        this.db.dailyPointsUsed++;  
           
         if (attr === 'FOR') this.db.attr.FOR++;  
         if (attr === 'VIT') this.db.attr.VIT++;  
@@ -564,6 +559,13 @@ const Sys = {
                 this.db.attr = { FOR: oldFor, VIT: oldRes, INT: oldInt, CON: oldMen, VON: oldCor, ESS: oldFe };
             }
 
+            // Migração: social -> concentracao
+            if (this.db.hobbies && this.db.hobbies.social) {
+                this.db.hobbies.concentracao = this.db.hobbies.social;
+                delete this.db.hobbies.social;
+            }
+            if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
+
             if (this.db.hobbies.corpo) {
                 this.db.hobbies.forca = this.db.hobbies.corpo;
                 this.db.hobbies.resist = [];
@@ -614,7 +616,7 @@ const Sys = {
             routine:{"blk_init": {title: "ROTINA INICIAL", tasks: []}},  
             weeklyRoutine:{"wblk_init": {title: "ROTINA SEMANAL", tasks: []}},  
             lists: {}, selectedSkills: {}, missionBlockUntil: 0,
-            hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], social:[], baixa:[]},  
+            hobbies:{forca:[], resist:[], espirito:[], criativo:[], conhecimento:[], concentracao:[], baixa:[]},  
             trains:{puxada:[], empurrada:[], core:[]},  
             trainTitles: {puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE'},  
             customCali: {E:[], D:[], C:[], B:[], A:[], S:[]},  
@@ -656,8 +658,8 @@ const Sys = {
         if (this.db.last === '') { this.db.last = today; this.save(); return; }  
           
         if (this.db.last !== today) {  
-            this.db.dailyPointsUsed = 0;  
-
+            // Removido o reset de dailyPointsUsed
+            
             if (this.db.debuffs.emboscada) {
                 this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 2);
                 this.db.attr.VIT = Math.max(0, this.db.attr.VIT - 2);
@@ -687,7 +689,7 @@ const Sys = {
                             if(m.skipped) return;  
                             if(m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) { penaltyC++; this.db.debuffs.corpo = true; }  
                             if(m.type.includes('ESPÍRITO')) { penaltyE++; this.db.debuffs.espirito = true; }  
-                            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) { penaltyM++; this.db.debuffs.mente = true; }  
+                            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('CONCENTRAÇÃO')) { penaltyM++; this.db.debuffs.mente = true; }  
                         }  
                     });  
                 }  
@@ -855,7 +857,9 @@ const Sys = {
         let rL = (rPool.length > 0) ? rPool.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Resistência";
 
         let eL = (this.db.hobbies.espirito && this.db.hobbies.espirito.length > 0) ? this.db.hobbies.espirito.sort(() => 0.5 - Math.random())[0].task : "Cadastre Missão de Espírito";  
-        let mindCats = ['criativo', 'social', 'baixa'].filter(cat => this.db.hobbies[cat] && this.db.hobbies[cat].length > 0);  
+        
+        // Hobbies mentais (apenas Criativo e Baixa Energia)
+        let mindCats = ['criativo', 'baixa'].filter(cat => this.db.hobbies[cat] && this.db.hobbies[cat].length > 0);  
         mindCats.sort(() => 0.5 - Math.random());  
           
         let hobby1 = "Cadastre um Hobby";  
@@ -863,10 +867,26 @@ const Sys = {
         if (mindCats.length >= 1) { let cat1 = mindCats[0]; hobby1 = this.db.hobbies[cat1].sort(() => 0.5 - Math.random())[0].task; }  
         if (mindCats.length >= 2) { let cat2 = mindCats[1]; hobby2 = this.db.hobbies[cat2].sort(() => 0.5 - Math.random())[0].task; }  
           
-        let conhecimentoMissao = "Cadastre uma missão de Conhecimento";  
+        // Conhecimento 1
+        let conhecimento1 = "Cadastre uma missão de Conhecimento";  
         if (this.db.hobbies.conhecimento && this.db.hobbies.conhecimento.length > 0) {  
-            conhecimentoMissao = this.db.hobbies.conhecimento.sort(() => 0.5 - Math.random())[0].task;  
-        }  
+            conhecimento1 = this.db.hobbies.conhecimento.sort(() => 0.5 - Math.random())[0].task;  
+        }
+
+        // Conhecimento 2 (nova missão extra)
+        let conhecimento2 = "Cadastre outra missão de Conhecimento";  
+        if (this.db.hobbies.conhecimento && this.db.hobbies.conhecimento.length > 0) {  
+            // tenta pegar uma diferente da primeira
+            let pool = this.db.hobbies.conhecimento.filter(h => h.task !== conhecimento1);
+            if (pool.length === 0) pool = this.db.hobbies.conhecimento;
+            conhecimento2 = pool.sort(() => 0.5 - Math.random())[0].task;
+        }
+
+        // Concentração (nova missão exclusiva)
+        let concentracaoTask = "Cadastre uma missão de Concentração";  
+        if (this.db.hobbies.concentracao && this.db.hobbies.concentracao.length > 0) {  
+            concentracaoTask = this.db.hobbies.concentracao.sort(() => 0.5 - Math.random())[0].task;  
+        }
           
         this.db.miss = [  
             { type: '💪 FORÇA', task: fL, done: false, xpG: 0, energyG: 0, skipped: false },  
@@ -874,7 +894,9 @@ const Sys = {
             { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false },  
             { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false },  
-            { type: '📚 CONHECIMENTO', task: conhecimentoMissao, done: false, xpG: 0, energyG: 0, skipped: false }  
+            { type: '📚 CONHECIMENTO', task: conhecimento1, done: false, xpG: 0, energyG: 0, skipped: false },
+            { type: '📚 CONHECIMENTO', task: conhecimento2, done: false, xpG: 0, energyG: 0, skipped: false },
+            { type: '🧠 CONCENTRAÇÃO', task: concentracaoTask, done: false, xpG: 0, energyG: 0, skipped: false }  
         ];  
 
         this.db.lastPhysical.forca = fL;
@@ -1005,7 +1027,7 @@ const Sys = {
             this.db.points += 2;  
             if (m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;  
             if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;  
-            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO')) this.db.debuffs.mente = false;  
+            if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('CONCENTRAÇÃO')) this.db.debuffs.mente = false;  
             this.pop(e, "");  
         }  
         await this.checkTitles(); this.checkLvl(); this.save(); this.render();  
@@ -1110,11 +1132,11 @@ const Sys = {
     },
 
     async applyDishonestyPenalty() {
-        if(await SystemModal.confirm("Você admitiu desonestidade/mentira. A penalidade bloqueará suas missões (e qualquer ganho com elas) por 48 HORAS por falta de credibilidade. Tem certeza?")) {
-            this.db.missionBlockUntil = Date.now() + (48 * 60 * 60 * 1000); 
+        if(await SystemModal.confirm("Você admitiu desonestidade/mentira. A penalidade bloqueará suas missões (e qualquer ganho com elas) por 24 HORAS por falta de credibilidade. Tem certeza?")) {
+            this.db.missionBlockUntil = Date.now() + (24 * 60 * 60 * 1000); 
             this.save();
             this.render();
-            await SystemModal.alert(" PENALIDADE APLICADA. Suas missões sumiram do radar do Sistema por 48h.");
+            await SystemModal.alert(" PENALIDADE APLICADA. Suas missões sumiram do radar do Sistema por 24h.");
         }
     },
 
@@ -1283,7 +1305,6 @@ const Sys = {
     },
       
     render() {  
-        document.getElementById('daily-limit-ui').innerText = this.db.dailyPointsUsed;  
         if(!this.db) return; const isB = this.db.reten >= 3;  
         if(this.db.pic) { document.getElementById('p-img').src = this.db.pic; document.getElementById('p-img').classList.remove('hidden'); document.getElementById('p-img-placeholder').classList.add('hidden'); }  
         document.getElementById('p-name').innerText = this.db.name;  
@@ -1440,7 +1461,7 @@ const Sys = {
         });  
         document.getElementById('trains-container').innerHTML = tTotalH;  
           
-        ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'social', 'baixa'].forEach(cat => {  
+        ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa'].forEach(cat => {  
             let hH = ""; if(this.db.hobbies[cat]) { this.db.hobbies[cat].forEach((h, i) => { hH += `<div class="routine-item"><span style="flex:1">${h.task}</span><span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span></div>`; }); }  
             let el = document.getElementById(`hobby-${cat}-ui`); if(el) el.innerHTML = hH;  
         });  
