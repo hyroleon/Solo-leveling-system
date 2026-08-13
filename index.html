@@ -542,6 +542,7 @@
             font-size: 8px;
             letter-spacing: 1px;
             word-wrap: break-word;
+            cursor: pointer;
         }
         .trinity-card b {
             font-size: 24px;
@@ -936,32 +937,32 @@
 
             <div class="trinity-grid">
                 <div class="trinity-card">
-                    <span class="stat-label">Força</span>
+                    <span class="stat-label" id="attr-name-FOR" onclick="Sys.edAttrName('FOR')">Força</span>
                     <b id="v-for" onclick="Sys.edSt('FOR')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('FOR')">+</button>
                 </div>
                 <div class="trinity-card">
-                    <span class="stat-label">Vitalidade</span>
+                    <span class="stat-label" id="attr-name-VIT" onclick="Sys.edAttrName('VIT')">Vitalidade</span>
                     <b id="v-vit" onclick="Sys.edSt('VIT')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('VIT')">+</button>
                 </div>
                 <div class="trinity-card">
-                    <span class="stat-label">Intelecto</span>
+                    <span class="stat-label" id="attr-name-INT" onclick="Sys.edAttrName('INT')">Intelecto</span>
                     <b id="v-int" onclick="Sys.edSt('INT')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('INT')">+</button>
                 </div>
                 <div class="trinity-card">
-                    <span class="stat-label">Consciência</span>
+                    <span class="stat-label" id="attr-name-CON" onclick="Sys.edAttrName('CON')">Consciência</span>
                     <b id="v-con" onclick="Sys.edSt('CON')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('CON')">+</button>
                 </div>
                 <div class="trinity-card">
-                    <span class="stat-label">Vontade</span>
+                    <span class="stat-label" id="attr-name-VON" onclick="Sys.edAttrName('VON')">Vontade</span>
                     <b id="v-von" onclick="Sys.edSt('VON')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('VON')">+</button>
                 </div>
                 <div class="trinity-card">
-                    <span class="stat-label">Essência</span>
+                    <span class="stat-label" id="attr-name-ESS" onclick="Sys.edAttrName('ESS')">Essência</span>
                     <b id="v-ess" onclick="Sys.edSt('ESS')" style="cursor:pointer">10</b>
                     <button class="btn-add-rtn" onclick="Sys.usePoint('ESS')">+</button>
                 </div>
@@ -982,16 +983,6 @@
         </div>
 
         <div id="tab-org" class="hidden">
-            <div class="panel" style="text-align:center">
-                <div class="quest-division" style="margin-top:30px;">Rotina Diária</div>
-                <div id="routine-list-ui"></div>
-                <button class="btn-init" onclick="Sys.addRoutineBlock()">+ NOVO BLOCO DE ROTINA</button>
-
-                <div class="quest-division" style="color:var(--gold); border-bottom-color:rgba(176,38,255,0.3); margin-top:30px;">Rotina Semanal</div>
-                <div id="weekly-routine-list-ui"></div>
-                <button class="btn-init" style="border-color:var(--gold); color:var(--gold);" onclick="Sys.addWeeklyRoutineBlock()">+ NOVO BLOCO SEMANAL</button>
-            </div>
-
             <div class="panel">
                 <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px; text-shadow: var(--glow);">LISTAS</h3>
                 <div id="lists-container"></div>
@@ -1228,17 +1219,24 @@
                     // Inicializa slots customizados de missão se não existir
                     if (!this.db.customMissSlots) this.db.customMissSlots = [];
 
+                    // Nomes de atributos personalizados
+                    if (!this.db.attrNames) {
+                        this.db.attrNames = { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" };
+                    }
+
                     if (this.db.aura !== undefined) {
                         this.db.energy = this.db.aura;
                         delete this.db.aura;
                     }
-                    if (Array.isArray(this.db.routine)) {
-                        let oldTasks = this.db.routine;
-                        this.db.routine = { "blk_default": { title: "ROTINA DIÁRIA", tasks: oldTasks } };
-                    }
-                    if (!this.db.weeklyRoutine) this.db.weeklyRoutine = { "wblk_default": { title: "ROTINA SEMANAL",
-                            tasks: [] } };
+
+                    // Rotinas foram removidas, mas mantemos as propriedades para compatibilidade
+                    if (!this.db.routine) this.db.routine = {};
+                    if (!this.db.weeklyRoutine) this.db.weeklyRoutine = {};
                     if (!this.db.lastWeek) this.db.lastWeek = this.getWeekKey(new Date());
+
+                    // Substitui lastPhysical por lastResistTask
+                    if (!this.db.lastResistTask) this.db.lastResistTask = "";
+                    delete this.db.lastPhysical;
 
                     if (this.db.attr.MEN !== undefined || this.db.attr.C !== undefined) {
                         let oldFor = this.db.attr.FOR || this.db.attr.C || 10;
@@ -1265,7 +1263,6 @@
                     if (!this.db.hobbies.forca) this.db.hobbies.forca = [];
                     if (!this.db.hobbies.resist) this.db.hobbies.resist = [];
 
-                    if (!this.db.lastPhysical) this.db.lastPhysical = { forca: "", resist: "" };
                     if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
 
                     this.initTimer();
@@ -1310,10 +1307,11 @@
                     reten: 0,
                     last: '',
                     attr: initialAttr,
+                    attrNames: { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" },
                     miss: [],
                     skills: [],
-                    routine: { "blk_init": { title: "ROTINA INICIAL", tasks: [] } },
-                    weeklyRoutine: { "wblk_init": { title: "ROTINA SEMANAL", tasks: [] } },
+                    routine: {},
+                    weeklyRoutine: {},
                     lists: {},
                     selectedSkills: {},
                     missionBlockUntil: 0,
@@ -1326,6 +1324,7 @@
                     lvl: 1,
                     energy: 0,
                     lastWeek: this.getWeekKey(new Date()),
+                    lastResistTask: "",
                     activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
                     debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
                     stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0,
@@ -1335,7 +1334,6 @@
                     earnedTitles: [],
                     eventToday: false,
                     seasonMonth: new Date().getMonth(),
-                    lastPhysical: { forca: "", resist: "" },
                     essences: "[ INSERIR 3 ESSÊNCIAS ]"
                 };
                 this.genMiss();
@@ -1355,15 +1353,7 @@
                 }
 
                 let currentWeekKey = this.getWeekKey(now);
-                if (this.db.lastWeek && this.db.lastWeek !== currentWeekKey) {
-                    if (this.db.weeklyRoutine) {
-                        Object.keys(this.db.weeklyRoutine).forEach(blk => {
-                            this.db.weeklyRoutine[blk].tasks.forEach(t => t.done = false);
-                        });
-                    }
-                    this.db.lastWeek = currentWeekKey;
-                    this.save();
-                } else if (!this.db.lastWeek) {
+                if (this.db.lastWeek !== currentWeekKey) {
                     this.db.lastWeek = currentWeekKey;
                     this.save();
                 }
@@ -1405,7 +1395,7 @@
                             this.db.miss.forEach(m => {
                                 if (!m.done) {
                                     if (m.skipped) return;
-                                    if (m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) {
+                                    if (m.type.includes('RESISTÊNCIA')) {
                                         penaltyC++;
                                         this.db.debuffs.corpo = true;
                                     }
@@ -1431,11 +1421,7 @@
 
                     this.db.activeBuffs.doubleXP = false;
                     this.db.reten++;
-                    if (this.db.routine) {
-                        Object.keys(this.db.routine).forEach(blk => {
-                            this.db.routine[blk].tasks.forEach(t => t.done = false);
-                        });
-                    }
+                    // Rotinas diárias foram removidas, não resetamos mais
                     if (this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex
                             .done = false);
                         this.db.trains[k].rewardGiven = false; }); }
@@ -1598,11 +1584,8 @@
                     return picked.task;
                 };
 
-                let fPool = (this.db.hobbies.forca || []).filter(h => h.task !== this.db.lastPhysical.forca);
-                if (fPool.length === 0 && this.db.hobbies.forca && this.db.hobbies.forca.length > 0) fPool = this.db.hobbies.forca;
-                let fL = pickUnique(fPool, "Cadastre Missão de Força");
-
-                let rPool = (this.db.hobbies.resist || []).filter(h => h.task !== this.db.lastPhysical.resist);
+                // Removida a missão de força (apenas resistência agora)
+                let rPool = (this.db.hobbies.resist || []).filter(h => h.task !== this.db.lastResistTask);
                 if (rPool.length === 0 && this.db.hobbies.resist && this.db.hobbies.resist.length > 0) rPool = this.db.hobbies.resist;
                 let rL = pickUnique(rPool, "Cadastre Missão de Resistência");
 
@@ -1627,7 +1610,6 @@
                 let concentracaoTask = pickUnique(this.db.hobbies.concentracao || [], "Cadastre uma missão de Concentração");
 
                 this.db.miss = [
-                    { type: '💪 FORÇA', task: fL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'forca' },
                     { type: '🛡️ RESISTÊNCIA', task: rL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'resist' },
                     { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'espirito' },
                     { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false, cat: mindCats[0] || 'criativo' },
@@ -1653,8 +1635,7 @@
                     });
                 });
 
-                this.db.lastPhysical.forca = fL;
-                this.db.lastPhysical.resist = rL;
+                this.db.lastResistTask = rL;
             },
 
             getMultiplier() {
@@ -1712,23 +1693,6 @@
                 if (dir === 1 && i < arr.length - 1)[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
                 this.save();
                 this.renderSkills();
-            },
-
-            async toggleRoutine(blk, i, e) {
-                let r = this.db.routine[blk].tasks[i];
-                if (r.done) {
-                    r.done = false;
-                    this.db.energy -= r.gain;
-                    this.pop(e, `-${r.gain} AURA`);
-                } else {
-                    r.done = true;
-                    r.gain = Math.floor(25 * this.getMultiplier());
-                    this.db.energy += r.gain;
-                    this.pop(e, `+${r.gain} AURA`);
-                }
-                this.checkLvl();
-                this.save();
-                this.render();
             },
 
             async toggleTrain(cat, i, e) {
@@ -1796,7 +1760,7 @@
                     }
                     this.db.energy += m.energyG;
                     this.db.points += 2;
-                    if (m.type.includes('FORÇA') || m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;
+                    if (m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;
                     if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;
                     if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('CONCENTRAÇÃO')) this
                         .db.debuffs.mente = false;
@@ -1926,90 +1890,6 @@
             toggleListItem(id, i) { this.db.lists[id].items[i].done = !this.db.lists[id].items[i].done;
                 this.save();
                 this.renderLists(); },
-
-            async addRoutineBlock() { let name = await SystemModal.prompt("Nome do Bloco de Rotina:"); if (name) { let id = "blk_" +
-                    Date.now();
-                this.db.routine[id] = { title: name.toUpperCase(), tasks: [] };
-                this.save();
-                this.render(); } },
-            async delRoutineBlock(id) { if (await SystemModal.confirm("Excluir este bloco de rotina?")) { delete this.db.routine[
-                    id];
-                this.save();
-                this.render(); } },
-            async edRoutineBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.routine[id].title); if (n) { this
-                    .db.routine[id].title = n.toUpperCase();
-                this.save();
-                this.render(); } },
-            addRoutine(blkId) { let inp = document.getElementById('inp-' + blkId); if (!inp.value) return;
-                this.db.routine[blkId].tasks.push({ task: inp.value, done: false, gain: 0 });
-                inp.value = "";
-                this.save();
-                this.render(); },
-            delRoutine(blkId, i, e) { e.stopPropagation();
-                this.db.routine[blkId].tasks.splice(i, 1);
-                this.save();
-                this.render(); },
-            async edRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.routine[blkId].tasks[i].task; let n = await SystemModal
-                .prompt("Editar Tarefa:", old); if (n) { this.db.routine[blkId].tasks[i].task = n;
-                this.save();
-                this.render(); } },
-            moveRoutine(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.routine[blkId].tasks; if (dir === -1 && i > 0)[
-                    arr[i], arr[i - 1]] = [arr[i - 1], arr[i]]; if (dir === 1 && i < arr.length - 1)[arr[i], arr[i + 1]] = [
-                    arr[i + 1], arr[i]
-                ];
-                this.save();
-                this.render(); },
-
-            async addWeeklyRoutineBlock() { let name = await SystemModal.prompt("Nome do Bloco Semanal:"); if (name) { let id =
-                    "wblk_" + Date.now();
-                this.db.weeklyRoutine[id] = { title: name.toUpperCase(), tasks: [] };
-                this.save();
-                this.render(); } },
-            async delWeeklyRoutineBlock(id) { if (await SystemModal.confirm("Excluir este bloco semanal?")) { delete this.db
-                    .weeklyRoutine[id];
-                this.save();
-                this.render(); } },
-            async edWeeklyRoutineBlockTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.weeklyRoutine[id].title); if (
-                n) { this.db.weeklyRoutine[id].title = n.toUpperCase();
-                this.save();
-                this.render(); } },
-            addWeeklyRoutine(blkId) { let inp = document.getElementById('inp-w-' + blkId); if (!inp.value) return;
-                this.db.weeklyRoutine[blkId].tasks.push({ task: inp.value, done: false, gain: 0 });
-                inp.value = "";
-                this.save();
-                this.render(); },
-            delWeeklyRoutine(blkId, i, e) { e.stopPropagation();
-                this.db.weeklyRoutine[blkId].tasks.splice(i, 1);
-                this.save();
-                this.render(); },
-            async edWeeklyRoutineName(blkId, i, e) { e.stopPropagation(); let old = this.db.weeklyRoutine[blkId].tasks[i].task; let n =
-                await SystemModal.prompt("Editar Tarefa Semanal:", old); if (n) { this.db.weeklyRoutine[blkId].tasks[i].task =
-                    n;
-                this.save();
-                this.render(); } },
-            moveWeeklyRoutine(blkId, i, dir, e) { e.stopPropagation(); let arr = this.db.weeklyRoutine[blkId].tasks; if (dir ===
-                    -1 && i > 0)[arr[i], arr[i - 1]] = [arr[i - 1], arr[i]]; if (dir === 1 && i < arr.length - 1)[arr[i], arr[
-                        i + 1
-                    ]] = [arr[i + 1], arr[i]];
-                this.save();
-                this.render(); },
-
-            async toggleWeeklyRoutine(blk, i, e) {
-                let r = this.db.weeklyRoutine[blk].tasks[i];
-                if (r.done) {
-                    r.done = false;
-                    this.db.energy -= r.gain;
-                    this.pop(e, `-${r.gain} AURA`);
-                } else {
-                    r.done = true;
-                    r.gain = Math.floor(35 * this.getMultiplier());
-                    this.db.energy += r.gain;
-                    this.pop(e, `+${r.gain} AURA`);
-                }
-                this.checkLvl();
-                this.save();
-                this.render();
-            },
 
             addTrain(cat) { let inp = document.getElementById('inp-' + cat); if (!inp.value) return;
                 this.db.trains[cat].push({ task: inp.value, done: false, gain: 0 });
@@ -2181,6 +2061,16 @@
                     this.render(); }
             },
 
+            async edAttrName(attr) {
+                let current = this.db.attrNames[attr] || attr;
+                let newName = await SystemModal.prompt("Novo nome para o atributo " + attr + ":", current);
+                if (newName) {
+                    this.db.attrNames[attr] = newName;
+                    this.save();
+                    this.render();
+                }
+            },
+
             async shuffleMiss() { if (await SystemModal.confirm("Sortear novas?")) { this.genMiss();
                 this.save();
                 this.render(); } },
@@ -2331,6 +2221,14 @@
                 document.getElementById('v-von').innerText = this.db.attr.VON;
                 document.getElementById('v-ess').innerText = this.db.attr.ESS;
 
+                // Atualiza os nomes dos atributos
+                document.getElementById('attr-name-FOR').innerText = this.db.attrNames.FOR;
+                document.getElementById('attr-name-VIT').innerText = this.db.attrNames.VIT;
+                document.getElementById('attr-name-INT').innerText = this.db.attrNames.INT;
+                document.getElementById('attr-name-CON').innerText = this.db.attrNames.CON;
+                document.getElementById('attr-name-VON').innerText = this.db.attrNames.VON;
+                document.getElementById('attr-name-ESS').innerText = this.db.attrNames.ESS;
+
                 let skillsHtml = "";
                 if (this.db.lvl >= 10) {
                     skillsHtml += `<div class="quest-division">Habilidades de Classe</div>`;
@@ -2359,70 +2257,7 @@
                 }
                 document.getElementById('skills-choice-ui').innerHTML = skillsHtml;
 
-                let rBH = "";
-                Object.keys(this.db.routine).forEach(blkId => {
-                    let blk = this.db.routine[blkId];
-                    let tasksH = "";
-                    blk.tasks.forEach((r, i) => {
-                        tasksH +=
-                            `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleRoutine('${blkId}', ${i}, event)">  
-                    <div class="routine-check">${r.done?'✓':''}</div>  
-                    <span style="flex:1">${r.task}</span>  
-                    <div style="display:flex; gap:8px;">  
-                        <button class="btn-order" onclick="Sys.moveRoutine('${blkId}',${i},-1,event)">▲</button>  
-                        <button class="btn-order" onclick="Sys.moveRoutine('${blkId}',${i},1,event)">▼</button>  
-                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edRoutineName('${blkId}', ${i}, event)">✎</span>  
-                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delRoutine('${blkId}', ${i}, event)">✕</span>  
-                    </div>  
-                </div>`;
-                    });
-                    rBH += `<div class="routine-box">  
-                <div class="routine-header">  
-                    <span class="stat-label" style="cursor:pointer" onclick="Sys.edRoutineBlockTitle('${blkId}')">${blk.title}</span>  
-                    <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delRoutineBlock('${blkId}')">Remover Bloco</button>  
-                </div>  
-                <div class="routine-list">${tasksH}</div>  
-                <div class="routine-input-wrap">  
-                    <input type="text" id="inp-${blkId}" class="routine-input" placeholder="Nova tarefa...">  
-                    <button class="btn-add-rtn" onclick="Sys.addRoutine('${blkId}')">+</button>  
-                </div>  
-            </div>`;
-                });
-                document.getElementById('routine-list-ui').innerHTML = rBH;
-
-                let wBH = "";
-                if (this.db.weeklyRoutine) {
-                    Object.keys(this.db.weeklyRoutine).forEach(blkId => {
-                        let blk = this.db.weeklyRoutine[blkId];
-                        let tasksH = "";
-                        blk.tasks.forEach((r, i) => {
-                            tasksH +=
-                                `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleWeeklyRoutine('${blkId}', ${i}, event)">  
-                        <div class="routine-check">${r.done?'✓':''}</div>  
-                        <span style="flex:1">${r.task}</span>  
-                        <div style="display:flex; gap:8px;">  
-                            <button class="btn-order" onclick="Sys.moveWeeklyRoutine('${blkId}',${i},-1,event)">▲</button>  
-                            <button class="btn-order" onclick="Sys.moveWeeklyRoutine('${blkId}',${i},1,event)">▼</button>  
-                            <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edWeeklyRoutineName('${blkId}', ${i}, event)">✎</span>  
-                            <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delWeeklyRoutine('${blkId}', ${i}, event)">✕</span>  
-                        </div>  
-                    </div>`;
-                        });
-                        wBH +=
-                            `<div class="routine-box" style="border-color:rgba(176, 38, 255, 0.3)">  
-                    <div class="routine-header">  
-                        <span class="stat-label" style="cursor:pointer; color:var(--gold)" onclick="Sys.edWeeklyRoutineBlockTitle('${blkId}')">${blk.title}</span>  
-                        <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delWeeklyRoutineBlock('${blkId}')">Remover Bloco</button>  
-                    </div>  
-                    <div class="routine-list">${tasksH}</div>  
-                    <div class="routine-input-wrap">  
-                        <input type="text" id="inp-w-${blkId}" class="routine-input" placeholder="Nova tarefa semanal...">  
-                        <button class="btn-add-rtn" style="color:var(--gold); border-color:var(--gold); box-shadow: 0 0 5px rgba(176,38,255,0.2)" onclick="Sys.addWeeklyRoutine('${blkId}')">+</button>  
-                    </div>  
-                </div>`;
-                    });
-                }
-                document.getElementById('weekly-routine-list-ui').innerHTML = wBH;
+                // Rotinas diária e semanal foram removidas da interface
 
                 let tTotalH = "";
                 Object.keys(this.db.trains).forEach(cat => {
