@@ -78,39 +78,18 @@
             text-align: center;
         }
         @keyframes up {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1)
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50px) scale(1.2)
-            }
+            0% { opacity: 1; transform: translateY(0) scale(1) }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.2) }
         }
         @keyframes pulse {
-            0% {
-                opacity: 0.7;
-                text-shadow: none;
-            }
-            50% {
-                opacity: 1;
-                text-shadow: var(--glow);
-            }
-            100% {
-                opacity: 0.7;
-                text-shadow: none;
-            }
+            0% { opacity: 0.7; text-shadow: none; }
+            50% { opacity: 1; text-shadow: var(--glow); }
+            100% { opacity: 0.7; text-shadow: none; }
         }
         @keyframes systemWarning {
-            0% {
-                box-shadow: 0 0 10px rgba(176, 38, 255, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(176, 38, 255, 0.6);
-            }
-            100% {
-                box-shadow: 0 0 10px rgba(176, 38, 255, 0.2);
-            }
+            0% { box-shadow: 0 0 10px rgba(176, 38, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(176, 38, 255, 0.6); }
+            100% { box-shadow: 0 0 10px rgba(176, 38, 255, 0.2); }
         }
 
         .setup-overlay {
@@ -269,7 +248,7 @@
 
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* Reduzido para 4 colunas (sem Organização) */
             gap: 4px;
             margin-bottom: 15px;
             width: 100%;
@@ -326,16 +305,6 @@
             margin-bottom: 15px;
             cursor: pointer;
             opacity: 0.8;
-        }
-
-        .streak-ui {
-            font-size: 12px;
-            color: var(--energy-color);
-            font-weight: bold;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
-            cursor: pointer;
         }
 
         .buff-active {
@@ -745,43 +714,10 @@
             opacity: 1;
             text-shadow: 0 0 5px var(--danger);
         }
-        .btn-liar {
-            width: 100%;
-            padding: 15px;
-            background: rgba(189, 0, 255, 0.05);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-top: 20px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 11px;
-            box-shadow: 0 0 10px rgba(189, 0, 255, 0.2);
-        }
-        .btn-liar:hover {
-            background: rgba(189, 0, 255, 0.15);
-            box-shadow: 0 0 15px rgba(189, 0, 255, 0.5);
-            text-shadow: 0 0 5px var(--danger);
-        }
+        /* Botões removidos, mas mantive classes para futuras referências */
+        .btn-liar,
         .btn-dishonest {
-            width: 100%;
-            padding: 15px;
-            background: rgba(157, 0, 255, 0.05);
-            border: 1px solid #9d00ff;
-            color: #9d00ff;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-top: 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 11px;
-            box-shadow: 0 0 10px rgba(157, 0, 255, 0.2);
-        }
-        .btn-dishonest:hover {
-            background: rgba(157, 0, 255, 0.15);
-            box-shadow: 0 0 15px rgba(157, 0, 255, 0.5);
-            text-shadow: 0 0 5px #9d00ff;
+            display: none;
         }
         .hidden {
             display: none !important
@@ -892,7 +828,6 @@
     <div class="container">
         <div class="nav-tabs">
             <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>
-            <button class="nav-btn" id="tab-org-btn" onclick="Sys.switchTab('org')">ORGANIZAÇÃO</button>
             <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>
             <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">DUNGEON</button>
             <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>
@@ -913,9 +848,7 @@
                 <div id="essences-ui" onclick="Sys.edEssences()">[ INSERIR 3 ESSÊNCIAS ]</div>
 
                 <div id="prestige-ui" style="color:var(--gold); font-size:12px; font-weight:900; letter-spacing: 2px; margin-bottom:5px; text-transform: uppercase;"></div>
-                <div id="titles-ui" style="font-size:10px; color:var(--a); margin-bottom:10px; letter-spacing: 1px; min-height: 15px;"></div>
 
-                <div id="streak-ui" class="streak-ui" onclick="Sys.edReten()">SEQUÊNCIA: 0 DIAS</div>
                 <div id="day-buffs" class="buff-active"></div>
                 <div id="day-debuffs" class="debuff-active"></div>
 
@@ -977,18 +910,11 @@
 
             <div id="skills-choice-ui"></div>
 
-            <button class="btn-liar" onclick="Sys.failReten()">⚠️ RECAÍDA (RESET SEQUÊNCIA)</button>
-            <button class="btn-dishonest" onclick="Sys.applyDishonestyPenalty()">⚠️ FUI DESONESTO (BLOQUEAR MISSÕE)</button>
+            <!-- Botões de recaída e desonestidade removidos -->
             <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
 
-        <div id="tab-org" class="hidden">
-            <div class="panel">
-                <h3 style="text-align:center; color:var(--a); font-size:12px; letter-spacing:3px; text-shadow: var(--glow);">LISTAS</h3>
-                <div id="lists-container"></div>
-                <button class="btn-init" onclick="Sys.addList()">+ CRIAR NOVA LISTA</button>
-            </div>
-        </div>
+        <!-- Aba de Organização removida -->
 
         <div id="tab-train" class="hidden">
             <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
@@ -1025,7 +951,7 @@
 
                 <div class="quest-division">Corpo</div>
                 <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Resistência</span></div><div id="hobby-resist-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-resist" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('resist')">+</button></div></div>
+                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
 
                 <div class="quest-division">Espírito</div>
                 <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
@@ -1140,7 +1066,7 @@
 
         const CATEGORY_MAP = {
             forca: { type: '💪 FORÇA', debuff: 'corpo' },
-            resist: { type: '🛡️ RESISTÊNCIA', debuff: 'corpo' },
+            mobilidade: { type: '🛡️ MOBILIDADE', debuff: 'corpo' },
             espirito: { type: '✝️ ESPÍRITO', debuff: 'espirito' },
             criativo: { type: '🎨 HOBBY', debuff: 'mente' },
             conhecimento: { type: '📚 CONHECIMENTO', debuff: 'mente' },
@@ -1150,7 +1076,7 @@
 
         const CATEGORY_NAMES = {
             forca: '💪 Força',
-            resist: '🛡️ Resistência',
+            mobilidade: '🛡️ Mobilidade',
             espirito: '✝️ Espírito',
             criativo: '🎨 Criativo',
             conhecimento: '📚 Conhecimento',
@@ -1206,20 +1132,15 @@
 
                     if (!this.db.stats) this.db.stats = { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0,
                         seasonQuests: 0, seasonBosses: 0 };
-                    if (!this.db.lists) this.db.lists = {};
                     if (this.db.prestige === undefined) this.db.prestige = 0;
-                    if (!this.db.titles) this.db.titles = [];
-                    if (!this.db.earnedTitles) this.db.earnedTitles = [];
                     if (this.db.seasonMonth === undefined) this.db.seasonMonth = new Date().getMonth();
                     if (this.db.eventToday === undefined) this.db.eventToday = false;
 
                     if (!this.db.selectedSkills) this.db.selectedSkills = {};
-                    if (this.db.missionBlockUntil === undefined) this.db.missionBlockUntil = 0;
+                    // Removido missionBlockUntil (não usado)
 
-                    // Inicializa slots customizados de missão se não existir
                     if (!this.db.customMissSlots) this.db.customMissSlots = [];
 
-                    // Nomes de atributos personalizados
                     if (!this.db.attrNames) {
                         this.db.attrNames = { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" };
                     }
@@ -1229,14 +1150,10 @@
                         delete this.db.aura;
                     }
 
-                    // Rotinas foram removidas, mas mantemos as propriedades para compatibilidade
-                    if (!this.db.routine) this.db.routine = {};
-                    if (!this.db.weeklyRoutine) this.db.weeklyRoutine = {};
                     if (!this.db.lastWeek) this.db.lastWeek = this.getWeekKey(new Date());
 
-                    // Substitui lastPhysical por lastResistTask
-                    if (!this.db.lastResistTask) this.db.lastResistTask = "";
-                    delete this.db.lastPhysical;
+                    if (!this.db.lastMobilidadeTask) this.db.lastMobilidadeTask = "";
+                    // Removido lastResistTask, reten, titles, etc.
 
                     if (this.db.attr.MEN !== undefined || this.db.attr.C !== undefined) {
                         let oldFor = this.db.attr.FOR || this.db.attr.C || 10;
@@ -1248,20 +1165,19 @@
                         this.db.attr = { FOR: oldFor, VIT: oldRes, INT: oldInt, CON: oldMen, VON: oldCor, ESS: oldFe };
                     }
 
-                    if (this.db.hobbies && this.db.hobbies.social) {
-                        this.db.hobbies.concentracao = this.db.hobbies.social;
-                        delete this.db.hobbies.social;
+                    // Migração de hobbies: 'resist' para 'mobilidade'
+                    if (this.db.hobbies && this.db.hobbies.resist && !this.db.hobbies.mobilidade) {
+                        this.db.hobbies.mobilidade = this.db.hobbies.resist;
+                        delete this.db.hobbies.resist;
                     }
-                    if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
-
-                    if (this.db.hobbies.corpo) {
-                        this.db.hobbies.forca = this.db.hobbies.corpo;
-                        this.db.hobbies.resist = [];
-                        delete this.db.hobbies.corpo;
-                    }
-
+                    if (!this.db.hobbies) this.db.hobbies = {};
+                    if (!this.db.hobbies.mobilidade) this.db.hobbies.mobilidade = [];
                     if (!this.db.hobbies.forca) this.db.hobbies.forca = [];
-                    if (!this.db.hobbies.resist) this.db.hobbies.resist = [];
+                    if (!this.db.hobbies.espirito) this.db.hobbies.espirito = [];
+                    if (!this.db.hobbies.criativo) this.db.hobbies.criativo = [];
+                    if (!this.db.hobbies.conhecimento) this.db.hobbies.conhecimento = [];
+                    if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
+                    if (!this.db.hobbies.baixa) this.db.hobbies.baixa = [];
 
                     if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
 
@@ -1276,13 +1192,12 @@
             save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
 
             switchTab(t) {
-                ['system', 'org', 'train', 'skills', 'hobbies'].forEach(id => {
+                ['system', 'train', 'skills', 'hobbies'].forEach(id => {
                     let el = document.getElementById('tab-' + id);
                     if (el) el.classList.toggle('hidden', id !== t);
                 });
                 const tabsMap = {
                     system: 'tab-sys-btn',
-                    org: 'tab-org-btn',
                     train: 'tab-train-btn',
                     skills: 'tab-skills-btn',
                     hobbies: 'tab-hobbies-btn'
@@ -1292,7 +1207,6 @@
                     if (el) el.classList.toggle('active', id === t);
                 });
                 if (t === 'skills') this.renderSkills();
-                if (t === 'org') this.renderLists();
                 this.render();
             },
 
@@ -1304,34 +1218,25 @@
                     points: 0,
                     dailyPointsUsed: 0,
                     name: n.toUpperCase(),
-                    reten: 0,
-                    last: '',
                     attr: initialAttr,
                     attrNames: { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" },
                     miss: [],
                     skills: [],
-                    routine: {},
-                    weeklyRoutine: {},
-                    lists: {},
+                    lists: {}, // não usado, mas pode deixar
                     selectedSkills: {},
-                    missionBlockUntil: 0,
                     customMissSlots: [],
-                    hobbies: { forca: [], resist: [], espirito: [], criativo: [], conhecimento: [], concentracao: [],
-                        baixa: [] },
+                    hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [] },
                     trains: { puxada: [], empurrada: [], core: [] },
                     trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
                     customCali: { E: [], D: [], C: [], B: [], A: [], S: [] },
                     lvl: 1,
                     energy: 0,
                     lastWeek: this.getWeekKey(new Date()),
-                    lastResistTask: "",
+                    lastMobilidadeTask: "",
                     activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
                     debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
-                    stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0,
-                        seasonBosses: 0 },
+                    stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
                     prestige: 0,
-                    titles: [],
-                    earnedTitles: [],
                     eventToday: false,
                     seasonMonth: new Date().getMonth(),
                     essences: "[ INSERIR 3 ESSÊNCIAS ]"
@@ -1395,7 +1300,7 @@
                             this.db.miss.forEach(m => {
                                 if (!m.done) {
                                     if (m.skipped) return;
-                                    if (m.type.includes('RESISTÊNCIA')) {
+                                    if (m.type.includes('MOBILIDADE')) {
                                         penaltyC++;
                                         this.db.debuffs.corpo = true;
                                     }
@@ -1420,8 +1325,7 @@
                     }
 
                     this.db.activeBuffs.doubleXP = false;
-                    this.db.reten++;
-                    // Rotinas diárias foram removidas, não resetamos mais
+                    // Removido incremento de reten
                     if (this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex
                             .done = false);
                         this.db.trains[k].rewardGiven = false; }); }
@@ -1436,7 +1340,7 @@
                     await this.rollEvent();
                 }
 
-                await this.checkTitles();
+                // Removida chamada a checkTitles()
             },
 
             async rollEvent() {
@@ -1490,7 +1394,6 @@
                 if (sm === 0) sm = 12;
 
                 let rep = `🌌 TEMPORADA ${sm} ENCERRADA! 🌌
-        \n- Máx Sequência Alcançada: ${this.db.reten}
         \n- Treinos Completos: ${t}
         \n- Quests Executadas: ${q}
         \n- Chefes Derrotados: ${b}
@@ -1501,58 +1404,6 @@
                 this.db.stats.seasonTrains = 0;
                 this.db.stats.seasonQuests = 0;
                 this.db.stats.seasonBosses = 0;
-                this.save();
-            },
-
-            async checkTitles() {
-                let t = this.db.titles || [];
-                let earned = this.db.earnedTitles || [];
-
-                if (this.db.reten >= 30 && !t.includes("O DISCIPLINADO")) {
-                    t.push("O DISCIPLINADO");
-                    if (!earned.includes("O DISCIPLINADO")) {
-                        earned.push("O DISCIPLINADO");
-                        await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: O DISCIPLINADO");
-                    }
-                } else if (this.db.reten < 30 && t.includes("O DISCIPLINADO")) {
-                    t = t.filter(x => x !== "O DISCIPLINADO");
-                }
-
-                if (this.db.reten >= 365 && !t.includes("INQUEBRÁVEL")) {
-                    t.push("INQUEBRÁVEL");
-                    if (!earned.includes("INQUEBRÁVEL")) {
-                        earned.push("INQUEBRÁVEL");
-                        await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: INQUEBRÁVEL");
-                    }
-                } else if (this.db.reten < 365 && t.includes("INQUEBRÁVEL")) {
-                    t = t.filter(x => x !== "INQUEBRÁVEL");
-                }
-
-                if (this.db.stats.totalTrains >= 100 && !t.includes("MONGE DE FERRO")) {
-                    t.push("MONGE DE FERRO");
-                    if (!earned.includes("MONGE DE FERRO")) {
-                        earned.push("MONGE DE FERRO");
-                        await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: MONGE DE FERRO");
-                    }
-                }
-                if (this.db.stats.totalKnowledge >= 50 && !t.includes("SÁBIO")) {
-                    t.push("SÁBIO");
-                    if (!earned.includes("SÁBIO")) {
-                        earned.push("SÁBIO");
-                        await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: SÁBIO");
-                    }
-                }
-
-                if (this.db.stats.totalBosses >= 10 && !t.includes("CAÇADOR DE CHEFES")) {
-                    t.push("CAÇADOR DE CHEFES");
-                    if (!earned.includes("CAÇADOR DE CHEFES")) {
-                        earned.push("CAÇADOR DE CHEFES");
-                        await SystemModal.alert("🏆 NOVO TÍTULO DESBLOQUEADO: CAÇADOR DE CHEFES");
-                    }
-                }
-
-                this.db.titles = t;
-                this.db.earnedTitles = earned;
                 this.save();
             },
 
@@ -1584,10 +1435,10 @@
                     return picked.task;
                 };
 
-                // Removida a missão de força (apenas resistência agora)
-                let rPool = (this.db.hobbies.resist || []).filter(h => h.task !== this.db.lastResistTask);
-                if (rPool.length === 0 && this.db.hobbies.resist && this.db.hobbies.resist.length > 0) rPool = this.db.hobbies.resist;
-                let rL = pickUnique(rPool, "Cadastre Missão de Resistência");
+                // Missão de mobilidade (antiga resistência)
+                let rPool = (this.db.hobbies.mobilidade || []).filter(h => h.task !== this.db.lastMobilidadeTask);
+                if (rPool.length === 0 && this.db.hobbies.mobilidade && this.db.hobbies.mobilidade.length > 0) rPool = this.db.hobbies.mobilidade;
+                let rL = pickUnique(rPool, "Cadastre Missão de Mobilidade");
 
                 let eL = pickUnique(this.db.hobbies.espirito || [], "Cadastre Missão de Espírito");
 
@@ -1610,7 +1461,7 @@
                 let concentracaoTask = pickUnique(this.db.hobbies.concentracao || [], "Cadastre uma missão de Concentração");
 
                 this.db.miss = [
-                    { type: '🛡️ RESISTÊNCIA', task: rL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'resist' },
+                    { type: '🛡️ MOBILIDADE', task: rL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'mobilidade' },
                     { type: '✝️ ESPÍRITO', task: eL, done: false, xpG: 0, energyG: 0, skipped: false, cat: 'espirito' },
                     { type: '🧠 HOBBY', task: hobby1, done: false, xpG: 0, energyG: 0, skipped: false, cat: mindCats[0] || 'criativo' },
                     { type: '🧠 HOBBY', task: hobby2, done: false, xpG: 0, energyG: 0, skipped: false, cat: mindCats[1] || 'baixa' },
@@ -1635,11 +1486,11 @@
                     });
                 });
 
-                this.db.lastResistTask = rL;
+                this.db.lastMobilidadeTask = rL;
             },
 
             getMultiplier() {
-                let mult = (this.db.reten >= 3) ? 1.5 : 1.0;
+                let mult = 1.0; // Sem bônus de sequência
                 if (this.db.activeBuffs && this.db.activeBuffs.doubleXP) mult *= 2;
                 let presBonus = 1 + ((this.db.prestige || 0) * 0.10);
                 return mult * presBonus;
@@ -1660,7 +1511,7 @@
                     this.db.stats.seasonBosses++;
                     this.pop(e, `+5 ENERGIA\nBOSS ABATIDO`);
                 }
-                await this.checkTitles();
+                // Removida chamada a checkTitles
                 this.save();
                 this.render();
                 this.renderSkills();
@@ -1732,7 +1583,7 @@
                         this.pop(e, `+${item.gain} AURA`);
                     }
                 }
-                await this.checkTitles();
+                // Removida chamada a checkTitles
                 this.checkLvl();
                 this.save();
                 this.render();
@@ -1760,13 +1611,13 @@
                     }
                     this.db.energy += m.energyG;
                     this.db.points += 2;
-                    if (m.type.includes('RESISTÊNCIA')) this.db.debuffs.corpo = false;
+                    if (m.type.includes('MOBILIDADE')) this.db.debuffs.corpo = false;
                     if (m.type.includes('ESPÍRITO')) this.db.debuffs.espirito = false;
                     if (m.type.includes('HOBBY') || m.type.includes('CONHECIMENTO') || m.type.includes('CONCENTRAÇÃO')) this
                         .db.debuffs.mente = false;
                     this.pop(e, "");
                 }
-                await this.checkTitles();
+                // Removida chamada a checkTitles
                 this.checkLvl();
                 this.save();
                 this.render();
@@ -1812,6 +1663,7 @@
                 delete this.db.trainTitles[cat];
                 this.save();
                 this.render(); } },
+
             addHobby(cat) { let inp = document.getElementById('inp-' + cat); if (!inp.value) return; if (!this.db.hobbies[cat])
                     this.db.hobbies[cat] = [];
                 this.db.hobbies[cat].push({ task: inp.value });
@@ -1857,39 +1709,7 @@
                 }
             },
 
-            async addList() { let n = await SystemModal.prompt("Nome da Lista:"); if (n) { this.db.lists['lst_' + Date
-                .now()] = { title: n.toUpperCase(), items: [] };
-                this.save();
-                this.renderLists(); } },
-            async delList(id) { if (await SystemModal.confirm("Apagar Lista Inteira?")) { delete this.db.lists[id];
-                this.save();
-                this.renderLists(); } },
-            async edListTitle(id) { let n = await SystemModal.prompt("Novo nome:", this.db.lists[id].title); if (n) { this.db.lists[
-                    id].title = n.toUpperCase();
-                this.save();
-                this.renderLists(); } },
-            addListItem(id) { let inp = document.getElementById('inp-lst-' + id); if (!inp.value) return;
-                this.db.lists[id].items.push({ task: inp.value, done: false });
-                inp.value = "";
-                this.save();
-                this.renderLists(); },
-            delListItem(id, i, e) { e.stopPropagation();
-                this.db.lists[id].items.splice(i, 1);
-                this.save();
-                this.renderLists(); },
-            async edListItem(id, i, e) { e.stopPropagation(); let old = this.db.lists[id].items[i].task; let n = await SystemModal
-                .prompt("Editar:", old); if (n) { this.db.lists[id].items[i].task = n;
-                this.save();
-                this.renderLists(); } },
-            moveListItem(id, i, dir, e) { e.stopPropagation(); let arr = this.db.lists[id].items; if (dir === -1 && i > 0)[arr[
-                    i], arr[i - 1]] = [arr[i - 1], arr[i]]; if (dir === 1 && i < arr.length - 1)[arr[i], arr[i + 1]] = [
-                    arr[i + 1], arr[i]
-                ];
-                this.save();
-                this.renderLists(); },
-            toggleListItem(id, i) { this.db.lists[id].items[i].done = !this.db.lists[id].items[i].done;
-                this.save();
-                this.renderLists(); },
+            // Funções de lista removidas (addList, delList, edListTitle, etc.)
 
             addTrain(cat) { let inp = document.getElementById('inp-' + cat); if (!inp.value) return;
                 this.db.trains[cat].push({ task: inp.value, done: false, gain: 0 });
@@ -1943,17 +1763,7 @@
                 }
             },
 
-            async applyDishonestyPenalty() {
-                if (await SystemModal.confirm(
-                        "Você admitiu desonestidade/mentira. A penalidade bloqueará suas missões (e qualquer ganho com elas) por 24 HORAS por falta de credibilidade. Tem certeza?"
-                        )) {
-                    this.db.missionBlockUntil = Date.now() + (24 * 60 * 60 * 1000);
-                    this.save();
-                    this.render();
-                    await SystemModal.alert(
-                    " PENALIDADE APLICADA. Suas missões sumiram do radar do Sistema por 24h.");
-                }
-            },
+            // Funções applyDishonestyPenalty e failReten removidas
 
             async interactSkill(tierLvl, tIdx, sIdx) {
                 let sk = SYSTEM_SKILLS[tIdx][sIdx];
@@ -2046,9 +1856,6 @@
             async edRank() { let v = await SystemModal.prompt("Rank:"); if (v) { this.db.customRank = v.toUpperCase();
                 this.save();
                 this.render(); } },
-            async edReten() { let v = await SystemModal.prompt("SEQUÊNCIA:"); if (v) { this.db.reten = Number(v);
-                this.save();
-                this.render(); } },
             async edEssences() { let v = await SystemModal.prompt("Insira suas 3 essências:", this.db.essences); if (v) { this.db
                     .essences = v.toUpperCase();
                 this.save();
@@ -2074,34 +1881,7 @@
             async shuffleMiss() { if (await SystemModal.confirm("Sortear novas?")) { this.genMiss();
                 this.save();
                 this.render(); } },
-            async failReten() {
-                if (await SystemModal.confirm("ZERAR SEQUÊNCIA?")) {
-                    this.db.reten = 0;
-                    this.db.points = 0;
-                    this.db.energy = 0;
-                    this.db.lvl = 1;
-                    this.db.dailyPointsUsed = 10;
-                    this.db.selectedSkills = {};
 
-                    this.db.activeBuffs.doubleXP = false;
-                    this.db.activeBuffs.penaltyImmunity = 0;
-
-                    this.db.debuffs.corpo = true;
-                    this.db.debuffs.mente = true;
-                    this.db.debuffs.espirito = true;
-
-                    this.db.attr.FOR = Math.max(1, this.db.attr.FOR - 5);
-                    this.db.attr.VIT = Math.max(1, this.db.attr.VIT - 5);
-                    this.db.attr.INT = Math.max(1, this.db.attr.INT - 5);
-                    this.db.attr.CON = Math.max(1, this.db.attr.CON - 5);
-                    this.db.attr.VON = Math.max(1, this.db.attr.VON - 5);
-                    this.db.attr.ESS = Math.max(1, this.db.attr.ESS - 5);
-
-                    await this.checkTitles();
-                    this.save();
-                    this.render();
-                }
-            },
             async reset() { if (await SystemModal.confirm("FORMATAR TUDO?")) { localStorage.clear();
                 location.reload(); } },
 
@@ -2134,48 +1914,13 @@
                 document.getElementById('skills-list-ui').innerHTML = h;
             },
 
-            renderLists() {
-                let lBH = "";
-                Object.keys(this.db.lists).forEach(id => {
-                    let lst = this.db.lists[id];
-                    let itemsH = "";
-                    lst.items.forEach((r, i) => {
-                        itemsH +=
-                            `<div class="routine-item ${r.done?'checked':''}" onclick="Sys.toggleListItem('${id}', ${i})">  
-                    <div class="routine-check">${r.done?'✓':''}</div>  
-                    <span style="flex:1">${r.task}</span>  
-                    <div style="display:flex; gap:8px;">  
-                        <button class="btn-order" onclick="Sys.moveListItem('${id}',${i},-1,event)">▲</button>  
-                        <button class="btn-order" onclick="Sys.moveListItem('${id}',${i},1,event)">▼</button>  
-                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edListItem('${id}', ${i}, event)">✎</span>  
-                        <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delListItem('${id}', ${i}, event)">✕</span>  
-                    </div>  
-                </div>`;
-                    });
-                    lBH += `<div class="routine-box">  
-                <div class="routine-header">  
-                    <span class="stat-label" style="cursor:pointer; color:var(--a);" onclick="Sys.edListTitle('${id}')">${lst.title}</span>  
-                    <button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delList('${id}')">Remover Lista</button>  
-                </div>  
-                <div class="routine-list">${itemsH}</div>  
-                <div class="routine-input-wrap">  
-                    <input type="text" id="inp-lst-${id}" class="routine-input" placeholder="Novo item...">  
-                    <button class="btn-add-rtn" onclick="Sys.addListItem('${id}')">+</button>  
-                </div>  
-            </div>`;
-                });
-                document.getElementById('lists-container').innerHTML = lBH;
-            },
-
             render() {
                 if (!this.db) return;
-                const isB = this.db.reten >= 3;
                 if (this.db.pic) { document.getElementById('p-img').src = this.db.pic;
                     document.getElementById('p-img').classList.remove('hidden');
                     document.getElementById('p-img-placeholder').classList.add('hidden'); }
                 document.getElementById('p-name').innerText = this.db.name;
                 document.getElementById('essences-ui').innerText = this.db.essences;
-                document.getElementById('streak-ui').innerText = "SEQUÊNCIA: " + this.db.reten + " DIAS";
                 document.getElementById('lvl-ui').innerText = "LVL " + this.db.lvl;
 
                 if (this.db.prestige > 0) {
@@ -2184,19 +1929,14 @@
                     document.getElementById('prestige-ui').innerText = "";
                 }
 
-                if (this.db.titles && this.db.titles.length > 0) {
-                    document.getElementById('titles-ui').innerText = "Títulos: " + this.db.titles.join(' | ');
-                } else {
-                    document.getElementById('titles-ui').innerText = "";
-                }
-
                 if (this.db.lvl >= 100) document.getElementById('btn-prestige').classList.remove('hidden');
                 else document.getElementById('btn-prestige').classList.add('hidden');
 
-                let buffTxt = isB ? "✨ BUFF SEQUÊNCIA" : "";
+                let buffTxt = "";
                 if (this.db.activeBuffs.doubleXP) buffTxt += " | 🔥 XP DUPLO";
                 if (this.db.activeBuffs.penaltyImmunity > 0) buffTxt += " | 🛡️ IMUNIDADE";
                 if (this.db.prestige > 0) buffTxt += ` | 👑 +${this.db.prestige * 10}% AURA`;
+                if (buffTxt.startsWith(" | ")) buffTxt = buffTxt.slice(3); // Remove separador inicial
                 document.getElementById('day-buffs').innerText = buffTxt;
 
                 let debuffTxt = "";
@@ -2221,7 +1961,6 @@
                 document.getElementById('v-von').innerText = this.db.attr.VON;
                 document.getElementById('v-ess').innerText = this.db.attr.ESS;
 
-                // Atualiza os nomes dos atributos
                 document.getElementById('attr-name-FOR').innerText = this.db.attrNames.FOR;
                 document.getElementById('attr-name-VIT').innerText = this.db.attrNames.VIT;
                 document.getElementById('attr-name-INT').innerText = this.db.attrNames.INT;
@@ -2257,8 +1996,6 @@
                 }
                 document.getElementById('skills-choice-ui').innerHTML = skillsHtml;
 
-                // Rotinas diária e semanal foram removidas da interface
-
                 let tTotalH = "";
                 Object.keys(this.db.trains).forEach(cat => {
                     let tItemsH = "";
@@ -2280,7 +2017,7 @@
                 });
                 document.getElementById('trains-container').innerHTML = tTotalH;
 
-                ['forca', 'resist', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa'].forEach(cat => {
+                ['forca', 'mobilidade', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa'].forEach(cat => {
                     let hH = "";
                     if (this.db.hobbies[cat]) {
                         this.db.hobbies[cat].forEach((h, i) => {
@@ -2297,15 +2034,7 @@
                 });
 
                 let mH = "";
-                let nowTs = Date.now();
-                if (this.db.missionBlockUntil > nowTs) {
-                    let hoursLeft = Math.ceil((this.db.missionBlockUntil - nowTs) / (1000 * 60 * 60));
-                    mH = `<div style="text-align:center; padding: 25px; margin: 10px 0; border: 1px solid #9d00ff; background: rgba(157, 0, 255, 0.1); color: #9d00ff; font-weight: bold; letter-spacing: 1px; box-shadow: 0 0 15px rgba(157, 0, 255, 0.2);">
-                    🔒 MISSÕES BLOQUEADAS<br><br>
-                    <span style="font-size: 11px; opacity: 0.8; font-weight: normal;">Falta de credibilidade com o Sistema devido à desonestidade.</span><br><br>
-                    TEMPO RESTANTE: ${hoursLeft} HORAS
-                  </div>`;
-                } else if (this.db.miss) {
+                if (this.db.miss) {
                     this.db.miss.forEach((m, i) => {
                         mH +=
                             `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}"><div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;"><div style="display:flex; align-items:center; gap:10px; flex:1;"><div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div><div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div></div>${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}</div></div>`;
