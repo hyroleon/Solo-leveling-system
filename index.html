@@ -1246,7 +1246,6 @@
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
             <div id="mission-ui"></div>
-            <div id="custom-slots-ui" style="margin-top:10px;"></div>
 
             <div id="skills-choice-ui"></div>
 
@@ -1254,7 +1253,6 @@
             <div class="quest-division">Configuração de Missões</div>
             <div id="miss-config-ui"></div>
 
-            <!-- Botões de recaída e desonestidade removidos -->
             <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
 
@@ -1301,8 +1299,6 @@
             <div class="quest-division" style="margin-top:40px;">Compromissos</div>
             <div id="commitments-container"></div>
         </div>
-
-        <!-- Aba de Organização removida -->
 
         <div id="tab-train" class="hidden">
             <div class="panel" style="text-align:center; margin-bottom:15px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
@@ -1463,16 +1459,6 @@
             baixa: { type: '🔋 HOBBY', debuff: 'mente' }
         };
 
-        const CATEGORY_NAMES = {
-            forca: '💪 Força',
-            mobilidade: '🛡️ Mobilidade',
-            espirito: '✝️ Espírito',
-            criativo: '🎨 Criativo',
-            conhecimento: '📚 Conhecimento',
-            concentracao: '🧠 Concentração',
-            baixa: '🔋 Baixa Energia'
-        };
-
         // ====== OBJETO SYS ======
         const Sys = {
             db: null,
@@ -1527,8 +1513,6 @@
                     if (this.db.eventToday === undefined) this.db.eventToday = false;
 
                     if (!this.db.selectedSkills) this.db.selectedSkills = {};
-
-                    if (!this.db.customMissSlots) this.db.customMissSlots = [];
 
                     if (!this.db.attrNames) {
                         this.db.attrNames = { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" };
@@ -1599,6 +1583,23 @@
                         });
                     });
 
+                    // Migração: garantir que tarefas de rotina tenham rewardGiven
+                    const days = ['sun','mon','tue','wed','thu','fri','sat'];
+                    days.forEach(day => {
+                        if (this.db.routine[day]) {
+                            ['morning','afternoon','evening'].forEach(block => {
+                                this.db.routine[day][block].forEach(task => {
+                                    if (task.rewardGiven === undefined) task.rewardGiven = false;
+                                });
+                            });
+                        }
+                    });
+                    // Migração: garantir que compromissos tenham done e rewardGiven
+                    this.db.commitments.forEach(c => {
+                        if (c.done === undefined) c.done = false;
+                        if (c.rewardGiven === undefined) c.rewardGiven = false;
+                    });
+
                     this.initTimer();
                     await this.check();
                     Routine.init();
@@ -1646,7 +1647,6 @@
                     skills: [],
                     lists: {},
                     selectedSkills: {},
-                    customMissSlots: [],
                     hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [] },
                     trains: { puxada: [], empurrada: [], core: [] },
                     trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
@@ -1767,6 +1767,11 @@
                     if (this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex
                             .done = false);
                         this.db.trains[k].rewardGiven = false; }); }
+
+                    // Resetar rewardGiven das tarefas do dia anterior? Não, as tarefas são por dia, então as de hoje serão novas.
+                    // Mas para garantir que tarefas antigas não tenham rewardGiven true, podemos resetar quando o dia muda?
+                    // Na verdade, cada dia tem seu próprio conjunto de tarefas com rewardGiven próprio.
+                    // Não precisamos fazer nada especial, pois a rotina de hoje é separada.
 
                     this.db.last = today;
                     this.db.eventToday = false;
@@ -1931,24 +1936,6 @@
                 for (let i = 0; i < (counts.concentracao || 0); i++) {
                     addMissForCat('concentracao', "Cadastre missão de Concentração", names.concentracao || '🧠 CONCENTRAÇÃO');
                 }
-
-                // Slots extras
-                (this.db.customMissSlots || []).forEach(cat => {
-                    let info = CATEGORY_MAP[cat];
-                    if (!info) return;
-                    let pool = this.db.hobbies[cat] || [];
-                    let picked = pickUnique(pool, "Cadastre missão em " + cat);
-                    missArray.push({
-                        type: info.type,
-                        task: picked.task,
-                        desc: picked.desc || '',
-                        done: false,
-                        xpG: 0,
-                        energyG: 0,
-                        skipped: false,
-                        cat: cat
-                    });
-                });
 
                 this.db.miss = missArray;
                 if (missArray.length > 0 && (this.db.hobbies.mobilidade || []).length > 0) {
@@ -2177,29 +2164,6 @@
                         this.save();
                         this.render();
                     }
-                }
-            },
-
-            async addCustomMissSlot() {
-                let catList = Object.keys(CATEGORY_MAP).join(', ');
-                let cat = await SystemModal.prompt(
-                    "Escolha a categoria do novo slot de missão diária:\n\nCategorias disponíveis: " + catList +
-                    "\n\nDigite o nome da categoria:"
-                );
-                if (cat && CATEGORY_MAP[cat.trim().toLowerCase()]) {
-                    this.db.customMissSlots.push(cat.trim().toLowerCase());
-                    this.save();
-                    this.render();
-                } else if (cat) {
-                    await SystemModal.alert("Categoria inválida. Use uma das seguintes: " + catList);
-                }
-            },
-
-            async removeCustomMissSlot(index) {
-                if (await SystemModal.confirm("Remover este slot extra de missão diária?")) {
-                    this.db.customMissSlots.splice(index, 1);
-                    this.save();
-                    this.render();
                 }
             },
 
@@ -2532,25 +2496,6 @@
                 }
                 document.getElementById('mission-ui').innerHTML = mH;
 
-                let slotsHtml = '<div class="quest-division" style="margin-top:20px;">Slots Extras de Missões</div>';
-                slotsHtml += '<div style="margin-bottom:10px;">';
-                if (this.db.customMissSlots && this.db.customMissSlots.length > 0) {
-                    this.db.customMissSlots.forEach((cat, i) => {
-                        slotsHtml +=
-                            `<div class="custom-slot-item">
-                        <span>${CATEGORY_NAMES[cat] || cat}</span>
-                        <span class="btn-slot-remove" onclick="Sys.removeCustomMissSlot(${i})">✕</span>
-                    </div>`;
-                    });
-                } else {
-                    slotsHtml +=
-                        '<div style="font-size:11px; color:var(--t-dim); padding:10px; text-align:center;">Nenhum slot extra adicionado.</div>';
-                }
-                slotsHtml += '</div>';
-                slotsHtml +=
-                    '<button class="btn-shuffle" style="width:100%;" onclick="Sys.addCustomMissSlot()">+ ADICIONAR SLOT DE MISSÃO</button>';
-                document.getElementById('custom-slots-ui').innerHTML = slotsHtml;
-
                 // Configuração de missões
                 let configHtml = '';
                 const catKeys = ['forca', 'mobilidade', 'espirito', 'hobby', 'conhecimento', 'concentracao'];
@@ -2726,16 +2671,29 @@
             toggleTaskDone(dayKey, blockKey, idx, e) {
                 if (e) e.stopPropagation();
                 let task = Sys.db.routine[dayKey][blockKey][idx];
-                task.done = !task.done;
+                if (task.rewardGiven === undefined) task.rewardGiven = false;
+
+                if (!task.done) {
+                    task.done = true;
+                    if (!task.rewardGiven) {
+                        task.rewardGiven = true;
+                        Sys.db.energy += 25;
+                        Sys.checkLvl();
+                        Sys.pop(e, "⚡ +25 Energia");
+                    }
+                } else {
+                    task.done = false;
+                    // Não remove energia, rewardGiven permanece true
+                }
                 Sys.save();
                 this.refreshCurrentView();
+                Sys.render(); // Atualiza a barra de energia
             },
 
             moveTask(dayKey, blockKey, idx, dir, e) {
                 if (e) e.stopPropagation();
                 let tasks = Sys.db.routine[dayKey][blockKey];
                 if (dir === -1 && idx > 0) {
-                    // Perguntar se quer aplicar a todos os dias (apenas na visualização diária)
                     if (this.currentSubtab === 'daily') {
                         this.confirmApplyAll().then(applyAll => {
                             if (applyAll) {
@@ -2880,7 +2838,8 @@
                                 time,
                                 desc,
                                 done: false,
-                                applyAll: true
+                                applyAll: true,
+                                rewardGiven: false // Inicializa rewardGiven
                             });
                         });
                     } else {
@@ -2890,7 +2849,8 @@
                             time,
                             desc,
                             done: false,
-                            applyAll: false
+                            applyAll: false,
+                            rewardGiven: false // Inicializa rewardGiven
                         });
                     }
                 }
@@ -2902,6 +2862,7 @@
             updateProgress() {
                 let todayKey = this.getTodayKey();
                 let routine = Sys.db.routine[todayKey];
+                if (!routine) return;
                 let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
                 let total = allTasks.length;
                 let done = allTasks.filter(t => t.done).length;
@@ -2913,6 +2874,7 @@
             renderNow() {
                 let todayKey = this.getTodayKey();
                 let routine = Sys.db.routine[todayKey];
+                if (!routine) return;
                 let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
                 let next = allTasks.find(t => !t.done);
                 let container = document.getElementById('routine-now-content');
@@ -2936,10 +2898,14 @@
                 let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
                 let next = allTasks.find(t => !t.done);
                 if (next) {
-                    next.done = true;
-                    Sys.save();
-                    this.renderNow();
-                    this.updateProgress();
+                    // Encontrar o dia e bloco para atualizar
+                    for (let blockKey of ['morning', 'afternoon', 'evening']) {
+                        let idx = routine[blockKey].findIndex(t => t.id === next.id);
+                        if (idx !== -1) {
+                            this.toggleTaskDone(todayKey, blockKey, idx, null);
+                            break;
+                        }
+                    }
                 }
             },
 
@@ -2989,7 +2955,8 @@
                         html += `
                         <div class="commitment-item" data-id="${c.id}">
                             <span class="commitment-date">${dateLabel}</span>
-                            <span class="commitment-title">${c.title}${c.time ? ' (' + c.time + ')' : ''}</span>
+                            <div class="routine-check" style="margin-right:10px; cursor:pointer;" onclick="event.stopPropagation(); Routine.toggleCommitmentDone('${c.id}', event)">${c.done ? '✓' : ''}</div>
+                            <span class="commitment-title" style="text-decoration:${c.done ? 'line-through' : 'none'}; opacity:${c.done ? '0.6' : '1'};">${c.title}${c.time ? ' (' + c.time + ')' : ''}</span>
                             <div class="commitment-actions">
                                 <button onclick="event.stopPropagation(); Routine.openCommitmentModal('${c.id}')">✎</button>
                                 <button onclick="event.stopPropagation(); Routine.deleteCommitment('${c.id}')">✕</button>
@@ -3054,7 +3021,9 @@
                         title,
                         date,
                         time,
-                        desc
+                        desc,
+                        done: false,      // Inicializa como não concluído
+                        rewardGiven: false // Recompensa ainda não entregue
                     });
                 }
                 Sys.save();
@@ -3070,6 +3039,34 @@
                         this.renderCommitments();
                     }
                 });
+            },
+
+            toggleCommitmentDone(id, e) {
+                if (e) e.stopPropagation();
+                let c = Sys.db.commitments.find(comm => comm.id === id);
+                if (!c) return;
+                if (c.done === undefined) c.done = false;
+                if (c.rewardGiven === undefined) c.rewardGiven = false;
+
+                if (!c.done) {
+                    c.done = true;
+                    if (!c.rewardGiven) {
+                        c.rewardGiven = true;
+                        Sys.db.energy += 100;
+                        Sys.checkLvl();
+                        Sys.pop(e, "⚡ +100 Energia");
+                    }
+                } else {
+                    c.done = false;
+                    // Não remove energia, rewardGiven permanece true
+                }
+                Sys.save();
+                Sys.render(); // Atualiza a barra de energia
+                this.renderCommitments();
+            },
+
+            editCommitment(id) {
+                this.openCommitmentModal(id);
             },
 
             openRecovery() {
