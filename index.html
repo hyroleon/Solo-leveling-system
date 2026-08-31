@@ -248,7 +248,7 @@
 
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 colunas agora */
+            grid-template-columns: repeat(4, 1fr);
             gap: 4px;
             margin-bottom: 15px;
             width: 100%;
@@ -725,10 +725,6 @@
             opacity: 1;
             text-shadow: 0 0 5px var(--danger);
         }
-        .btn-liar,
-        .btn-dishonest {
-            display: none;
-        }
         .hidden {
             display: none !important
         }
@@ -812,257 +808,10 @@
             text-shadow: 0 0 5px var(--danger);
         }
 
-        /* NOVOS ESTILOS PARA ROTINA */
-        .routine-subtabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .routine-subtab {
-            flex: 1;
-            padding: 8px 5px;
-            background: rgba(10, 18, 30, 0.6);
-            border: 1px solid var(--b);
-            color: var(--t-dim);
-            font-size: 10px;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-align: center;
-            border-radius: 2px;
-        }
-        .routine-subtab.active {
-            border-color: var(--a);
-            color: var(--t);
-            background: var(--a-dim);
-            box-shadow: inset 0 -2px 0 var(--a), 0 0 15px rgba(0, 229, 255, 0.3);
-            text-shadow: 0 0 5px var(--a);
-        }
-        .routine-day-selector {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .routine-day-btn {
-            padding: 6px 10px;
-            background: rgba(10, 18, 30, 0.6);
-            border: 1px solid var(--b);
-            color: var(--t-dim);
-            font-size: 10px;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 2px;
-        }
-        .routine-day-btn.active {
-            border-color: var(--a);
-            color: var(--t);
-            background: var(--a-dim);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-            text-shadow: 0 0 5px var(--a);
-        }
-        .routine-block {
-            margin-bottom: 20px;
-        }
-        .routine-block-title {
-            font-size: 12px;
-            font-weight: 900;
-            color: var(--a);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            text-shadow: var(--glow);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .routine-task {
-            display: flex;
-            align-items: center;
-            padding: 8px 10px;
-            border: 1px solid var(--b);
-            margin-bottom: 4px;
-            background: rgba(0, 0, 0, 0.3);
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .routine-task.checked {
-            opacity: 0.5;
-        }
-        .routine-task .routine-check {
-            margin-right: 10px;
-        }
-        .routine-task-actions {
-            margin-left: auto;
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-        .routine-task-actions button {
-            background: none;
-            border: none;
-            color: var(--t-dim);
-            cursor: pointer;
-            font-size: 12px;
-            padding: 2px 4px;
-        }
-        .routine-task-actions button:hover {
-            color: var(--a);
-            text-shadow: var(--glow);
-        }
-        .routine-task-time {
-            font-size: 10px;
-            color: var(--t-dim);
-            margin-left: 5px;
-        }
-        .progress-container {
-            margin-bottom: 20px;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--t-dim);
-            margin-bottom: 5px;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--b);
-            overflow: hidden;
-            border-radius: 2px;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--a);
-            box-shadow: 0 0 10px var(--a);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        .commitments-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .commitments-month-nav {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-        .commitments-month-nav button {
-            background: rgba(10, 18, 30, 0.6);
-            border: 1px solid var(--b);
-            color: var(--t-dim);
-            font-size: 14px;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 2px;
-        }
-        .commitments-month-nav button:hover {
-            border-color: var(--a);
-            color: var(--a);
-        }
-        .commitment-item {
-            padding: 10px;
-            border: 1px solid var(--b);
-            margin-bottom: 6px;
-            background: rgba(0, 0, 0, 0.3);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        .commitment-item:hover {
-            border-color: rgba(0, 229, 255, 0.4);
-        }
-        .commitment-date {
-            font-weight: 900;
-            color: var(--a);
-            margin-right: 10px;
-            min-width: 60px;
-        }
-        .commitment-title {
-            flex: 1;
-        }
-        .commitment-actions {
-            display: flex;
-            gap: 5px;
-        }
-        .commitment-actions button {
-            background: none;
-            border: none;
-            color: var(--t-dim);
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .commitment-actions button:hover {
-            color: var(--danger);
-        }
-        /* Modal genérico para tarefas e compromissos */
-        .modal-input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .modal-input-group label {
-            display: block;
-            font-size: 11px;
-            color: var(--t-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        .modal-input-group input,
-        .modal-input-group textarea {
-            text-align: left;
-            margin: 0;
-        }
-        .modal-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 15px 0;
-            font-size: 13px;
-            color: var(--t);
-        }
-        .modal-checkbox input {
-            width: auto;
-            margin: 0;
-        }
-        /* Plano de volta */
-        .recovery-step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border: 1px solid var(--b);
-            margin-bottom: 6px;
-            background: rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-        }
-        .recovery-step.checked {
-            opacity: 0.6;
-            border-color: var(--a);
-        }
-        .recovery-step .routine-check {
-            margin-right: 10px;
-        }
-        /* Ajustes responsivos */
         @media (max-width: 400px) {
             .nav-btn {
                 font-size: 7px;
                 padding: 8px 1px;
-            }
-            .routine-day-selector {
-                gap: 2px;
-            }
-            .routine-day-btn {
-                padding: 4px 6px;
-                font-size: 8px;
             }
         }
     </style>
@@ -1089,61 +838,6 @@
         </div>
     </div>
 
-    <!-- Modal para tarefas de rotina -->
-    <div id="task-modal-overlay" class="setup-overlay hidden" style="z-index: 10002;">
-        <div class="setup-card" style="max-width: 350px; text-align: left;">
-            <h2 id="task-modal-title" style="color:var(--a); font-size:16px; text-align: center;">TAREFA</h2>
-            <div class="modal-input-group">
-                <label>Nome da Tarefa</label>
-                <input type="text" id="task-name" placeholder="Ex: Meditar">
-            </div>
-            <div class="modal-input-group">
-                <label>Horário (opcional)</label>
-                <input type="time" id="task-time">
-            </div>
-            <div class="modal-input-group">
-                <label>Descrição (opcional)</label>
-                <textarea id="task-desc" placeholder="Detalhes..."></textarea>
-            </div>
-            <div class="modal-checkbox">
-                <input type="checkbox" id="task-apply-all">
-                <label for="task-apply-all" style="cursor:pointer;">Aplicar a todos os dias da semana</label>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button id="task-modal-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
-                <button id="task-modal-save" class="btn-init" style="margin-top:0;">SALVAR</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para compromissos -->
-    <div id="commitment-modal-overlay" class="setup-overlay hidden" style="z-index: 10002;">
-        <div class="setup-card" style="max-width: 350px; text-align: left;">
-            <h2 style="color:var(--a); font-size:16px; text-align: center;">COMPROMISSO</h2>
-            <div class="modal-input-group">
-                <label>Título</label>
-                <input type="text" id="commitment-title" placeholder="Ex: Consulta">
-            </div>
-            <div class="modal-input-group">
-                <label>Data</label>
-                <input type="date" id="commitment-date">
-            </div>
-            <div class="modal-input-group">
-                <label>Horário (opcional)</label>
-                <input type="time" id="commitment-time">
-            </div>
-            <div class="modal-input-group">
-                <label>Descrição (opcional)</label>
-                <textarea id="commitment-desc" placeholder="Detalhes..."></textarea>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button id="commitment-modal-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
-                <button id="commitment-modal-save" class="btn-init" style="margin-top:0;">SALVAR</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para detalhes de missão -->
     <div id="mission-detail-overlay" class="setup-overlay hidden" style="z-index: 10002;">
         <div class="setup-card" style="max-width: 350px; text-align: left;">
             <h2 id="mission-detail-title" style="color:var(--a); font-size:16px; text-align: center;">MISSÃO</h2>
@@ -1155,19 +849,9 @@
         </div>
     </div>
 
-    <!-- Modal para recuperação -->
-    <div id="recovery-overlay" class="setup-overlay hidden" style="z-index: 10002;">
-        <div class="setup-card" style="max-width: 350px; text-align: left;">
-            <h2 style="color:var(--a); font-size:16px; text-align: center;">🧘 PLANO DE VOLTA</h2>
-            <div id="recovery-steps"></div>
-            <button id="recovery-close" class="btn-init" style="margin-top:15px;">FECHAR</button>
-        </div>
-    </div>
-
     <div class="container">
         <div class="nav-tabs">
             <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>
-            <button class="nav-btn" id="tab-rotina-btn" onclick="Sys.switchTab('rotina')">ROTINA</button>
             <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>
             <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">DUNGEON</button>
             <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>
@@ -1249,55 +933,10 @@
 
             <div id="skills-choice-ui"></div>
 
-            <!-- Configuração de missões -->
             <div class="quest-division">Configuração de Missões</div>
             <div id="miss-config-ui"></div>
 
             <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
-        </div>
-
-        <!-- Aba ROTINA -->
-        <div id="tab-rotina" class="hidden">
-            <div class="panel" style="text-align:center;">
-                <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-                    <span style="font-size:24px;">⚙️</span>
-                    <span style="font-size:20px; font-weight:900; letter-spacing:3px; text-transform:uppercase; color:var(--t); text-shadow:var(--glow);">Minha Rotina</span>
-                </div>
-                <div id="routine-date-time" style="font-size:14px; color:var(--a); letter-spacing:1px;"></div>
-            </div>
-
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>📊 Progresso do dia</span>
-                    <span id="routine-progress-text">0%</span>
-                </div>
-                <div class="progress-bar"><div id="routine-progress-fill" class="progress-fill"></div></div>
-            </div>
-
-            <div class="routine-subtabs">
-                <button class="routine-subtab active" id="subtab-daily" onclick="Routine.switchSubtab('daily')">📋 Diária</button>
-                <button class="routine-subtab" id="subtab-weekly" onclick="Routine.switchSubtab('weekly')">📅 Semanal</button>
-                <button class="routine-subtab" id="subtab-now" onclick="Routine.switchSubtab('now')">🎯 Agora?</button>
-            </div>
-
-            <div id="routine-daily-view">
-                <div id="routine-blocks-container"></div>
-                <button class="btn-init" style="margin-top:20px;" onclick="Routine.openRecovery()">🔄 Tudo deu errado</button>
-            </div>
-
-            <div id="routine-weekly-view" class="hidden">
-                <div class="routine-day-selector" id="routine-day-selector"></div>
-                <div id="routine-weekly-blocks"></div>
-                <button class="btn-init" style="margin-top:20px;" onclick="Routine.openRecovery()">🔄 Tudo deu errado</button>
-            </div>
-
-            <div id="routine-now-view" class="hidden">
-                <div id="routine-now-content"></div>
-                <button class="btn-init" style="margin-top:20px;" onclick="Routine.openRecovery()">🔄 Tudo deu errado</button>
-            </div>
-
-            <div class="quest-division" style="margin-top:40px;">Compromissos</div>
-            <div id="commitments-container"></div>
         </div>
 
         <div id="tab-train" class="hidden">
@@ -1483,26 +1122,41 @@
                 this.render();
             },
 
-            getWeekKey(d) {
-                let date = new Date(d);
-                date.setHours(0, 0, 0, 0);
-                let day = date.getDay();
-                let diff = date.getDate() - day + (day === 0 ? -6 : 1);
-                date.setDate(diff);
-                let yyyy = date.getFullYear();
-                let mm = String(date.getMonth() + 1).padStart(2, '0');
-                let dd = String(date.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
-            },
-
             async init() {
                 let d = localStorage.getItem(this.key);
                 if (d) {
                     this.db = JSON.parse(d);
-                    if (this.db.dailyPointsUsed === undefined) this.db.dailyPointsUsed = 0;
-                    if (!this.db.customCali) this.db.customCali = { E: [], D: [], C: [], B: [], A: [], S: [] };
+
+                    // Garantir estruturas essenciais
+                    if (!this.db.attr) {
+                        this.db.attr = {
+                            FOR: 10,
+                            VIT: 10,
+                            INT: 10,
+                            CON: 10,
+                            VON: 10,
+                            ESS: 10
+                        };
+                    }
+                    if (!this.db.customCali) {
+                        this.db.customCali = {};
+                    }
+                    RANKS.slice(0, 6).forEach(rank => {
+                        if (!Array.isArray(this.db.customCali[rank])) {
+                            this.db.customCali[rank] = [];
+                        }
+                    });
                     if (!this.db.trains) this.db.trains = {};
                     if (!this.db.trainTitles) this.db.trainTitles = {};
+                    Object.keys(this.db.trains).forEach(cat => {
+                        if (!Array.isArray(this.db.trains[cat])) {
+                            this.db.trains[cat] = [];
+                        }
+                        if (!this.db.trainTitles[cat]) {
+                            this.db.trainTitles[cat] = cat.toUpperCase();
+                        }
+                    });
+
                     if (!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };
                     if (!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false, emboscada: false };
 
@@ -1522,10 +1176,6 @@
                         this.db.energy = this.db.aura;
                         delete this.db.aura;
                     }
-
-                    if (!this.db.lastWeek) this.db.lastWeek = this.getWeekKey(new Date());
-
-                    if (!this.db.lastMobilidadeTask) this.db.lastMobilidadeTask = "";
 
                     if (this.db.attr.MEN !== undefined || this.db.attr.C !== undefined) {
                         let oldFor = this.db.attr.FOR || this.db.attr.C || 10;
@@ -1552,28 +1202,8 @@
 
                     if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
 
-                    // Novas estruturas de rotina, compromissos e configuração de missões
-                    if (!this.db.routine) {
-                        this.db.routine = {};
-                        const days = ['sun','mon','tue','wed','thu','fri','sat'];
-                        days.forEach(day => {
-                            this.db.routine[day] = { morning: [], afternoon: [], evening: [] };
-                        });
-                    }
-                    if (!this.db.commitments) this.db.commitments = [];
-                    if (!this.db.missConfig) {
-                        this.db.missConfig = {
-                            counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1 },
-                            names: {
-                                forca: '💪 FORÇA',
-                                mobilidade: '🛡️ MOBILIDADE',
-                                espirito: '✝️ ESPÍRITO',
-                                hobby: '🧠 HOBBY',
-                                conhecimento: '📚 CONHECIMENTO',
-                                concentracao: '🧠 CONCENTRAÇÃO'
-                            }
-                        };
-                    }
+                    if (this.db.routine) delete this.db.routine;
+                    if (this.db.commitments) delete this.db.commitments;
 
                     // Garantir que hobbies tenham desc
                     ['forca','mobilidade','espirito','criativo','conhecimento','concentracao','baixa'].forEach(cat => {
@@ -1583,28 +1213,9 @@
                         });
                     });
 
-                    // Migração: garantir que tarefas de rotina tenham rewardGiven
-                    const days = ['sun','mon','tue','wed','thu','fri','sat'];
-                    days.forEach(day => {
-                        if (this.db.routine[day]) {
-                            ['morning','afternoon','evening'].forEach(block => {
-                                this.db.routine[day][block].forEach(task => {
-                                    if (task.rewardGiven === undefined) task.rewardGiven = false;
-                                });
-                            });
-                        }
-                    });
-                    // Migração: garantir que compromissos tenham done e rewardGiven
-                    this.db.commitments.forEach(c => {
-                        if (c.done === undefined) c.done = false;
-                        if (c.rewardGiven === undefined) c.rewardGiven = false;
-                    });
-
                     this.initTimer();
                     await this.check();
-                    Routine.init();
                     this.render();
-                    Routine.render();
                 } else {
                     document.getElementById('setup-screen').classList.remove('hidden');
                 }
@@ -1613,13 +1224,12 @@
             save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
 
             switchTab(t) {
-                ['system', 'rotina', 'train', 'skills', 'hobbies'].forEach(id => {
+                ['system', 'train', 'skills', 'hobbies'].forEach(id => {
                     let el = document.getElementById('tab-' + id);
                     if (el) el.classList.toggle('hidden', id !== t);
                 });
                 const tabsMap = {
                     system: 'tab-sys-btn',
-                    rotina: 'tab-rotina-btn',
                     train: 'tab-train-btn',
                     skills: 'tab-skills-btn',
                     hobbies: 'tab-hobbies-btn'
@@ -1629,7 +1239,6 @@
                     if (el) el.classList.toggle('active', id === t);
                 });
                 if (t === 'skills') this.renderSkills();
-                if (t === 'rotina') Routine.render();
                 this.render();
             },
 
@@ -1639,13 +1248,11 @@
                 let initialAttr = { FOR: 10, VIT: 10, INT: 10, CON: 10, VON: 10, ESS: 10 };
                 this.db = {
                     points: 0,
-                    dailyPointsUsed: 0,
                     name: n.toUpperCase(),
                     attr: initialAttr,
                     attrNames: { FOR: "Força", VIT: "Vitalidade", INT: "Intelecto", CON: "Consciência", VON: "Vontade", ESS: "Essência" },
                     miss: [],
                     skills: [],
-                    lists: {},
                     selectedSkills: {},
                     hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [] },
                     trains: { puxada: [], empurrada: [], core: [] },
@@ -1653,8 +1260,6 @@
                     customCali: { E: [], D: [], C: [], B: [], A: [], S: [] },
                     lvl: 1,
                     energy: 0,
-                    lastWeek: this.getWeekKey(new Date()),
-                    lastMobilidadeTask: "",
                     activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
                     debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
                     stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
@@ -1662,8 +1267,6 @@
                     eventToday: false,
                     seasonMonth: new Date().getMonth(),
                     essences: "[ INSERIR 3 ESSÊNCIAS ]",
-                    routine: {},
-                    commitments: [],
                     missConfig: {
                         counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1 },
                         names: {
@@ -1676,11 +1279,6 @@
                         }
                     }
                 };
-                // Inicializar rotina vazia
-                const days = ['sun','mon','tue','wed','thu','fri','sat'];
-                days.forEach(day => {
-                    this.db.routine[day] = { morning: [], afternoon: [], evening: [] };
-                });
                 this.genMiss();
                 this.save();
                 location.reload();
@@ -1695,12 +1293,6 @@
                 if (this.db.seasonMonth !== currentMonth && this.db.last !== '') {
                     await this.endSeason();
                     this.db.seasonMonth = currentMonth;
-                }
-
-                let currentWeekKey = this.getWeekKey(now);
-                if (this.db.lastWeek !== currentWeekKey) {
-                    this.db.lastWeek = currentWeekKey;
-                    this.save();
                 }
 
                 if (this.db.last === '' || this.db.last === undefined) { this.db.last = today;
@@ -1767,11 +1359,6 @@
                     if (this.db.trains) { Object.keys(this.db.trains).forEach(k => { this.db.trains[k].forEach(ex => ex
                             .done = false);
                         this.db.trains[k].rewardGiven = false; }); }
-
-                    // Resetar rewardGiven das tarefas do dia anterior? Não, as tarefas são por dia, então as de hoje serão novas.
-                    // Mas para garantir que tarefas antigas não tenham rewardGiven true, podemos resetar quando o dia muda?
-                    // Na verdade, cada dia tem seu próprio conjunto de tarefas com rewardGiven próprio.
-                    // Não precisamos fazer nada especial, pois a rotina de hoje é separada.
 
                     this.db.last = today;
                     this.db.eventToday = false;
@@ -1849,14 +1436,20 @@
             },
 
             getRank() {
-                const order = ['E', 'D', 'C', 'B', 'A', 'S', 'SS+'];
-                for (let i = 0; i < order.length; i++) {
-                    let r = order[i];
-                    let arr = this.db.customCali[r] || [];
-                    if (arr.length === 0) return r;
-                    let allDone = arr.every(skill => this.db.skills.includes(skill));
-                    if (!allDone) return r;
+                for (const rank of RANKS) {
+                    const skills = this.db.customCali[rank] || [];
+
+                    if (skills.length === 0) {
+                        return rank;
+                    }
+
+                    const allDone = skills.every(skill => this.db.skills.includes(skill));
+
+                    if (!allDone) {
+                        return rank;
+                    }
                 }
+
                 return 'SS+';
             },
 
@@ -1865,14 +1458,20 @@
 
                 const pickUnique = (pool, fallbackMsg) => {
                     if (!pool || pool.length === 0) {
-                        const task = fallbackMsg;
-                        usedTasks.add(task);
-                        return { task, desc: '' };
+                        usedTasks.add(fallbackMsg);
+                        return { task: fallbackMsg, desc: '' };
                     }
+
                     let filtered = pool.filter(h => !usedTasks.has(h.task));
-                    if (filtered.length === 0) filtered = pool;
-                    const picked = filtered.sort(() => 0.5 - Math.random())[0];
+
+                    if (filtered.length === 0) {
+                        filtered = pool;
+                    }
+
+                    const picked = filtered[Math.floor(Math.random() * filtered.length)];
+
                     usedTasks.add(picked.task);
+
                     return picked;
                 };
 
@@ -1882,7 +1481,6 @@
 
                 let missArray = [];
 
-                // Função auxiliar para adicionar missão de categoria
                 const addMissForCat = (catKey, fallback, typeLabel) => {
                     let pool = this.db.hobbies[catKey] || [];
                     let picked = pickUnique(pool, fallback);
@@ -1938,9 +1536,6 @@
                 }
 
                 this.db.miss = missArray;
-                if (missArray.length > 0 && (this.db.hobbies.mobilidade || []).length > 0) {
-                    this.db.lastMobilidadeTask = missArray.find(m => m.cat === 'mobilidade')?.task || "";
-                }
             },
 
             getMultiplier() {
@@ -1952,19 +1547,25 @@
 
             async toggleSkill(s, rank, e) {
                 if (e.target.tagName === 'B') return;
-                let rIdx = RANKS.findIndex(rk => rk.id === rank),
-                    myIdx = RANKS.findIndex(rk => rk.id === this.getRank());
-                if (rIdx > myIdx) return;
+
+                const rankIndex = RANKS.indexOf(rank);
+                const currentRankIndex = RANKS.indexOf(this.getRank());
+
+                if (rankIndex === -1 || currentRankIndex === -1) return;
+                if (rankIndex > currentRankIndex) return;
+
                 if (this.db.skills.includes(s)) {
-                    this.db.skills = this.db.skills.filter(i => i !== s);
+                    this.db.skills = this.db.skills.filter(skill => skill !== s);
                     this.db.points = Math.max(0, this.db.points - 5);
                 } else {
                     this.db.skills.push(s);
                     this.db.points += 5;
                     this.db.stats.totalBosses++;
                     this.db.stats.seasonBosses++;
+
                     this.pop(e, `+5 ENERGIA\nBOSS ABATIDO`);
                 }
+
                 this.save();
                 this.render();
                 this.renderSkills();
@@ -2000,22 +1601,32 @@
             },
 
             async toggleTrain(cat, i, e) {
-                let item = this.db.trains[cat][i];
+                const item = this.db.trains[cat]?.[i];
+                if (!item) return;
+
                 if (item.done) {
                     item.done = false;
+
                     this.db.energy -= item.gain;
+                    this.db.stats.totalTrains = Math.max(0, this.db.stats.totalTrains - 1);
+                    this.db.stats.seasonTrains = Math.max(0, this.db.stats.seasonTrains - 1);
+
                     this.pop(e, `-${item.gain} AURA`);
 
                     const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
+
                     if (!treinoCompleto && this.db.trains[cat].rewardGiven) {
                         this.db.attr.FOR = Math.max(0, this.db.attr.FOR - 1);
                         this.db.attr.VIT = Math.max(0, this.db.attr.VIT - 1);
+
                         this.db.trains[cat].rewardGiven = false;
+
                         this.pop(e, "-1 FOR/VIT");
                     }
                 } else {
                     item.done = true;
                     item.gain = Math.floor(25 * this.getMultiplier());
+
                     this.db.energy += item.gain;
 
                     this.db.stats.totalTrains++;
@@ -2027,48 +1638,92 @@
                     }
 
                     const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
+
                     if (treinoCompleto && !this.db.trains[cat].rewardGiven) {
-                        this.db.attr.FOR += 1;
-                        this.db.attr.VIT += 1;
+                        this.db.attr.FOR++;
+                        this.db.attr.VIT++;
+
                         this.db.trains[cat].rewardGiven = true;
+
                         this.pop(e, `+${item.gain} AURA\n+1 FOR/VIT`);
                     } else {
                         this.pop(e, `+${item.gain} AURA`);
                     }
                 }
+
                 this.checkLvl();
                 this.save();
                 this.render();
             },
 
             async doMiss(i, e) {
-                let m = this.db.miss[i];
-                if (m.skipped) return;
+                const m = this.db.miss?.[i];
+                if (!m || m.skipped) return;
+
                 if (m.done) {
                     m.done = false;
+
                     this.db.energy -= m.energyG;
+
+                    this.db.stats.seasonQuests = Math.max(
+                        0,
+                        this.db.stats.seasonQuests - 1
+                    );
+
+                    if (m.cat === 'conhecimento') {
+                        this.db.stats.totalKnowledge = Math.max(
+                            0,
+                            this.db.stats.totalKnowledge - 1
+                        );
+                    }
+
                     this.pop(e, "");
                 } else {
                     m.done = true;
 
-                    if (m.cat === 'conhecimento') this.db.stats.totalKnowledge++;
+                    if (m.cat === 'conhecimento') {
+                        this.db.stats.totalKnowledge++;
+                    }
+
                     this.db.stats.seasonQuests++;
 
-                    let mult = this.getMultiplier();
+                    const mult = this.getMultiplier();
+
                     m.xpG = Math.floor(10 * mult);
                     m.energyG = Math.floor(25 * mult);
-                    if (this.db.debuffs.corpo || this.db.debuffs.mente || this.db.debuffs.espirito) {
+
+                    if (
+                        this.db.debuffs.corpo ||
+                        this.db.debuffs.mente ||
+                        this.db.debuffs.espirito
+                    ) {
                         m.xpG = Math.floor(m.xpG * 0.7);
                         m.energyG = Math.floor(m.energyG * 0.7);
                     }
+
                     this.db.energy += m.energyG;
                     this.db.points += 2;
-                    if (m.cat === 'mobilidade' || m.cat === 'forca') this.db.debuffs.corpo = false;
-                    if (m.cat === 'espirito') this.db.debuffs.espirito = false;
-                    if (m.cat === 'criativo' || m.cat === 'baixa' || m.cat === 'conhecimento' || m.cat === 'concentracao') this
-                        .db.debuffs.mente = false;
+
+                    if (m.cat === 'mobilidade' || m.cat === 'forca') {
+                        this.db.debuffs.corpo = false;
+                    }
+
+                    if (m.cat === 'espirito') {
+                        this.db.debuffs.espirito = false;
+                    }
+
+                    if (
+                        m.cat === 'criativo' ||
+                        m.cat === 'baixa' ||
+                        m.cat === 'conhecimento' ||
+                        m.cat === 'concentracao'
+                    ) {
+                        this.db.debuffs.mente = false;
+                    }
+
                     this.pop(e, "");
                 }
+
                 this.checkLvl();
                 this.save();
                 this.render();
@@ -2154,7 +1809,6 @@
                 if (e && e.stopPropagation) e.stopPropagation();
                 let hobby = this.db.hobbies[cat][i];
                 if (!hobby) return;
-                // Usar modal customizado para editar nome e descrição
                 let newTask = await SystemModal.prompt("Editar nome da missão:", hobby.task);
                 if (newTask !== null) {
                     let newDesc = await SystemModal.prompt("Editar descrição (deixe vazio para limpar):", hobby.desc || '');
@@ -2341,9 +1995,9 @@
 
             renderSkills() {
                 let h = "";
-                let mRI = RANKS.findIndex(rk => rk.id === this.getRank());
+                const mRI = RANKS.indexOf(this.getRank());
                 ['E', 'D', 'C', 'B', 'A', 'S'].forEach(r => {
-                    let rI = RANKS.findIndex(rk => rk.id === r),
+                    const rI = RANKS.indexOf(r),
                         l = rI > mRI;
                     h +=
                     `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;
@@ -2516,595 +2170,39 @@
             },
 
             async renameMissClass(cat) {
-                let current = this.db.missConfig.names[cat] || cat;
-                let newName = await SystemModal.prompt("Novo nome para a classe de missão:", current);
-                if (newName) {
-                    this.db.missConfig.names[cat] = newName;
-                    this.save();
-                    this.render();
-                    // Regenerar missões para refletir novos nomes
-                    this.genMiss();
-                    this.save();
-                    this.render();
-                }
+                const current = this.db.missConfig.names[cat] || cat;
+
+                const newName = await SystemModal.prompt(
+                    "Novo nome para a classe de missão:",
+                    current
+                );
+
+                if (!newName) return;
+
+                this.db.missConfig.names[cat] = newName;
+
+                this.genMiss();
+                this.save();
+                this.render();
             },
 
             adjustMissCount(cat, delta) {
-                let current = this.db.missConfig.counts[cat] || 0;
-                let newVal = current + delta;
-                if (newVal < 0) newVal = 0;
-                this.db.missConfig.counts[cat] = newVal;
-                this.save();
-                this.render();
-                // Regenerar missões imediatamente
+                const current = this.db.missConfig.counts[cat] || 0;
+                const newValue = Math.max(0, current + delta);
+
+                if (newValue === current) return;
+
+                this.db.missConfig.counts[cat] = newValue;
+
                 this.genMiss();
                 this.save();
                 this.render();
             }
         };
 
-        // ====== OBJETO ROUTINE ======
-        const Routine = {
-            currentSubtab: 'daily',
-            selectedDay: null, // para semanal
-            commitMonth: new Date().getMonth(),
-            commitYear: new Date().getFullYear(),
-
-            init() {
-                // Inicializar data/hora
-                this.updateDateTime();
-                setInterval(() => this.updateDateTime(), 1000);
-                // Eventos dos modais
-                document.getElementById('task-modal-cancel').onclick = () => this.closeTaskModal();
-                document.getElementById('task-modal-save').onclick = () => this.saveTaskFromModal();
-                document.getElementById('commitment-modal-cancel').onclick = () => this.closeCommitmentModal();
-                document.getElementById('commitment-modal-save').onclick = () => this.saveCommitmentFromModal();
-                document.getElementById('mission-detail-close').onclick = () => Sys.closeMissDetail();
-                document.getElementById('recovery-close').onclick = () => this.closeRecovery();
-
-                // Configurar botões de navegação de compromissos
-                document.getElementById('commitments-container').addEventListener('click', (e) => {
-                    if (e.target.closest('.commitment-item')) {
-                        let id = e.target.closest('.commitment-item').dataset.id;
-                        if (id) this.editCommitment(id);
-                    }
-                });
-            },
-
-            updateDateTime() {
-                let now = new Date();
-                let dateStr = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
-                let timeStr = now.toLocaleTimeString('pt-BR');
-                document.getElementById('routine-date-time').innerText = `${dateStr} - ${timeStr}`;
-            },
-
-            switchSubtab(sub) {
-                this.currentSubtab = sub;
-                ['daily', 'weekly', 'now'].forEach(s => {
-                    document.getElementById(`subtab-${s}`).classList.toggle('active', s === sub);
-                });
-                document.getElementById('routine-daily-view').classList.toggle('hidden', sub !== 'daily');
-                document.getElementById('routine-weekly-view').classList.toggle('hidden', sub !== 'weekly');
-                document.getElementById('routine-now-view').classList.toggle('hidden', sub !== 'now');
-                if (sub === 'weekly') {
-                    if (!this.selectedDay) this.selectedDay = this.getTodayKey();
-                    this.renderWeekly();
-                } else if (sub === 'now') {
-                    this.renderNow();
-                } else {
-                    this.renderDaily();
-                }
-            },
-
-            getTodayKey() {
-                const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                return days[new Date().getDay()];
-            },
-
-            getDayName(key) {
-                const map = { sun: 'Dom', mon: 'Seg', tue: 'Ter', wed: 'Qua', thu: 'Qui', fri: 'Sex', sat: 'Sáb' };
-                return map[key] || key;
-            },
-
-            renderDaily() {
-                let todayKey = this.getTodayKey();
-                let routine = Sys.db.routine[todayKey] || { morning: [], afternoon: [], evening: [] };
-                let container = document.getElementById('routine-blocks-container');
-                let html = '';
-                html += this.renderBlock('morning', '☀️ MANHÃ', '06:00 — 12:00', routine.morning, todayKey, true);
-                html += this.renderBlock('afternoon', '🌤️ TARDE', '12:00 — 18:00', routine.afternoon, todayKey, true);
-                html += this.renderBlock('evening', '🌙 NOITE', '18:00 — 22:30', routine.evening, todayKey, true);
-                container.innerHTML = html;
-                this.updateProgress();
-            },
-
-            renderWeekly() {
-                if (!this.selectedDay) this.selectedDay = this.getTodayKey();
-                let dayKey = this.selectedDay;
-                let routine = Sys.db.routine[dayKey] || { morning: [], afternoon: [], evening: [] };
-                // Render seletor de dias
-                let selectorHtml = '';
-                const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                days.forEach(d => {
-                    selectorHtml += `<button class="routine-day-btn ${d === dayKey ? 'active' : ''}" onclick="Routine.selectDay('${d}')">${this.getDayName(d)}</button>`;
-                });
-                document.getElementById('routine-day-selector').innerHTML = selectorHtml;
-
-                let container = document.getElementById('routine-weekly-blocks');
-                let html = '';
-                html += this.renderBlock('morning', '☀️ MANHÃ', '06:00 — 12:00', routine.morning, dayKey, false);
-                html += this.renderBlock('afternoon', '🌤️ TARDE', '12:00 — 18:00', routine.afternoon, dayKey, false);
-                html += this.renderBlock('evening', '🌙 NOITE', '18:00 — 22:30', routine.evening, dayKey, false);
-                container.innerHTML = html;
-                this.updateProgress();
-            },
-
-            selectDay(day) {
-                this.selectedDay = day;
-                this.renderWeekly();
-            },
-
-            renderBlock(blockKey, title, timeRange, tasks, dayKey, isDaily) {
-                let tasksHtml = '';
-                tasks.forEach((task, idx) => {
-                    let timeStr = task.time ? ` <span class="routine-task-time">${task.time}</span>` : '';
-                    tasksHtml += `
-                <div class="routine-task ${task.done ? 'checked' : ''}" data-id="${task.id}" data-day="${dayKey}" data-block="${blockKey}">
-                    <div class="routine-check" onclick="Routine.toggleTaskDone('${dayKey}', '${blockKey}', ${idx}, event)">${task.done ? '✓' : ''}</div>
-                    <span style="flex:1;">${task.name}${timeStr}</span>
-                    <div class="routine-task-actions">
-                        <button onclick="Routine.moveTask('${dayKey}', '${blockKey}', ${idx}, -1, event)" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}>↑</button>
-                        <button onclick="Routine.moveTask('${dayKey}', '${blockKey}', ${idx}, 1, event)" ${idx === tasks.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>↓</button>
-                        <button onclick="Routine.openTaskModal('${dayKey}', '${blockKey}', ${idx}, event)">✎</button>
-                        <button onclick="Routine.deleteTask('${dayKey}', '${blockKey}', ${idx}, event)">✕</button>
-                    </div>
-                </div>`;
-                });
-                return `
-                <div class="routine-block">
-                    <div class="routine-block-title">${title} <span style="font-size:9px; color:var(--t-dim);">${timeRange}</span></div>
-                    <div class="routine-list">${tasksHtml || '<div style="font-size:11px; color:var(--t-dim); padding:10px; text-align:center;">Sem tarefas</div>'}</div>
-                    <button class="btn-add-rtn" style="margin-top:8px; width:100%;" onclick="Routine.openTaskModal('${dayKey}', '${blockKey}', null, event)">+ Adicionar tarefa</button>
-                </div>`;
-            },
-
-            toggleTaskDone(dayKey, blockKey, idx, e) {
-                if (e) e.stopPropagation();
-                let task = Sys.db.routine[dayKey][blockKey][idx];
-                if (task.rewardGiven === undefined) task.rewardGiven = false;
-
-                if (!task.done) {
-                    task.done = true;
-                    if (!task.rewardGiven) {
-                        task.rewardGiven = true;
-                        Sys.db.energy += 25;
-                        Sys.checkLvl();
-                        Sys.pop(e, "⚡ +25 Energia");
-                    }
-                } else {
-                    task.done = false;
-                    // Não remove energia, rewardGiven permanece true
-                }
-                Sys.save();
-                this.refreshCurrentView();
-                Sys.render(); // Atualiza a barra de energia
-            },
-
-            moveTask(dayKey, blockKey, idx, dir, e) {
-                if (e) e.stopPropagation();
-                let tasks = Sys.db.routine[dayKey][blockKey];
-                if (dir === -1 && idx > 0) {
-                    if (this.currentSubtab === 'daily') {
-                        this.confirmApplyAll().then(applyAll => {
-                            if (applyAll) {
-                                this.moveTaskAllDays(blockKey, idx, dir);
-                            } else {
-                                [tasks[idx], tasks[idx - 1]] = [tasks[idx - 1], tasks[idx]];
-                            }
-                            Sys.save();
-                            this.refreshCurrentView();
-                        });
-                    } else {
-                        [tasks[idx], tasks[idx - 1]] = [tasks[idx - 1], tasks[idx]];
-                        Sys.save();
-                        this.refreshCurrentView();
-                    }
-                } else if (dir === 1 && idx < tasks.length - 1) {
-                    if (this.currentSubtab === 'daily') {
-                        this.confirmApplyAll().then(applyAll => {
-                            if (applyAll) {
-                                this.moveTaskAllDays(blockKey, idx, dir);
-                            } else {
-                                [tasks[idx], tasks[idx + 1]] = [tasks[idx + 1], tasks[idx]];
-                            }
-                            Sys.save();
-                            this.refreshCurrentView();
-                        });
-                    } else {
-                        [tasks[idx], tasks[idx + 1]] = [tasks[idx + 1], tasks[idx]];
-                        Sys.save();
-                        this.refreshCurrentView();
-                    }
-                }
-            },
-
-            moveTaskAllDays(blockKey, idx, dir) {
-                const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                days.forEach(day => {
-                    let tasks = Sys.db.routine[day][blockKey];
-                    if (dir === -1 && idx > 0) {
-                        [tasks[idx], tasks[idx - 1]] = [tasks[idx - 1], tasks[idx]];
-                    } else if (dir === 1 && idx < tasks.length - 1) {
-                        [tasks[idx], tasks[idx + 1]] = [tasks[idx + 1], tasks[idx]];
-                    }
-                });
-            },
-
-            confirmApplyAll() {
-                return SystemModal.confirm("Deseja aplicar essa mudança de ordem a TODOS os dias da semana? (OK = todos, Cancelar = apenas hoje)");
-            },
-
-            deleteTask(dayKey, blockKey, idx, e) {
-                if (e) e.stopPropagation();
-                let task = Sys.db.routine[dayKey][blockKey][idx];
-                if (this.currentSubtab === 'daily' && task.applyAll) {
-                    SystemModal.confirm("Esta tarefa foi aplicada a todos os dias. Deseja removê-la de TODOS os dias?").then(res => {
-                        if (res) {
-                            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                            days.forEach(day => {
-                                Sys.db.routine[day][blockKey] = Sys.db.routine[day][blockKey].filter(t => t.id !== task.id);
-                            });
-                        } else {
-                            Sys.db.routine[dayKey][blockKey].splice(idx, 1);
-                        }
-                        Sys.save();
-                        this.refreshCurrentView();
-                    });
-                } else {
-                    SystemModal.confirm("Excluir tarefa?").then(res => {
-                        if (res) {
-                            Sys.db.routine[dayKey][blockKey].splice(idx, 1);
-                            Sys.save();
-                            this.refreshCurrentView();
-                        }
-                    });
-                }
-            },
-
-            openTaskModal(dayKey, blockKey, idx, e) {
-                if (e) e.stopPropagation();
-                this.taskModalContext = { dayKey, blockKey, idx };
-                let isEdit = idx !== null && idx !== undefined;
-                document.getElementById('task-modal-title').innerText = isEdit ? 'EDITAR TAREFA' : 'NOVA TAREFA';
-                if (isEdit) {
-                    let task = Sys.db.routine[dayKey][blockKey][idx];
-                    document.getElementById('task-name').value = task.name || '';
-                    document.getElementById('task-time').value = task.time || '';
-                    document.getElementById('task-desc').value = task.desc || '';
-                    document.getElementById('task-apply-all').checked = task.applyAll || false;
-                } else {
-                    document.getElementById('task-name').value = '';
-                    document.getElementById('task-time').value = '';
-                    document.getElementById('task-desc').value = '';
-                    document.getElementById('task-apply-all').checked = false;
-                }
-                document.getElementById('task-apply-all').style.display = this.currentSubtab === 'daily' ? 'flex' : 'none';
-                document.getElementById('task-modal-overlay').classList.remove('hidden');
-            },
-
-            closeTaskModal() {
-                document.getElementById('task-modal-overlay').classList.add('hidden');
-            },
-
-            saveTaskFromModal() {
-                let name = document.getElementById('task-name').value.trim();
-                if (!name) return;
-                let time = document.getElementById('task-time').value;
-                let desc = document.getElementById('task-desc').value.trim();
-                let applyAll = document.getElementById('task-apply-all').checked;
-                let { dayKey, blockKey, idx } = this.taskModalContext;
-
-                if (idx !== null && idx !== undefined) {
-                    // Editar
-                    let task = Sys.db.routine[dayKey][blockKey][idx];
-                    if (this.currentSubtab === 'daily' && applyAll) {
-                        // Atualizar em todos os dias que tenham o mesmo id
-                        const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                        days.forEach(day => {
-                            let tasks = Sys.db.routine[day][blockKey];
-                            let t = tasks.find(t => t.id === task.id);
-                            if (t) {
-                                t.name = name;
-                                t.time = time;
-                                t.desc = desc;
-                                t.applyAll = true;
-                            }
-                        });
-                    } else {
-                        task.name = name;
-                        task.time = time;
-                        task.desc = desc;
-                        if (this.currentSubtab === 'daily') task.applyAll = applyAll;
-                    }
-                } else {
-                    // Adicionar
-                    if (this.currentSubtab === 'daily' && applyAll) {
-                        let baseId = Date.now() + Math.random();
-                        const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                        days.forEach(day => {
-                            Sys.db.routine[day][blockKey].push({
-                                id: baseId,
-                                name,
-                                time,
-                                desc,
-                                done: false,
-                                applyAll: true,
-                                rewardGiven: false // Inicializa rewardGiven
-                            });
-                        });
-                    } else {
-                        Sys.db.routine[dayKey][blockKey].push({
-                            id: Date.now() + Math.random(),
-                            name,
-                            time,
-                            desc,
-                            done: false,
-                            applyAll: false,
-                            rewardGiven: false // Inicializa rewardGiven
-                        });
-                    }
-                }
-                Sys.save();
-                this.closeTaskModal();
-                this.refreshCurrentView();
-            },
-
-            updateProgress() {
-                let todayKey = this.getTodayKey();
-                let routine = Sys.db.routine[todayKey];
-                if (!routine) return;
-                let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
-                let total = allTasks.length;
-                let done = allTasks.filter(t => t.done).length;
-                let percent = total > 0 ? Math.round((done / total) * 100) : 0;
-                document.getElementById('routine-progress-text').innerText = `${done}/${total} tarefas = ${percent}%`;
-                document.getElementById('routine-progress-fill').style.width = percent + '%';
-            },
-
-            renderNow() {
-                let todayKey = this.getTodayKey();
-                let routine = Sys.db.routine[todayKey];
-                if (!routine) return;
-                let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
-                let next = allTasks.find(t => !t.done);
-                let container = document.getElementById('routine-now-content');
-                if (next) {
-                    container.innerHTML = `
-                    <div class="routine-box" style="border-left-color:var(--a);">
-                        <div class="routine-block-title">🎯 Próxima tarefa</div>
-                        <div style="font-size:16px; font-weight:900; margin-bottom:5px;">${next.name}</div>
-                        ${next.time ? `<div style="font-size:12px; color:var(--t-dim);">Horário: ${next.time}</div>` : ''}
-                        ${next.desc ? `<div style="font-size:12px; color:var(--t-dim); margin-top:5px;">${next.desc}</div>` : ''}
-                        <button class="btn-init" style="margin-top:15px;" onclick="Routine.completeNextTask()">✅ Concluir</button>
-                    </div>`;
-                } else {
-                    container.innerHTML = `<div class="routine-box" style="text-align:center; font-size:18px; color:var(--a);">🎉 Tudo concluído!</div>`;
-                }
-            },
-
-            completeNextTask() {
-                let todayKey = this.getTodayKey();
-                let routine = Sys.db.routine[todayKey];
-                let allTasks = [...routine.morning, ...routine.afternoon, ...routine.evening];
-                let next = allTasks.find(t => !t.done);
-                if (next) {
-                    // Encontrar o dia e bloco para atualizar
-                    for (let blockKey of ['morning', 'afternoon', 'evening']) {
-                        let idx = routine[blockKey].findIndex(t => t.id === next.id);
-                        if (idx !== -1) {
-                            this.toggleTaskDone(todayKey, blockKey, idx, null);
-                            break;
-                        }
-                    }
-                }
-            },
-
-            refreshCurrentView() {
-                if (this.currentSubtab === 'daily') this.renderDaily();
-                else if (this.currentSubtab === 'weekly') this.renderWeekly();
-                else if (this.currentSubtab === 'now') this.renderNow();
-                this.updateProgress();
-            },
-
-            render() {
-                this.updateProgress();
-                if (this.currentSubtab === 'daily') this.renderDaily();
-                else if (this.currentSubtab === 'weekly') this.renderWeekly();
-                else if (this.currentSubtab === 'now') this.renderNow();
-                this.renderCommitments();
-            },
-
-            // Compromissos
-            renderCommitments() {
-                let container = document.getElementById('commitments-container');
-                let commitments = Sys.db.commitments || [];
-                let month = this.commitMonth;
-                let year = this.commitYear;
-                let filtered = commitments.filter(c => {
-                    let d = new Date(c.date);
-                    return d.getMonth() === month && d.getFullYear() === year;
-                });
-                filtered.sort((a, b) => a.date.localeCompare(b.date));
-
-                let html = `
-                <div class="commitments-header">
-                    <div class="commitments-month-nav">
-                        <button onclick="Routine.changeCommitMonth(-1)">◀</button>
-                        <span style="font-weight:900; letter-spacing:1px;">${new Date(year, month).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</span>
-                        <button onclick="Routine.changeCommitMonth(1)">▶</button>
-                    </div>
-                    <button class="btn-shuffle" onclick="Routine.openCommitmentModal(null)">+ Novo</button>
-                </div>`;
-
-                if (filtered.length === 0) {
-                    html += '<div style="font-size:11px; color:var(--t-dim); padding:15px; text-align:center;">Nenhum compromisso neste mês.</div>';
-                } else {
-                    filtered.forEach(c => {
-                        let dateObj = new Date(c.date + 'T00:00:00');
-                        let dateLabel = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-                        html += `
-                        <div class="commitment-item" data-id="${c.id}">
-                            <span class="commitment-date">${dateLabel}</span>
-                            <div class="routine-check" style="margin-right:10px; cursor:pointer;" onclick="event.stopPropagation(); Routine.toggleCommitmentDone('${c.id}', event)">${c.done ? '✓' : ''}</div>
-                            <span class="commitment-title" style="text-decoration:${c.done ? 'line-through' : 'none'}; opacity:${c.done ? '0.6' : '1'};">${c.title}${c.time ? ' (' + c.time + ')' : ''}</span>
-                            <div class="commitment-actions">
-                                <button onclick="event.stopPropagation(); Routine.openCommitmentModal('${c.id}')">✎</button>
-                                <button onclick="event.stopPropagation(); Routine.deleteCommitment('${c.id}')">✕</button>
-                            </div>
-                        </div>`;
-                    });
-                }
-                container.innerHTML = html;
-            },
-
-            changeCommitMonth(delta) {
-                let newMonth = this.commitMonth + delta;
-                let newYear = this.commitYear;
-                if (newMonth < 0) { newMonth = 11; newYear--; }
-                if (newMonth > 11) { newMonth = 0; newYear++; }
-                this.commitMonth = newMonth;
-                this.commitYear = newYear;
-                this.renderCommitments();
-            },
-
-            openCommitmentModal(id) {
-                this.editingCommitmentId = id || null;
-                document.getElementById('commitment-modal-overlay').classList.remove('hidden');
-                if (id) {
-                    let c = Sys.db.commitments.find(comm => comm.id === id);
-                    if (c) {
-                        document.getElementById('commitment-title').value = c.title || '';
-                        document.getElementById('commitment-date').value = c.date || '';
-                        document.getElementById('commitment-time').value = c.time || '';
-                        document.getElementById('commitment-desc').value = c.desc || '';
-                    }
-                } else {
-                    document.getElementById('commitment-title').value = '';
-                    document.getElementById('commitment-date').value = '';
-                    document.getElementById('commitment-time').value = '';
-                    document.getElementById('commitment-desc').value = '';
-                }
-            },
-
-            closeCommitmentModal() {
-                document.getElementById('commitment-modal-overlay').classList.add('hidden');
-            },
-
-            saveCommitmentFromModal() {
-                let title = document.getElementById('commitment-title').value.trim();
-                let date = document.getElementById('commitment-date').value;
-                let time = document.getElementById('commitment-time').value;
-                let desc = document.getElementById('commitment-desc').value.trim();
-                if (!title || !date) return;
-
-                if (this.editingCommitmentId) {
-                    let c = Sys.db.commitments.find(comm => comm.id === this.editingCommitmentId);
-                    if (c) {
-                        c.title = title;
-                        c.date = date;
-                        c.time = time;
-                        c.desc = desc;
-                    }
-                } else {
-                    Sys.db.commitments.push({
-                        id: Date.now() + Math.random(),
-                        title,
-                        date,
-                        time,
-                        desc,
-                        done: false,      // Inicializa como não concluído
-                        rewardGiven: false // Recompensa ainda não entregue
-                    });
-                }
-                Sys.save();
-                this.closeCommitmentModal();
-                this.renderCommitments();
-            },
-
-            deleteCommitment(id) {
-                SystemModal.confirm("Excluir compromisso?").then(res => {
-                    if (res) {
-                        Sys.db.commitments = Sys.db.commitments.filter(c => c.id !== id);
-                        Sys.save();
-                        this.renderCommitments();
-                    }
-                });
-            },
-
-            toggleCommitmentDone(id, e) {
-                if (e) e.stopPropagation();
-                let c = Sys.db.commitments.find(comm => comm.id === id);
-                if (!c) return;
-                if (c.done === undefined) c.done = false;
-                if (c.rewardGiven === undefined) c.rewardGiven = false;
-
-                if (!c.done) {
-                    c.done = true;
-                    if (!c.rewardGiven) {
-                        c.rewardGiven = true;
-                        Sys.db.energy += 100;
-                        Sys.checkLvl();
-                        Sys.pop(e, "⚡ +100 Energia");
-                    }
-                } else {
-                    c.done = false;
-                    // Não remove energia, rewardGiven permanece true
-                }
-                Sys.save();
-                Sys.render(); // Atualiza a barra de energia
-                this.renderCommitments();
-            },
-
-            editCommitment(id) {
-                this.openCommitmentModal(id);
-            },
-
-            openRecovery() {
-                let steps = [
-                    "Pare tudo. Respire fundo 3 vezes.",
-                    "Beba um copo de água.",
-                    "Identifique o que deu errado (sem julgamento).",
-                    "Volte para a última tarefa concluída.",
-                    "Use o botão “🎯 Agora?” para ver a próxima.",
-                    "Peça ajuda se necessário."
-                ];
-                let html = '';
-                steps.forEach((step, idx) => {
-                    html += `
-                    <div class="recovery-step" onclick="Routine.toggleRecoveryStep(${idx}, this)">
-                        <div class="routine-check"> </div>
-                        <span>${step}</span>
-                    </div>`;
-                });
-                document.getElementById('recovery-steps').innerHTML = html;
-                document.getElementById('recovery-overlay').classList.remove('hidden');
-            },
-
-            toggleRecoveryStep(idx, el) {
-                el.classList.toggle('checked');
-                let check = el.querySelector('.routine-check');
-                if (check) check.innerText = el.classList.contains('checked') ? '✓' : '';
-            },
-
-            closeRecovery() {
-                document.getElementById('recovery-overlay').classList.add('hidden');
-            }
-        };
-
         // ====== INICIALIZAÇÃO ======
         window.onload = () => {
             SystemModal.init();
-            Routine.init();
             Sys.init();
         };
     </script>
