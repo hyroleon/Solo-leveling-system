@@ -1219,6 +1219,10 @@
                 <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
                 <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Concentração</span></div><div id="hobby-concentracao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-concentracao" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('concentracao')">+</button></div></div>
                 <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
+
+                <!-- NOVA SEÇÃO: OBRIGAÇÕES -->
+                <div class="quest-division">Obrigações</div>
+                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">📋 Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
             </div>
         </div>
     </div>
@@ -1300,7 +1304,8 @@
             criativo: { type: '🎨 HOBBY', debuff: 'mente' },
             conhecimento: { type: '📚 CONHECIMENTO', debuff: 'mente' },
             concentracao: { type: '🧠 CONCENTRAÇÃO', debuff: 'mente' },
-            baixa: { type: '🔋 HOBBY', debuff: 'mente' }
+            baixa: { type: '🔋 HOBBY', debuff: 'mente' },
+            obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null } // nova categoria, sem debuff específico
         };
 
         // ====== OBJETO SYS ======
@@ -1426,17 +1431,29 @@
                     if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
                     if (!this.db.hobbies.baixa) this.db.hobbies.baixa = [];
 
+                    // NOVA CATEGORIA: OBRIGAÇÕES
+                    if (!this.db.hobbies.obrigacoes) this.db.hobbies.obrigacoes = [];
+
                     if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
 
                     if (this.db.routine) delete this.db.routine;
                     if (this.db.commitments) delete this.db.commitments;
 
-                    ['forca','mobilidade','espirito','criativo','conhecimento','concentracao','baixa'].forEach(cat => {
+                    ['forca','mobilidade','espirito','criativo','conhecimento','concentracao','baixa','obrigacoes'].forEach(cat => {
                         if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
                         this.db.hobbies[cat].forEach(h => {
                             if (!h.desc) h.desc = '';
                         });
                     });
+
+                    // Garantir missConfig
+                    if (!this.db.missConfig) this.db.missConfig = { counts: {}, names: {} };
+                    if (!this.db.missConfig.counts) this.db.missConfig.counts = {};
+                    if (!this.db.missConfig.names) this.db.missConfig.names = {};
+
+                    // Adicionar obrigacoes ao missConfig se não existir
+                    if (!this.db.missConfig.counts.obrigacoes) this.db.missConfig.counts.obrigacoes = 1;
+                    if (!this.db.missConfig.names.obrigacoes) this.db.missConfig.names.obrigacoes = '📋 OBRIGAÇÕES';
 
                     // Garantir que this.db.last exista como string vazia se não definido
                     if (this.db.last === undefined || this.db.last === null) {
@@ -1483,7 +1500,7 @@
                     customAttributes: [],
                     miss: [],
                     skills: [],
-                    hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [] },
+                    hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
                     trains: { puxada: [], empurrada: [], core: [] },
                     trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
                     trainRewardGiven: {},
@@ -1498,14 +1515,15 @@
                     seasonMonth: new Date().getMonth(),
                     essences: "[ INSERIR 3 ESSÊNCIAS ]",
                     missConfig: {
-                        counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1 },
+                        counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
                         names: {
                             forca: '💪 FORÇA',
                             mobilidade: '🛡️ MOBILIDADE',
                             espirito: '✝️ ESPÍRITO',
                             hobby: '🧠 HOBBY',
                             conhecimento: '📚 CONHECIMENTO',
-                            concentracao: '🧠 CONCENTRAÇÃO'
+                            concentracao: '🧠 CONCENTRAÇÃO',
+                            obrigacoes: '📋 OBRIGAÇÕES'
                         }
                     }
                 };
@@ -1568,6 +1586,10 @@
                                     if (m.cat === 'criativo' || m.cat === 'baixa' || m.cat === 'conhecimento' || m.cat === 'concentracao') {
                                         penaltyTotal++;
                                         this.db.debuffs.mente = true;
+                                    }
+                                    // NOVA CATEGORIA: OBRIGAÇÕES (penalidade geral, sem debuff específico)
+                                    if (m.cat === 'obrigacoes') {
+                                        penaltyTotal++;
                                     }
                                 }
                             });
@@ -1778,6 +1800,11 @@
                     addMissForCat('concentracao', "Cadastre missão de Concentração", names.concentracao || '🧠 CONCENTRAÇÃO');
                 }
 
+                // NOVA CATEGORIA: OBRIGAÇÕES
+                for (let i = 0; i < (counts.obrigacoes || 0); i++) {
+                    addMissForCat('obrigacoes', "Cadastre Obrigação", names.obrigacoes || '📋 OBRIGAÇÕES');
+                }
+
                 this.db.miss = missArray;
             },
 
@@ -1958,6 +1985,8 @@
                     ) {
                         this.db.debuffs.mente = false;
                     }
+
+                    // Obrigações não curam debuffs específicos (nada a fazer)
 
                     this.pop(e, "");
                 }
@@ -2392,8 +2421,7 @@
                 const progress = Math.min(1, (lvl - 1) / 99);
                 const r = Math.round(0 + (176 - 0) * progress);
                 const g = Math.round(229 + (38 - 229) * progress);
-                const b = 255; // mantém azul no componente azul, roxo final 128,0,255? ajuste para roxo intenso
-                // Para roxo intenso no nível 100: (128,0,255)
+                const b = 255;
                 const finalR = progress >= 1 ? 128 : r;
                 const finalG = progress >= 1 ? 0 : g;
                 const finalB = 255;
@@ -2551,7 +2579,8 @@
                 const trainsContainer = document.getElementById('trains-container');
                 if (trainsContainer) trainsContainer.innerHTML = tTotalH;
 
-                ['forca', 'mobilidade', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa'].forEach(cat => {
+                // Renderizar hobbies, incluindo obrigações
+                ['forca', 'mobilidade', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'].forEach(cat => {
                     let hH = "";
                     if (this.db.hobbies[cat]) {
                         this.db.hobbies[cat].forEach((h, i) => {
@@ -2579,7 +2608,7 @@
 
                 // Configuração de missões
                 let configHtml = '';
-                const catKeys = ['forca', 'mobilidade', 'espirito', 'hobby', 'conhecimento', 'concentracao'];
+                const catKeys = ['forca', 'mobilidade', 'espirito', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
                 catKeys.forEach(cat => {
                     let count = this.db.missConfig.counts[cat] || 0;
                     let name = this.db.missConfig.names[cat] || cat;
