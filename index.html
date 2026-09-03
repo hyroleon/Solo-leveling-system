@@ -207,7 +207,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             margin: 6px 0;
@@ -221,7 +222,8 @@
             letter-spacing: 0.5px;
         }
         input:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             border-color: var(--a);
             box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
         }
@@ -266,8 +268,8 @@
 
         .container {
             width: 100%;
-            max-width: 460px;
-            padding: 10px;
+            max-width: 480px;
+            padding: 16px 12px;
             z-index: var(--z-interface);
             position: relative;
         }
@@ -380,7 +382,7 @@
 
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 4px;
             margin-bottom: 12px;
             width: 100%;
@@ -407,6 +409,7 @@
             overflow: hidden;
             font-family: var(--font-tech);
             transition: all 0.2s ease;
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
         .nav-btn::before {
             content: "";
@@ -1098,8 +1101,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%;
-            max-width: 460px;
+            width: calc(100% - 32px);
+            max-width: 480px;
             max-height: 90vh;
             overflow-y: auto;
             background: var(--window-bg);
@@ -1129,10 +1132,265 @@
             pointer-events: auto;
         }
 
+        .window-title {
+            text-align: center;
+            color: var(--a);
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: var(--glow);
+            font-family: var(--font-mono);
+            position: relative;
+        }
+        .window-title::after {
+            content: "";
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: var(--a);
+            margin: 8px auto 0;
+            box-shadow: var(--glow);
+        }
+
+        .btn-window-close {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--b);
+            color: var(--t-dim);
+            padding: 8px 16px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            margin-top: 16px;
+            width: 100%;
+            border-radius: 0;
+            font-family: var(--font-mono);
+            transition: all 0.2s;
+        }
+        .btn-window-close:hover {
+            border-color: var(--a);
+            color: var(--a);
+            text-shadow: var(--glow);
+        }
+
+        /* ===== ROTINA ===== */
+        .routine-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+        .routine-tab-btn {
+            background: rgba(10, 18, 30, 0.6);
+            border: 1px solid var(--b);
+            color: var(--t-dim);
+            padding: 6px 10px;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 0;
+            font-family: var(--font-mono);
+            transition: all 0.2s;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .routine-tab-btn.active {
+            border-color: var(--a);
+            color: var(--t);
+            background: var(--a-dim);
+            box-shadow: 0 0 10px rgba(0,229,255,0.2);
+        }
+        .routine-block {
+            margin-bottom: 12px;
+        }
+        .routine-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--hud-line);
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+        .routine-task-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border: 1px solid var(--b);
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .routine-task-item:hover {
+            border-color: var(--a);
+            background: rgba(0,229,255,0.05);
+        }
+        .routine-task-item.checked {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        .routine-task-check {
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--b);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        .routine-task-item.checked .routine-task-check {
+            background: var(--a-dim);
+            color: var(--a);
+            border-color: var(--a);
+            box-shadow: 0 0 5px var(--a);
+        }
+        .routine-task-label {
+            flex: 1;
+            font-size: 13px;
+            color: var(--t);
+            font-family: var(--font-mono);
+        }
+        .routine-task-time {
+            font-size: 10px;
+            color: var(--t-dim);
+            margin-right: 8px;
+            font-family: var(--font-mono);
+        }
+        .routine-task-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .routine-day-selector {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        .routine-day-btn {
+            background: rgba(10,18,30,0.6);
+            border: 1px solid var(--b);
+            color: var(--t-dim);
+            padding: 6px 0;
+            font-size: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: all 0.2s;
+        }
+        .routine-day-btn.active {
+            border-color: var(--a);
+            color: var(--a);
+            background: var(--a-dim);
+            box-shadow: 0 0 8px rgba(0,229,255,0.2);
+        }
+        .routine-day-btn.today {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .routine-progress-bar {
+            height: 6px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--b);
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        .routine-progress-fill {
+            height: 100%;
+            background: var(--a);
+            width: 0%;
+            box-shadow: 0 0 8px var(--a);
+            transition: width 0.4s;
+        }
+        .routine-now-card {
+            text-align: center;
+            padding: 15px;
+            border: 1px solid var(--a);
+            background: var(--a-dim);
+            box-shadow: 0 0 15px rgba(0,229,255,0.2);
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+            margin-bottom: 12px;
+        }
+        .routine-now-card h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--a);
+            text-shadow: var(--glow);
+        }
+        .routine-now-card .routine-task-label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .routine-now-card .routine-task-time {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .routine-now-card button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: var(--a);
+            border: none;
+            color: #000;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 0;
+            font-family: var(--font-mono);
+        }
+        .routine-now-card button:hover {
+            background: #fff;
+            box-shadow: 0 0 10px var(--a);
+        }
+
+        /* Painel de escopo */
+        .scope-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .scope-btn {
+            background: rgba(0,229,255,0.05);
+            border: 1px solid var(--a);
+            color: var(--a);
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: all 0.2s;
+            font-family: var(--font-mono);
+        }
+        .scope-btn:hover {
+            background: var(--a-dim);
+            box-shadow: var(--glow);
+        }
+        .scope-btn.cancel {
+            border-color: var(--b);
+            color: var(--t-dim);
+        }
+        .scope-btn.cancel:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
         @media (max-width: 400px) {
             .nav-btn {
                 font-size: 7px;
                 padding: 6px 1px;
+                letter-spacing: 0.5px;
             }
             .container {
                 padding: 6px;
@@ -1149,6 +1407,19 @@
             .profile-circle {
                 width: 70px;
                 height: 70px;
+            }
+            .routine-task-item {
+                padding: 6px 6px;
+            }
+            .routine-task-label {
+                font-size: 11px;
+            }
+            .routine-day-btn {
+                font-size: 7px;
+                padding: 4px 0;
+            }
+            .window-title {
+                font-size: 16px;
             }
         }
     </style>
@@ -1200,11 +1471,47 @@
         </div>
     </div>
 
+    <!-- ROTINA: overlay de edição -->
+    <div id="routine-task-overlay" class="setup-overlay hidden" style="z-index: var(--z-modal);">
+        <div class="setup-card" style="max-width: 350px; text-align: left;">
+            <h2 style="color:var(--a); font-size:16px; text-align: center;" id="routine-task-overlay-title">NOVA TAREFA</h2>
+            <label class="stat-label" style="margin-bottom:4px;">NOME</label>
+            <input type="text" id="routine-task-name" class="routine-input" placeholder="Nome da tarefa">
+            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">HORÁRIO</label>
+            <input type="text" id="routine-task-time" class="routine-input" placeholder="ex: 06:15">
+            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">BLOCO</label>
+            <select id="routine-task-block" class="routine-input" style="text-align:center;">
+                <option value="morning">MANHÃ</option>
+                <option value="afternoon">TARDE</option>
+                <option value="night">NOITE</option>
+            </select>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button id="routine-task-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
+                <button id="routine-task-confirm" class="btn-init" style="margin-top:0;">SALVAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel de escopo para rotina -->
+    <div id="routine-scope-overlay" class="setup-overlay hidden" style="z-index: var(--z-confirmation);">
+        <div class="setup-card" style="max-width: 350px; text-align: center;">
+            <h2 style="color:var(--a); font-size:16px;">ONDE APLICAR?</h2>
+            <p style="color:var(--t); font-size:13px; margin-bottom:15px;">Escolha o escopo da alteração</p>
+            <div class="scope-buttons">
+                <button class="scope-btn" id="scope-this-day">APENAS ESTE DIA</button>
+                <button class="scope-btn" id="scope-all-days">TODOS OS DIAS</button>
+                <button class="scope-btn cancel" id="scope-cancel">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
     <div class="window-backdrop" id="window-backdrop"></div>
 
+    <!-- JANELAS DO SYSTEM -->
     <div id="tab-train" class="system-window hidden">
-        <div class="panel" style="text-align:center; margin-bottom:10px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
-            <h3 style="color:var(--gold); font-size:11px; letter-spacing:2px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5); font-family: var(--font-mono);">CRONÔMETRO</h3>
+        <div class="window-title">TREINAMENTO</div>
+        <div class="panel" style="text-align:center; margin-bottom:12px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
+            <h3 style="color:var(--gold); font-size:13px; letter-spacing:2px; margin:0 0 6px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5); font-family: var(--font-mono);">CRONÔMETRO</h3>
             <div id="timer-display">00:00:00</div>
             <div>
                 <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
@@ -1212,48 +1519,66 @@
                 <button class="timer-btn" onclick="Sys.resetTimer()" style="color:var(--danger); border-color:var(--danger);">⏹ Reset</button>
             </div>
         </div>
-
         <div class="panel">
-            <h3 style="text-align:center; color:var(--a); font-size:11px; letter-spacing:2px; text-shadow: var(--glow); font-family: var(--font-mono);">TREINAMENTOS</h3>
+            <h3 style="text-align:center; color:var(--a); font-size:13px; letter-spacing:2px; text-shadow: var(--glow); font-family: var(--font-mono); margin-bottom:12px;">GRUPOS DE TREINO</h3>
             <div id="trains-container"></div>
-            <button class="btn-init" onclick="Sys.createNewTrainTable()" style="font-size:11px;">+ CRIAR NOVO GRUPO</button>
+            <button class="btn-init" onclick="Sys.createNewTrainTable()" style="font-size:12px;">+ CRIAR NOVO GRUPO</button>
         </div>
-        <div style="margin-top:8px; font-size:8px; line-height:1.3; color:var(--t-dim); opacity:0.55; text-align:left; font-family: var(--font-mono);">
+        <div style="margin-top:10px; font-size:9px; line-height:1.4; color:var(--t-dim); opacity:0.6; text-align:left; font-family: var(--font-mono);">
             Isometrias: avance aos 15–20 segundos de forma perfeita.<br>
             Exercícios dinâmicos: avance quando fizer 1-5 repetições com controle total, sem roubar o movimento.
         </div>
-        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
+        <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
 
     <div id="tab-skills" class="system-window hidden">
+        <div class="window-title">DUNGEON SYSTEM</div>
         <div class="panel">
-            <h3 style="text-align:center; color:var(--a); text-shadow: var(--glow); letter-spacing: 3px; font-family: var(--font-mono);">BOSS</h3>
             <div id="skills-list-ui"></div>
         </div>
-        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
+        <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
 
     <div id="tab-hobbies" class="system-window hidden">
+        <div class="window-title">QUEST SYSTEM</div>
         <div class="panel">
-            <h3 style="text-align:center; color:var(--a); letter-spacing: 3px; text-shadow: var(--glow); font-family: var(--font-mono);">CENTRAL DE QUESTS</h3>
-
-            <div class="quest-division">Corpo</div>
+            <div class="quest-division">CORPO</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧼 Higiene</span></div><div id="hobby-higiene-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-higiene" class="routine-input" placeholder="Nova Higiene..."><button class="btn-add-rtn" onclick="Sys.addHobby('higiene')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🍽️ Alimentação</span></div><div id="hobby-alimentacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-alimentacao" class="routine-input" placeholder="Nova Alimentação..."><button class="btn-add-rtn" onclick="Sys.addHobby('alimentacao')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💧 Hidratação</span></div><div id="hobby-hidratacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-hidratacao" class="routine-input" placeholder="Nova Hidratação..."><button class="btn-add-rtn" onclick="Sys.addHobby('hidratacao')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">😴 Sono</span></div><div id="hobby-sono-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-sono" class="routine-input" placeholder="Nova Sono..."><button class="btn-add-rtn" onclick="Sys.addHobby('sono')">+</button></div></div>
 
-            <div class="quest-division">Espírito</div>
+            <div class="quest-division">ESPÍRITO</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🤝 Vínculos</span></div><div id="hobby-vinculos-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vinculos" class="routine-input" placeholder="Novo Vínculo..."><button class="btn-add-rtn" onclick="Sys.addHobby('vinculos')">+</button></div></div>
 
-            <div class="quest-division division-mente">Mente</div>
+            <div class="quest-division division-mente">MENTE</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Concentração</span></div><div id="hobby-concentracao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-concentracao" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('concentracao')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
 
-            <div class="quest-division">Obrigações</div>
+            <div class="quest-division">OBRIGAÇÕES</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">📋 Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
+
+            <div class="quest-division">CONFIGURAÇÕES</div>
+            <div id="miss-config-ui" style="margin-top:8px;"></div>
+            <button class="btn-reset" style="margin-top:20px; font-size:9px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
-        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
+        <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
+    </div>
+
+    <div id="tab-routine" class="system-window hidden">
+        <div class="window-title">ROTINA</div>
+        <div class="routine-tabs">
+            <button class="routine-tab-btn active" id="routine-tab-daily" onclick="Sys.setRoutineView('daily')">DIÁRIA</button>
+            <button class="routine-tab-btn" id="routine-tab-weekly" onclick="Sys.setRoutineView('weekly')">SEMANAL</button>
+            <button class="routine-tab-btn" id="routine-tab-now" onclick="Sys.setRoutineView('now')">AGORA?</button>
+        </div>
+        <div id="routine-view-container"></div>
+        <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
 
     <div class="container">
@@ -1262,6 +1587,7 @@
             <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>
             <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">DUNGEON</button>
             <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>
+            <button class="nav-btn" id="tab-routine-btn" onclick="Sys.switchTab('routine')">ROTINA</button>
         </div>
 
         <div id="tab-system">
@@ -1276,7 +1602,7 @@
                 </div>
 
                 <div id="p-name">--</div>
-                <div id="essences-ui" onclick="Sys.edEssences()">[ MBTI ]</div>
+                <div id="essences-ui" onclick="Sys.edEssences()">MBTI</div>
 
                 <div id="prestige-ui" style="color:var(--gold); font-size:11px; font-weight:900; letter-spacing: 2px; margin-bottom:5px; text-transform: uppercase;"></div>
 
@@ -1310,16 +1636,10 @@
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
             <div id="mission-ui"></div>
-
-            <div class="quest-division">Configuração de Missões</div>
-            <div id="miss-config-ui"></div>
-
-            <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
     </div>
 
     <script>
-        // ====== SISTEMA MODAL ======
         const SystemModal = {
             resolve: null,
             init() {
@@ -1396,13 +1716,17 @@
             }
         };
 
-        // ====== CONSTANTES ======
         const RANKS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS+'];
 
         const CATEGORY_MAP = {
             forca: { type: '💪 FORÇA', debuff: 'corpo' },
             mobilidade: { type: '🛡️ MOBILIDADE', debuff: 'corpo' },
+            higiene: { type: '🧼 HIGIENE', debuff: 'corpo' },
+            alimentacao: { type: '🍽️ ALIMENTAÇÃO', debuff: 'corpo' },
+            hidratacao: { type: '💧 HIDRATAÇÃO', debuff: 'corpo' },
+            sono: { type: '😴 SONO', debuff: 'corpo' },
             espirito: { type: '✝️ ESPÍRITO', debuff: 'espirito' },
+            vinculos: { type: '🤝 VÍNCULOS', debuff: 'espirito' },
             criativo: { type: '🎨 HOBBY', debuff: 'mente' },
             conhecimento: { type: '📚 CONHECIMENTO', debuff: 'mente' },
             concentracao: { type: '🧠 CONCENTRAÇÃO', debuff: 'mente' },
@@ -1410,7 +1734,6 @@
             obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null }
         };
 
-        // ====== OBJETO SYS ======
         const Sys = {
             db: null,
             key: 'monarch_v8_permanent',
@@ -1420,6 +1743,10 @@
             timerInterval: null,
             currentWindow: 'system',
             editContext: null,
+            routineView: 'daily',
+            routineSelectedDay: new Date().getDay(),
+            routineEditContext: null,
+            routineScopeContext: null,
 
             async usePoint(attr) {
                 if (this.db.points <= 0) return;
@@ -1532,15 +1859,19 @@
                     if (!this.db.hobbies.conhecimento) this.db.hobbies.conhecimento = [];
                     if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
                     if (!this.db.hobbies.baixa) this.db.hobbies.baixa = [];
-
+                    if (!this.db.hobbies.higiene) this.db.hobbies.higiene = [];
+                    if (!this.db.hobbies.alimentacao) this.db.hobbies.alimentacao = [];
+                    if (!this.db.hobbies.hidratacao) this.db.hobbies.hidratacao = [];
+                    if (!this.db.hobbies.sono) this.db.hobbies.sono = [];
+                    if (!this.db.hobbies.vinculos) this.db.hobbies.vinculos = [];
                     if (!this.db.hobbies.obrigacoes) this.db.hobbies.obrigacoes = [];
 
-                    if (!this.db.essences) this.db.essences = "[ MBTI ]";
+                    if (!this.db.essences) this.db.essences = "MBTI";
 
                     if (this.db.routine) delete this.db.routine;
                     if (this.db.commitments) delete this.db.commitments;
 
-                    ['forca','mobilidade','espirito','criativo','conhecimento','concentracao','baixa','obrigacoes'].forEach(cat => {
+                    ['forca','mobilidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'].forEach(cat => {
                         if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
                         this.db.hobbies[cat].forEach(h => {
                             if (!h.desc) h.desc = '';
@@ -1551,8 +1882,21 @@
                     if (!this.db.missConfig.counts) this.db.missConfig.counts = {};
                     if (!this.db.missConfig.names) this.db.missConfig.names = {};
 
-                    if (!this.db.missConfig.counts.obrigacoes) this.db.missConfig.counts.obrigacoes = 1;
-                    if (!this.db.missConfig.names.obrigacoes) this.db.missConfig.names.obrigacoes = '📋 OBRIGAÇÕES';
+                    const defaultCounts = { forca: 1, mobilidade: 1, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 };
+                    const defaultNames = { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' };
+
+                    Object.keys(defaultCounts).forEach(k => {
+                        if (this.db.missConfig.counts[k] === undefined) this.db.missConfig.counts[k] = defaultCounts[k];
+                    });
+                    Object.keys(defaultNames).forEach(k => {
+                        if (!this.db.missConfig.names[k]) this.db.missConfig.names[k] = defaultNames[k];
+                    });
+
+                    if (!this.db.routineSystem) {
+                        this.db.routineSystem = this.createDefaultRoutine();
+                    } else {
+                        this.ensureRoutineStructure();
+                    }
 
                     if (this.db.last === undefined || this.db.last === null) {
                         this.db.last = '';
@@ -1566,11 +1910,54 @@
                 }
             },
 
+            createDefaultRoutine() {
+                const days = {};
+                const defaultTasks = {
+                    morning: [
+                        { id: 'm1', label: 'Acordar e levantar', time: '06:00' },
+                        { id: 'm2', label: 'Higiene pessoal', time: '06:30' },
+                        { id: 'm3', label: 'Café da manhã', time: '07:00' }
+                    ],
+                    afternoon: [
+                        { id: 'a1', label: 'Almoçar', time: '12:30' },
+                        { id: 'a2', label: 'Descanso', time: '14:00' }
+                    ],
+                    night: [
+                        { id: 'n1', label: 'Jantar', time: '19:00' },
+                        { id: 'n2', label: 'Preparar para amanhã', time: '21:00' },
+                        { id: 'n3', label: 'Dormir', time: '22:00' }
+                    ]
+                };
+                for (let d = 0; d < 7; d++) {
+                    days[d] = {
+                        morning: defaultTasks.morning.map(t => ({...t, done: false})),
+                        afternoon: defaultTasks.afternoon.map(t => ({...t, done: false})),
+                        night: defaultTasks.night.map(t => ({...t, done: false}))
+                    };
+                }
+                return { days };
+            },
+
+            ensureRoutineStructure() {
+                if (!this.db.routineSystem) this.db.routineSystem = { days: {} };
+                if (!this.db.routineSystem.days) this.db.routineSystem.days = {};
+                for (let d = 0; d < 7; d++) {
+                    if (!this.db.routineSystem.days[d]) this.db.routineSystem.days[d] = {};
+                    if (!this.db.routineSystem.days[d].morning) this.db.routineSystem.days[d].morning = [];
+                    if (!this.db.routineSystem.days[d].afternoon) this.db.routineSystem.days[d].afternoon = [];
+                    if (!this.db.routineSystem.days[d].night) this.db.routineSystem.days[d].night = [];
+                    ['morning','afternoon','night'].forEach(block => {
+                        this.db.routineSystem.days[d][block].forEach(t => {
+                            if (t.done === undefined) t.done = false;
+                        });
+                    });
+                }
+            },
+
             save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
 
             switchTab(t) {
-                // Fechar todas as janelas, exceto a nova
-                const allWindows = ['system', 'train', 'skills', 'hobbies'];
+                const allWindows = ['system', 'train', 'skills', 'hobbies', 'routine'];
                 allWindows.forEach(id => {
                     const el = document.getElementById('tab-' + id);
                     if (el) {
@@ -1594,7 +1981,8 @@
                     system: 'tab-sys-btn',
                     train: 'tab-train-btn',
                     skills: 'tab-skills-btn',
-                    hobbies: 'tab-hobbies-btn'
+                    hobbies: 'tab-hobbies-btn',
+                    routine: 'tab-routine-btn'
                 };
                 Object.keys(tabsMap).forEach(id => {
                     let btn = document.getElementById(tabsMap[id]);
@@ -1602,6 +1990,7 @@
                 });
 
                 if (t === 'skills') this.renderSkills();
+                if (t === 'routine') this.renderRoutine();
                 this.render();
             },
 
@@ -1616,7 +2005,7 @@
                     customAttributes: [],
                     miss: [],
                     skills: [],
-                    hobbies: { forca: [], mobilidade: [], espirito: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
+                    hobbies: { forca: [], mobilidade: [], higiene: [], alimentacao: [], hidratacao: [], sono: [], espirito: [], vinculos: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
                     trains: { puxada: [], empurrada: [], core: [] },
                     trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
                     trainRewardGiven: {},
@@ -1629,19 +2018,12 @@
                     prestige: 0,
                     eventToday: false,
                     seasonMonth: new Date().getMonth(),
-                    essences: "[ MBTI ]",
+                    essences: "MBTI",
                     missConfig: {
-                        counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
-                        names: {
-                            forca: '💪 FORÇA',
-                            mobilidade: '🛡️ MOBILIDADE',
-                            espirito: '✝️ ESPÍRITO',
-                            hobby: '🧠 HOBBY',
-                            conhecimento: '📚 CONHECIMENTO',
-                            concentracao: '🧠 CONCENTRAÇÃO',
-                            obrigacoes: '📋 OBRIGAÇÕES'
-                        }
-                    }
+                        counts: { forca: 1, mobilidade: 1, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
+                        names: { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' }
+                    },
+                    routineSystem: this.createDefaultRoutine()
                 };
                 this.genMiss();
                 this.save();
@@ -1666,11 +2048,9 @@
                 }
 
                 if (this.db.last !== today) {
-
                     if (this.db.debuffs.emboscada) {
                         this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - 2);
-                        await SystemModal.alert(
-                            "⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 no Atributo Base.");
+                        await SystemModal.alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 no Atributo Base.");
                         this.db.debuffs.emboscada = false;
                     }
 
@@ -1690,11 +2070,11 @@
                         if (this.db.miss && Date.now() > (this.db.missionBlockUntil || 0)) {
                             this.db.miss.forEach(m => {
                                 if (!m.done && !m.skipped) {
-                                    if (m.cat === 'mobilidade' || m.cat === 'forca') {
+                                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
                                         penaltyTotal++;
                                         this.db.debuffs.corpo = true;
                                     }
-                                    if (m.cat === 'espirito') {
+                                    if (m.cat === 'espirito' || m.cat === 'vinculos') {
                                         penaltyTotal++;
                                         this.db.debuffs.espirito = true;
                                     }
@@ -1710,8 +2090,7 @@
                         }
                         if (penaltyTotal > 0) {
                             this.applyPenaltyToAllAttrs(penaltyTotal);
-                            await SystemModal.alert(
-                                "O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AOS ATRIBUTOS.");
+                            await SystemModal.alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AOS ATRIBUTOS.");
                         }
                     }
 
@@ -1823,18 +2202,10 @@
             getRank() {
                 for (const rank of RANKS) {
                     const skills = this.db.customCali[rank] || [];
-
-                    if (skills.length === 0) {
-                        return rank;
-                    }
-
+                    if (skills.length === 0) return rank;
                     const allDone = skills.every(skill => this.db.skills.includes(skill));
-
-                    if (!allDone) {
-                        return rank;
-                    }
+                    if (!allDone) return rank;
                 }
-
                 return 'SS+';
             },
 
@@ -1850,24 +2221,16 @@
                         usedTasks.add(fallbackMsg);
                         return { task: fallbackMsg, desc: '' };
                     }
-
                     let filtered = pool.filter(h => !usedTasks.has(h.task));
-
-                    if (filtered.length === 0) {
-                        filtered = pool;
-                    }
-
+                    if (filtered.length === 0) filtered = pool;
                     const picked = filtered[Math.floor(Math.random() * filtered.length)];
-
                     usedTasks.add(picked.task);
-
                     return picked;
                 };
 
                 let config = this.db.missConfig;
                 let counts = config.counts;
                 let names = config.names;
-
                 let missArray = [];
 
                 const addMissForCat = (catKey, fallback, typeLabel) => {
@@ -1885,15 +2248,20 @@
                     });
                 };
 
-                for (let i = 0; i < (counts.mobilidade || 0); i++) {
-                    addMissForCat('mobilidade', "Cadastre Missão de Mobilidade", names.mobilidade || '🛡️ MOBILIDADE');
-                }
-                for (let i = 0; i < (counts.forca || 0); i++) {
-                    addMissForCat('forca', "Cadastre Missão de Força", names.forca || '💪 FORÇA');
-                }
+                const bodyCats = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono'];
+                bodyCats.forEach(cat => {
+                    for (let i = 0; i < (counts[cat] || 0); i++) {
+                        addMissForCat(cat, `Cadastre missão de ${names[cat] || cat}`, names[cat] || cat);
+                    }
+                });
+
                 for (let i = 0; i < (counts.espirito || 0); i++) {
                     addMissForCat('espirito', "Cadastre Missão de Espírito", names.espirito || '✝️ ESPÍRITO');
                 }
+                for (let i = 0; i < (counts.vinculos || 0); i++) {
+                    addMissForCat('vinculos', "Cadastre Vínculo", names.vinculos || '🤝 VÍNCULOS');
+                }
+
                 const hobbyCount = counts.hobby || 0;
                 if (hobbyCount === 1) {
                     const criativoPool = (this.db.hobbies.criativo || []).map(h => ({...h, cat: 'criativo'}));
@@ -1920,13 +2288,13 @@
                         addMissForCat('baixa', "Cadastre missão de Baixa Energia", names.hobby || '🧠 HOBBY');
                     }
                 }
+
                 for (let i = 0; i < (counts.conhecimento || 0); i++) {
                     addMissForCat('conhecimento', "Cadastre missão de Conhecimento", names.conhecimento || '📚 CONHECIMENTO');
                 }
                 for (let i = 0; i < (counts.concentracao || 0); i++) {
                     addMissForCat('concentracao', "Cadastre missão de Concentração", names.concentracao || '🧠 CONCENTRAÇÃO');
                 }
-
                 for (let i = 0; i < (counts.obrigacoes || 0); i++) {
                     addMissForCat('obrigacoes', "Cadastre Obrigação", names.obrigacoes || '📋 OBRIGAÇÕES');
                 }
@@ -1943,13 +2311,10 @@
 
             async toggleSkill(s, rank, e) {
                 if (e.target.tagName === 'B') return;
-
                 const rankIndex = RANKS.indexOf(rank);
                 const currentRankIndex = RANKS.indexOf(this.getRank());
-
                 if (rankIndex === -1 || currentRankIndex === -1) return;
                 if (rankIndex > currentRankIndex) return;
-
                 if (this.db.skills.includes(s)) {
                     this.db.skills = this.db.skills.filter(skill => skill !== s);
                     this.db.points = Math.max(0, this.db.points - 5);
@@ -1958,10 +2323,8 @@
                     this.db.points += 5;
                     this.db.stats.totalBosses++;
                     this.db.stats.seasonBosses++;
-
                     this.pop(e, `+5 PONTOS DE ATRIBUTO\nBOSS ABATIDO`);
                 }
-
                 this.save();
                 this.render();
                 this.renderSkills();
@@ -2000,18 +2363,13 @@
             async toggleTrain(cat, i, e) {
                 const item = this.db.trains[cat]?.[i];
                 if (!item) return;
-
                 if (item.done) {
                     item.done = false;
-
                     this.db.energy -= item.gain;
                     this.db.stats.totalTrains = Math.max(0, this.db.stats.totalTrains - 1);
                     this.db.stats.seasonTrains = Math.max(0, this.db.stats.seasonTrains - 1);
-
                     this.pop(e, `-${item.gain} AURA`);
-
                     const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
-
                     if (!treinoCompleto && this.db.trainRewardGiven[cat]) {
                         this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - 1);
                         this.db.trainRewardGiven[cat] = false;
@@ -2020,19 +2378,14 @@
                 } else {
                     item.done = true;
                     item.gain = Math.floor(25 * this.getMultiplier());
-
                     this.db.energy += item.gain;
-
                     this.db.stats.totalTrains++;
                     this.db.stats.seasonTrains++;
-
                     if (this.db.debuffs.emboscada) {
                         this.db.debuffs.emboscada = false;
                         this.pop(e, "EMBOSCADA EVITADA!");
                     }
-
                     const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
-
                     if (treinoCompleto && !this.db.trainRewardGiven[cat]) {
                         this.db.attr.ATTR++;
                         this.db.trainRewardGiven[cat] = true;
@@ -2041,7 +2394,6 @@
                         this.pop(e, `+${item.gain} AURA`);
                     }
                 }
-
                 this.checkLvl();
                 this.save();
                 this.render();
@@ -2050,71 +2402,40 @@
             async doMiss(i, e) {
                 const m = this.db.miss?.[i];
                 if (!m || m.skipped) return;
-
                 if (m.done) {
                     m.done = false;
-
                     this.db.energy -= m.energyG;
-
-                    this.db.stats.seasonQuests = Math.max(
-                        0,
-                        this.db.stats.seasonQuests - 1
-                    );
-
+                    this.db.stats.seasonQuests = Math.max(0, this.db.stats.seasonQuests - 1);
                     if (m.cat === 'conhecimento') {
-                        this.db.stats.totalKnowledge = Math.max(
-                            0,
-                            this.db.stats.totalKnowledge - 1
-                        );
+                        this.db.stats.totalKnowledge = Math.max(0, this.db.stats.totalKnowledge - 1);
                     }
-
                     this.pop(e, "");
                 } else {
                     m.done = true;
-
                     if (m.cat === 'conhecimento') {
                         this.db.stats.totalKnowledge++;
                     }
-
                     this.db.stats.seasonQuests++;
-
                     const mult = this.getMultiplier();
-
                     m.xpG = Math.floor(10 * mult);
                     m.energyG = Math.floor(25 * mult);
-
-                    if (
-                        this.db.debuffs.corpo ||
-                        this.db.debuffs.mente ||
-                        this.db.debuffs.espirito
-                    ) {
+                    if (this.db.debuffs.corpo || this.db.debuffs.mente || this.db.debuffs.espirito) {
                         m.xpG = Math.floor(m.xpG * 0.7);
                         m.energyG = Math.floor(m.energyG * 0.7);
                     }
-
                     this.db.energy += m.energyG;
                     this.db.points += 2;
-
-                    if (m.cat === 'mobilidade' || m.cat === 'forca') {
+                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
                         this.db.debuffs.corpo = false;
                     }
-
-                    if (m.cat === 'espirito') {
+                    if (m.cat === 'espirito' || m.cat === 'vinculos') {
                         this.db.debuffs.espirito = false;
                     }
-
-                    if (
-                        m.cat === 'criativo' ||
-                        m.cat === 'baixa' ||
-                        m.cat === 'conhecimento' ||
-                        m.cat === 'concentracao'
-                    ) {
+                    if (m.cat === 'criativo' || m.cat === 'baixa' || m.cat === 'conhecimento' || m.cat === 'concentracao') {
                         this.db.debuffs.mente = false;
                     }
-
                     this.pop(e, "");
                 }
-
                 this.checkLvl();
                 this.save();
                 this.render();
@@ -2221,8 +2542,7 @@
                 let oldName = this.db.customCali[rank][idx];
                 let newName = await SystemModal.prompt("Renomear Habilidade:", oldName);
                 if (newName) {
-                    if (this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ?
-                        newName : s);
+                    if (this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);
                     this.db.customCali[rank][idx] = newName;
                     this.save();
                     this.renderSkills();
@@ -2336,9 +2656,7 @@
 
             async doPrestige() {
                 if (this.db.lvl < 100) return;
-                if (await SystemModal.confirm(
-                        "RENASCER? Você perderá seu Nível e Energia, mas receberá um Multiplicador de +10% Aura e manterá seus Bosses, Atributos e Conquistas."
-                        )) {
+                if (await SystemModal.confirm("RENASCER? Você perderá seu Nível e Energia, mas receberá um Multiplicador de +10% Aura e manterá seus Bosses, Atributos e Conquistas.")) {
                     this.db.prestige = (this.db.prestige || 0) + 1;
                     this.db.lvl = 1;
                     this.db.energy = 0;
@@ -2360,17 +2678,19 @@
                     await SystemModal.alert("ENERGIA INSUFICIENTE.");
                     return;
                 }
-                const newAttr = {
-                    id: 'attr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                    name: "",
-                    value: 1,
-                    purchasePrice: preco
-                };
-                this.db.customAttributes.push(newAttr);
-                this.db.energy -= preco;
-                this.checkLvl();
-                this.save();
-                this.render();
+                if (await SystemModal.confirm(`COMPRAR NOVO ATRIBUTO POR ${preco} ENERGIA?`)) {
+                    const newAttr = {
+                        id: 'attr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        name: "",
+                        value: 1,
+                        purchasePrice: preco
+                    };
+                    this.db.customAttributes.push(newAttr);
+                    this.db.energy -= preco;
+                    this.checkLvl();
+                    this.save();
+                    this.render();
+                }
             },
 
             async removeCustomAttr(id) {
@@ -2491,7 +2811,7 @@
                 }
             },
             async edEssences() {
-                let v = await SystemModal.prompt("Insira suas 3 essências:", this.db.essences);
+                let v = await SystemModal.prompt("Insira seu MBTI:", this.db.essences);
                 if (v !== null && v !== undefined && v !== '') {
                     this.db.essences = v.toUpperCase();
                     this.save();
@@ -2569,25 +2889,22 @@
                 ['E', 'D', 'C', 'B', 'A', 'S'].forEach(r => {
                     const rI = RANKS.indexOf(r);
                     const l = rI > mRI;
-                    h +=
-                        `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;
+                    h += `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;
                     if (this.db.customCali[r]) {
                         this.db.customCali[r].forEach((s, idx) => {
                             const m = this.db.skills.includes(s);
-                            h +=
-                                `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}">  
-                                    <b onclick="Sys.edSkillName('${r}', ${idx})" style="cursor:pointer; flex:1">${s}</b>  
-                                    <div style="display:flex; align-items:center; gap:8px;">
-                                        <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},-1,event)">▲</button>
-                                        <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},1,event)">▼</button>
-                                        <span style="opacity:0.3; font-size:10px; cursor:pointer;" onclick="Sys.delSkill('${r}', ${idx}, event)">✕</span>
-                                        <div class="check-box" onclick="Sys.toggleSkill('${s}', '${r}', event)">${m?'✓':''}</div>
-                                    </div>  
-                                </div>`;
+                            h += `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}">  
+                                <b onclick="Sys.edSkillName('${r}', ${idx})" style="cursor:pointer; flex:1">${s}</b>  
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},-1,event)">▲</button>
+                                    <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},1,event)">▼</button>
+                                    <span style="opacity:0.3; font-size:10px; cursor:pointer;" onclick="Sys.delSkill('${r}', ${idx}, event)">✕</span>
+                                    <div class="check-box" onclick="Sys.toggleSkill('${s}', '${r}', event)">${m?'✓':''}</div>
+                                </div>  
+                            </div>`;
                         });
                     }
-                    h +=
-                        `<div class="routine-input-wrap"><input type="text" id="inp-skill-${r}" class="routine-input" placeholder="Nova Habilidade Rank ${r}..."><button class="btn-add-rtn" onclick="Sys.addSkill('${r}')">+</button></div></div>`;
+                    h += `<div class="routine-input-wrap"><input type="text" id="inp-skill-${r}" class="routine-input" placeholder="Nova Habilidade Rank ${r}..."><button class="btn-add-rtn" onclick="Sys.addSkill('${r}')">+</button></div></div>`;
                 });
                 const skillsEl = document.getElementById('skills-list-ui');
                 if (skillsEl) skillsEl.innerHTML = h;
@@ -2646,7 +2963,7 @@
                 const pName = document.getElementById('p-name');
                 if (pName) pName.innerText = this.db.name;
                 const ess = document.getElementById('essences-ui');
-                if (ess) ess.innerText = this.db.essences;
+                if (ess) ess.innerText = this.db.essences || 'MBTI';
                 const lvlUi = document.getElementById('lvl-ui');
                 if (lvlUi) lvlUi.innerText = "LVL " + this.db.lvl;
 
@@ -2757,7 +3074,8 @@
                 const trainsContainer = document.getElementById('trains-container');
                 if (trainsContainer) trainsContainer.innerHTML = tTotalH;
 
-                ['forca', 'mobilidade', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'].forEach(cat => {
+                const allCats = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'];
+                allCats.forEach(cat => {
                     let hH = "";
                     if (this.db.hobbies[cat]) {
                         this.db.hobbies[cat].forEach((h, i) => {
@@ -2798,7 +3116,7 @@
                 if (missionUi) missionUi.innerHTML = mH;
 
                 let configHtml = '';
-                const catKeys = ['forca', 'mobilidade', 'espirito', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
+                const catKeys = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
                 catKeys.forEach(cat => {
                     let count = this.db.missConfig.counts[cat] || 0;
                     let name = this.db.missConfig.names[cat] || cat;
@@ -2818,16 +3136,9 @@
 
             async renameMissClass(cat) {
                 const current = this.db.missConfig.names[cat] || cat;
-
-                const newName = await SystemModal.prompt(
-                    "Novo nome para a classe de missão:",
-                    current
-                );
-
+                const newName = await SystemModal.prompt("Novo nome para a classe de missão:", current);
                 if (!newName) return;
-
                 this.db.missConfig.names[cat] = newName;
-
                 this.genMiss();
                 this.save();
                 this.render();
@@ -2836,14 +3147,328 @@
             adjustMissCount(cat, delta) {
                 const current = this.db.missConfig.counts[cat] || 0;
                 const newValue = Math.max(0, current + delta);
-
                 if (newValue === current) return;
-
                 this.db.missConfig.counts[cat] = newValue;
-
                 this.genMiss();
                 this.save();
                 this.render();
+            },
+
+            // ===== ROTINA FUNCTIONS =====
+            setRoutineView(view) {
+                this.routineView = view;
+                if (view === 'weekly' && !this.routineSelectedDay) {
+                    this.routineSelectedDay = new Date().getDay();
+                }
+                if (view === 'daily') this.routineSelectedDay = new Date().getDay();
+                document.querySelectorAll('.routine-tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(`routine-tab-${view}`).classList.add('active');
+                this.renderRoutine();
+            },
+
+            renderRoutine() {
+                if (!this.db.routineSystem) this.db.routineSystem = this.createDefaultRoutine();
+                this.ensureRoutineStructure();
+                const container = document.getElementById('routine-view-container');
+                if (!container) return;
+                if (this.routineView === 'daily') {
+                    container.innerHTML = this.renderRoutineDaily();
+                } else if (this.routineView === 'weekly') {
+                    container.innerHTML = this.renderRoutineWeekly();
+                } else if (this.routineView === 'now') {
+                    container.innerHTML = this.renderRoutineNow();
+                }
+            },
+
+            renderRoutineDaily() {
+                const today = new Date().getDay();
+                const dayData = this.db.routineSystem.days[today] || { morning: [], afternoon: [], night: [] };
+                let total = dayData.morning.length + dayData.afternoon.length + dayData.night.length;
+                let done = [...dayData.morning, ...dayData.afternoon, ...dayData.night].filter(t => t.done).length;
+                let percent = total > 0 ? Math.round((done / total) * 100) : 0;
+                let dateStr = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+                let timeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                let h = `<div style="text-align:center; margin-bottom:10px; font-size:11px; color:var(--t-dim); font-family:var(--font-mono);">${dateStr} • ${timeStr}</div>`;
+                h += `<div class="stat-label" style="text-align:center;">PROGRESSO DO DIA</div>`;
+                h += `<div style="text-align:center; font-size:20px; font-weight:900; color:var(--a); text-shadow:var(--glow); margin:4px 0;">${percent}%</div>`;
+                h += `<div class="routine-progress-bar"><div class="routine-progress-fill" style="width:${percent}%"></div></div>`;
+
+                h += this.renderRoutineBlock('morning', 'MANHÃ', '06:00 — 12:00', today);
+                h += this.renderRoutineBlock('afternoon', 'TARDE', '12:00 — 18:00', today);
+                h += this.renderRoutineBlock('night', 'NOITE', '18:00 — 22:30', today);
+                return h;
+            },
+
+            renderRoutineBlock(block, label, timeRange, dayIndex) {
+                const tasks = this.db.routineSystem.days[dayIndex][block] || [];
+                let h = `<div class="routine-block"><div class="routine-block-header"><span class="stat-label" style="color:var(--a)">${label} <span style="font-size:8px;">(${timeRange})</span></span><button class="btn-add-rtn" style="width:auto; padding:2px 8px;" onclick="Sys.openRoutineTaskEditor(${dayIndex},'${block}')">+</button></div>`;
+                if (tasks.length === 0) {
+                    h += `<div style="font-size:10px; color:var(--t-dim); opacity:0.5; padding:6px;">Sem tarefas</div>`;
+                } else {
+                    tasks.forEach((task, idx) => {
+                        h += `<div class="routine-task-item ${task.done?'checked':''}" onclick="Sys.toggleRoutineTask(${dayIndex},'${block}',${idx},event)">
+                            <div class="routine-task-check" onclick="event.stopPropagation(); Sys.toggleRoutineTask(${dayIndex},'${block}',${idx},event)">${task.done?'✓':''}</div>
+                            <span class="routine-task-label">${task.label}</span>
+                            ${task.time ? `<span class="routine-task-time">${task.time}</span>` : ''}
+                            <div class="routine-task-actions" onclick="event.stopPropagation();">
+                                <button class="btn-order" onclick="Sys.requestRoutineMove(${dayIndex},'${block}',${idx},-1,event)">↑</button>
+                                <button class="btn-order" onclick="Sys.requestRoutineMove(${dayIndex},'${block}',${idx},1,event)">↓</button>
+                                <button class="btn-order" onclick="Sys.editRoutineTask(${dayIndex},'${block}',${idx},event)">✎</button>
+                                <button class="btn-order" style="color:var(--danger);" onclick="Sys.requestRoutineDelete(${dayIndex},'${block}',${idx},event)">✕</button>
+                            </div>
+                        </div>`;
+                    });
+                }
+                h += `</div>`;
+                return h;
+            },
+
+            renderRoutineWeekly() {
+                const days = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+                const today = new Date().getDay();
+                let h = `<div class="routine-day-selector">`;
+                days.forEach((d, i) => {
+                    const isActive = i === this.routineSelectedDay;
+                    const isToday = i === today;
+                    h += `<button class="routine-day-btn ${isActive?'active':''} ${isToday?'today':''}" onclick="Sys.selectRoutineDay(${i})">${d}</button>`;
+                });
+                h += `</div>`;
+
+                const dayData = this.db.routineSystem.days[this.routineSelectedDay] || { morning: [], afternoon: [], night: [] };
+                h += this.renderRoutineBlock('morning', 'MANHÃ', '06:00 — 12:00', this.routineSelectedDay);
+                h += this.renderRoutineBlock('afternoon', 'TARDE', '12:00 — 18:00', this.routineSelectedDay);
+                h += this.renderRoutineBlock('night', 'NOITE', '18:00 — 22:30', this.routineSelectedDay);
+                return h;
+            },
+
+            renderRoutineNow() {
+                const today = new Date().getDay();
+                const dayData = this.db.routineSystem.days[today] || { morning: [], afternoon: [], night: [] };
+                const blocks = ['morning', 'afternoon', 'night'];
+                let nextTask = null;
+                let nextBlock = null;
+                for (let b of blocks) {
+                    const tasks = dayData[b] || [];
+                    const found = tasks.find(t => !t.done);
+                    if (found) {
+                        nextTask = found;
+                        nextBlock = b;
+                        break;
+                    }
+                }
+                if (!nextTask) {
+                    return `<div class="routine-now-card"><h3>🎉 TUDO CONCLUÍDO</h3><p style="font-size:14px; color:var(--t);">Nenhuma tarefa pendente para hoje.</p></div>`;
+                }
+                const blockName = nextBlock === 'morning' ? 'MANHÃ' : nextBlock === 'afternoon' ? 'TARDE' : 'NOITE';
+                return `<div class="routine-now-card">
+                    <h3>PRÓXIMA TAREFA</h3>
+                    <div class="routine-task-label">${nextTask.label}</div>
+                    <div class="routine-task-time">${nextTask.time || ''}</div>
+                    <div style="font-size:10px; color:var(--t-dim); margin-top:4px;">${blockName}</div>
+                    <button onclick="Sys.completeNowTask()">CONCLUIR</button>
+                </div>`;
+            },
+
+            selectRoutineDay(day) {
+                this.routineSelectedDay = day;
+                this.renderRoutine();
+            },
+
+            openRoutineTaskEditor(dayIndex, block, taskId = null) {
+                this.routineEditContext = { dayIndex, block, taskId };
+                const overlay = document.getElementById('routine-task-overlay');
+                document.getElementById('routine-task-overlay-title').innerText = taskId !== null ? 'EDITAR TAREFA' : 'NOVA TAREFA';
+                document.getElementById('routine-task-name').value = '';
+                document.getElementById('routine-task-time').value = '';
+                document.getElementById('routine-task-block').value = block;
+                if (taskId !== null) {
+                    const task = this.db.routineSystem.days[dayIndex][block][taskId];
+                    if (task) {
+                        document.getElementById('routine-task-name').value = task.label;
+                        document.getElementById('routine-task-time').value = task.time || '';
+                        document.getElementById('routine-task-block').value = block;
+                    }
+                }
+                overlay.classList.remove('hidden');
+                overlay.style.animation = 'none';
+                overlay.offsetHeight;
+                overlay.style.animation = '';
+                setTimeout(() => document.getElementById('routine-task-name').focus(), 100);
+            },
+
+            closeRoutineTaskEditor() {
+                const overlay = document.getElementById('routine-task-overlay');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('closing');
+                    }, 250);
+                }
+                this.routineEditContext = null;
+            },
+
+            async saveRoutineTask() {
+                if (!this.routineEditContext) return;
+                const { dayIndex, block, taskId } = this.routineEditContext;
+                const nameInput = document.getElementById('routine-task-name');
+                const timeInput = document.getElementById('routine-task-time');
+                const blockSelect = document.getElementById('routine-task-block');
+                const label = nameInput.value.trim();
+                if (!label) {
+                    await SystemModal.alert("Nome da tarefa é obrigatório.");
+                    return;
+                }
+                const time = timeInput.value.trim();
+                const newBlock = blockSelect.value;
+
+                // Definir contexto de escopo para criação/edição
+                this.routineScopeContext = {
+                    type: taskId === null ? 'create' : 'edit',
+                    dayIndex,
+                    block,
+                    taskId,
+                    label,
+                    time,
+                    newBlock
+                };
+                this.openRoutineScopePanel();
+                this.closeRoutineTaskEditor();
+            },
+
+            requestRoutineMove(dayIndex, block, idx, dir, e) {
+                e.stopPropagation();
+                this.routineScopeContext = {
+                    type: 'move',
+                    dayIndex,
+                    block,
+                    idx,
+                    dir
+                };
+                this.openRoutineScopePanel();
+            },
+
+            requestRoutineDelete(dayIndex, block, idx, e) {
+                e.stopPropagation();
+                this.routineScopeContext = {
+                    type: 'delete',
+                    dayIndex,
+                    block,
+                    idx
+                };
+                this.openRoutineScopePanel();
+            },
+
+            openRoutineScopePanel() {
+                const overlay = document.getElementById('routine-scope-overlay');
+                overlay.classList.remove('hidden');
+                overlay.style.animation = 'none';
+                overlay.offsetHeight;
+                overlay.style.animation = '';
+            },
+
+            closeRoutineScopePanel() {
+                const overlay = document.getElementById('routine-scope-overlay');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('closing');
+                    }, 250);
+                }
+                this.routineScopeContext = null;
+            },
+
+            handleRoutineScopeChoice(scope) {
+                if (!this.routineScopeContext) return;
+                const ctx = this.routineScopeContext;
+                this.closeRoutineScopePanel();
+
+                if (scope === 'cancel') return;
+
+                const daysToAffect = scope === 'all' ? [0,1,2,3,4,5,6] : [ctx.dayIndex];
+
+                switch (ctx.type) {
+                    case 'create':
+                        daysToAffect.forEach(d => {
+                            const newTask = {
+                                id: 'r' + Date.now() + Math.random().toString(36).substr(2,5),
+                                label: ctx.label,
+                                time: ctx.time,
+                                done: false
+                            };
+                            this.db.routineSystem.days[d][ctx.newBlock].push(newTask);
+                        });
+                        break;
+                    case 'edit':
+                        daysToAffect.forEach(d => {
+                            const day = this.db.routineSystem.days[d];
+                            if (ctx.taskId !== null && ctx.taskId >= 0 && ctx.taskId < day[ctx.block].length) {
+                                const task = day[ctx.block][ctx.taskId];
+                                task.label = ctx.label;
+                                task.time = ctx.time;
+                                if (ctx.newBlock !== ctx.block) {
+                                    const [removed] = day[ctx.block].splice(ctx.taskId, 1);
+                                    day[ctx.newBlock].push(removed);
+                                }
+                            }
+                        });
+                        break;
+                    case 'move':
+                        daysToAffect.forEach(d => {
+                            const tasks = this.db.routineSystem.days[d][ctx.block];
+                            const newIdx = ctx.idx + ctx.dir;
+                            if (newIdx >= 0 && newIdx < tasks.length) {
+                                [tasks[ctx.idx], tasks[newIdx]] = [tasks[newIdx], tasks[ctx.idx]];
+                            }
+                        });
+                        break;
+                    case 'delete':
+                        daysToAffect.forEach(d => {
+                            const tasks = this.db.routineSystem.days[d][ctx.block];
+                            if (ctx.idx >= 0 && ctx.idx < tasks.length) {
+                                tasks.splice(ctx.idx, 1);
+                            }
+                        });
+                        break;
+                }
+                this.save();
+                this.renderRoutine();
+            },
+
+            async toggleRoutineTask(dayIndex, block, idx, e) {
+                e.stopPropagation();
+                const task = this.db.routineSystem.days[dayIndex][block][idx];
+                if (!task) return;
+                const action = task.done ? 'DESFAZER CONCLUSÃO?' : 'CONFIRMAR CONCLUSÃO?';
+                if (await SystemModal.confirm(action)) {
+                    task.done = !task.done;
+                    this.save();
+                    this.renderRoutine();
+                }
+            },
+
+            editRoutineTask(dayIndex, block, idx, e) {
+                e.stopPropagation();
+                this.openRoutineTaskEditor(dayIndex, block, idx);
+            },
+
+            async completeNowTask() {
+                const today = new Date().getDay();
+                const blocks = ['morning', 'afternoon', 'night'];
+                for (let b of blocks) {
+                    const tasks = this.db.routineSystem.days[today][b];
+                    const idx = tasks.findIndex(t => !t.done);
+                    if (idx !== -1) {
+                        if (await SystemModal.confirm("CONFIRMAR CONCLUSÃO?")) {
+                            tasks[idx].done = true;
+                            this.save();
+                            this.renderRoutine();
+                        }
+                        return;
+                    }
+                }
             }
         };
 
@@ -2856,6 +3481,23 @@
             });
             document.getElementById('edit-mission-confirm').addEventListener('click', () => {
                 Sys.confirmEditMission();
+            });
+
+            document.getElementById('routine-task-cancel').addEventListener('click', () => {
+                Sys.closeRoutineTaskEditor();
+            });
+            document.getElementById('routine-task-confirm').addEventListener('click', () => {
+                Sys.saveRoutineTask();
+            });
+
+            document.getElementById('scope-this-day').addEventListener('click', () => {
+                Sys.handleRoutineScopeChoice('this');
+            });
+            document.getElementById('scope-all-days').addEventListener('click', () => {
+                Sys.handleRoutineScopeChoice('all');
+            });
+            document.getElementById('scope-cancel').addEventListener('click', () => {
+                Sys.handleRoutineScopeChoice('cancel');
             });
 
             Sys.init();
