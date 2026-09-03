@@ -27,6 +27,16 @@
             --panel-glow: 0 0 20px rgba(0, 229, 255, 0.12), inset 0 0 30px rgba(0, 229, 255, 0.03);
             --font-tech: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
+            --window-bg: rgba(5, 10, 18, 0.95);
+            --window-border: rgba(0, 229, 255, 0.5);
+            --window-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1);
+            --z-base: 1;
+            --z-interface: 10;
+            --z-section: 100;
+            --z-detail: 1000;
+            --z-modal: 10000;
+            --z-confirmation: 11000;
+            --z-emergency: 99999;
         }
 
         * {
@@ -64,7 +74,7 @@
                 radial-gradient(circle at 80% 20%, rgba(0, 100, 150, 0.08) 0%, transparent 60%),
                 radial-gradient(circle at 20% 80%, rgba(0, 150, 200, 0.05) 0%, transparent 50%);
             pointer-events: none;
-            z-index: 9998;
+            z-index: 0;
             opacity: 0.7;
         }
 
@@ -85,7 +95,7 @@
             font-weight: 900;
             pointer-events: none;
             animation: up 1s forwards;
-            z-index: 9999;
+            z-index: var(--z-emergency);
             text-shadow: var(--glow);
             font-size: 16px;
             white-space: pre-wrap;
@@ -112,17 +122,41 @@
             50% { box-shadow: 0 0 15px rgba(0,229,255,0.5); }
             100% { box-shadow: 0 0 5px rgba(0,229,255,0.3); }
         }
+        @keyframes hudPanelEnter {
+            0% { opacity: 0; transform: translateY(10px) scale(0.98); filter: brightness(1.5); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); }
+        }
+        @keyframes hudOverlayEnter {
+            0% { opacity: 0; transform: scale(0.96) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes hudOverlayExit {
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            100% { opacity: 0; transform: scale(0.96) translateY(12px); }
+        }
+        @keyframes windowMaterialize {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes windowDematerialize {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+        }
 
         .setup-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 10000;
+            z-index: var(--z-modal);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            animation: hudOverlayEnter 0.3s ease-out;
+        }
+        .setup-overlay.closing {
+            animation: hudOverlayExit 0.25s ease-in forwards;
         }
         .setup-card {
             background: var(--panel-bg);
@@ -135,6 +169,7 @@
             border-radius: 2px;
             position: relative;
             clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+            animation: hudPanelEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .setup-card::before {
             content: "";
@@ -146,6 +181,7 @@
             border-top: 2px solid var(--a);
             border-left: 2px solid var(--a);
             pointer-events: none;
+            box-shadow: 0 0 6px var(--a);
         }
         .setup-card::after {
             content: "";
@@ -157,6 +193,7 @@
             border-bottom: 2px solid var(--a);
             border-right: 2px solid var(--a);
             pointer-events: none;
+            box-shadow: 0 0 6px var(--a);
         }
         .setup-card h2 {
             color: var(--a);
@@ -231,7 +268,7 @@
             width: 100%;
             max-width: 460px;
             padding: 10px;
-            z-index: 1;
+            z-index: var(--z-interface);
             position: relative;
         }
         .protocol-banner {
@@ -349,7 +386,7 @@
             width: 100%;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: var(--z-section);
             background: rgba(3, 6, 13, 0.85);
             backdrop-filter: blur(8px);
             padding: 6px 0;
@@ -407,6 +444,7 @@
             border-radius: 2px;
             clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: hudPanelEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .panel::before {
             content: "";
@@ -1055,6 +1093,42 @@
             text-shadow: 0 0 5px var(--danger);
         }
 
+        .system-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 460px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--window-bg);
+            border: 1px solid var(--window-border);
+            box-shadow: var(--window-shadow);
+            z-index: var(--z-section);
+            padding: 20px 12px;
+            clip-path: polygon(0 0, calc(100% - 25px) 0, 100% 25px, 100% 100%, 25px 100%, 0 calc(100% - 25px));
+            animation: windowMaterialize 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .system-window.closing {
+            animation: windowDematerialize 0.25s ease-in forwards;
+        }
+
+        .window-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: calc(var(--z-section) - 1);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .window-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         @media (max-width: 400px) {
             .nav-btn {
                 font-size: 7px;
@@ -1089,7 +1163,7 @@
         </div>
     </div>
 
-    <div id="sys-modal-overlay" class="setup-overlay hidden" style="z-index: 10001;">
+    <div id="sys-modal-overlay" class="setup-overlay hidden" style="z-index: var(--z-confirmation);">
         <div class="setup-card" style="max-width: 350px;">
             <h2 id="sys-modal-title" style="color:var(--a); font-size:16px;">AVISO</h2>
             <div id="sys-modal-msg" style="margin-bottom: 20px; font-size: 13px; font-weight: bold; color:var(--t); white-space: pre-wrap;"></div>
@@ -1101,15 +1175,85 @@
         </div>
     </div>
 
-    <div id="mission-detail-overlay" class="setup-overlay hidden" style="z-index: 10002;">
+    <div id="mission-detail-overlay" class="setup-overlay hidden" style="z-index: var(--z-detail);">
         <div class="setup-card" style="max-width: 350px; text-align: left;">
             <h2 id="mission-detail-title" style="color:var(--a); font-size:16px; text-align: center;">MISSÃO</h2>
             <div id="mission-detail-body" style="margin: 15px 0; font-size: 13px; white-space: pre-wrap;"></div>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button id="mission-detail-edit" class="btn-init" style="border-color: var(--a); color: var(--a); margin-top:0;">EDITAR MISSÃO</button>
-                <button id="mission-detail-close" class="btn-init" style="margin-top:0;">FECHAR</button>
+                <button id="mission-detail-close" class="btn-init" style="margin-top:0;" onclick="Sys.closeMissDetail()">FECHAR</button>
             </div>
         </div>
+    </div>
+
+    <div id="edit-mission-overlay" class="setup-overlay hidden" style="z-index: var(--z-modal);">
+        <div class="setup-card" style="max-width: 350px; text-align: left;">
+            <h2 style="color:var(--a); font-size:16px; text-align: center;">EDITAR MISSÃO</h2>
+            <label class="stat-label" style="margin-bottom:4px;">NOME</label>
+            <input type="text" id="edit-mission-task" class="routine-input" placeholder="Nome da missão">
+            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DESCRIÇÃO</label>
+            <textarea id="edit-mission-desc" class="routine-input" placeholder="Descrição (opcional)" style="height:80px; text-align:left;"></textarea>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button id="edit-mission-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
+                <button id="edit-mission-confirm" class="btn-init" style="margin-top:0;">SALVAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="window-backdrop" id="window-backdrop"></div>
+
+    <div id="tab-train" class="system-window hidden">
+        <div class="panel" style="text-align:center; margin-bottom:10px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
+            <h3 style="color:var(--gold); font-size:11px; letter-spacing:2px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5); font-family: var(--font-mono);">CRONÔMETRO</h3>
+            <div id="timer-display">00:00:00</div>
+            <div>
+                <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
+                <button class="timer-btn" onclick="Sys.pauseTimer()">⏸ Pause</button>
+                <button class="timer-btn" onclick="Sys.resetTimer()" style="color:var(--danger); border-color:var(--danger);">⏹ Reset</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 style="text-align:center; color:var(--a); font-size:11px; letter-spacing:2px; text-shadow: var(--glow); font-family: var(--font-mono);">TREINAMENTOS</h3>
+            <div id="trains-container"></div>
+            <button class="btn-init" onclick="Sys.createNewTrainTable()" style="font-size:11px;">+ CRIAR NOVO GRUPO</button>
+        </div>
+        <div style="margin-top:8px; font-size:8px; line-height:1.3; color:var(--t-dim); opacity:0.55; text-align:left; font-family: var(--font-mono);">
+            Isometrias: avance aos 15–20 segundos de forma perfeita.<br>
+            Exercícios dinâmicos: avance quando fizer 1-5 repetições com controle total, sem roubar o movimento.
+        </div>
+        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
+    </div>
+
+    <div id="tab-skills" class="system-window hidden">
+        <div class="panel">
+            <h3 style="text-align:center; color:var(--a); text-shadow: var(--glow); letter-spacing: 3px; font-family: var(--font-mono);">BOSS</h3>
+            <div id="skills-list-ui"></div>
+        </div>
+        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
+    </div>
+
+    <div id="tab-hobbies" class="system-window hidden">
+        <div class="panel">
+            <h3 style="text-align:center; color:var(--a); letter-spacing: 3px; text-shadow: var(--glow); font-family: var(--font-mono);">CENTRAL DE QUESTS</h3>
+
+            <div class="quest-division">Corpo</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
+
+            <div class="quest-division">Espírito</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
+
+            <div class="quest-division division-mente">Mente</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Concentração</span></div><div id="hobby-concentracao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-concentracao" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('concentracao')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
+
+            <div class="quest-division">Obrigações</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">📋 Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
+        </div>
+        <button class="btn-init" style="margin-top:15px;" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
 
     <div class="container">
@@ -1132,7 +1276,7 @@
                 </div>
 
                 <div id="p-name">--</div>
-                <div id="essences-ui" onclick="Sys.edEssences()">[ INSERIR 3 ESSÊNCIAS ]</div>
+                <div id="essences-ui" onclick="Sys.edEssences()">[ MBTI ]</div>
 
                 <div id="prestige-ui" style="color:var(--gold); font-size:11px; font-weight:900; letter-spacing: 2px; margin-bottom:5px; text-transform: uppercase;"></div>
 
@@ -1155,7 +1299,6 @@
                 <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); margin-bottom: 12px;" onclick="Sys.doPrestige()">👑 RENASCER</button>
             </div>
 
-            <!-- GRADE ÚNICA DE ATRIBUTOS -->
             <div id="attributes-grid" class="attributes-grid"></div>
 
             <div style="margin-top: 8px; text-align:center;">
@@ -1172,58 +1315,6 @@
             <div id="miss-config-ui"></div>
 
             <button class="btn-reset" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
-        </div>
-
-        <div id="tab-train" class="hidden">
-            <div class="panel" style="text-align:center; margin-bottom:10px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
-                <h3 style="color:var(--gold); font-size:11px; letter-spacing:2px; margin:0 0 5px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5); font-family: var(--font-mono);">CRONÔMETRO</h3>
-                <div id="timer-display">00:00:00</div>
-                <div>
-                    <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
-                    <button class="timer-btn" onclick="Sys.pauseTimer()">⏸ Pause</button>
-                    <button class="timer-btn" onclick="Sys.resetTimer()" style="color:var(--danger); border-color:var(--danger);">⏹ Reset</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3 style="text-align:center; color:var(--a); font-size:11px; letter-spacing:2px; text-shadow: var(--glow); font-family: var(--font-mono);">TREINAMENTOS</h3>
-                <div id="trains-container"></div>
-                <button class="btn-init" onclick="Sys.createNewTrainTable()" style="font-size:11px;">+ CRIAR NOVO GRUPO</button>
-            </div>
-            <div style="margin-top:8px; font-size:8px; line-height:1.3; color:var(--t-dim); opacity:0.55; text-align:left; font-family: var(--font-mono);">
-                Isometrias: avance aos 15–20 segundos de forma perfeita.<br>
-                Exercícios dinâmicos: avance quando fizer 1-5 repetições com controle total, sem roubar o movimento.
-            </div>
-        </div>
-
-        <div id="tab-skills" class="hidden">
-            <div class="panel">
-                <h3 style="text-align:center; color:var(--a); text-shadow: var(--glow); letter-spacing: 3px; font-family: var(--font-mono);">BOSS</h3>
-                <div id="skills-list-ui"></div>
-            </div>
-        </div>
-
-        <div id="tab-hobbies" class="hidden">
-            <div class="panel">
-                <h3 style="text-align:center; color:var(--a); letter-spacing: 3px; text-shadow: var(--glow); font-family: var(--font-mono);">CENTRAL DE QUESTS</h3>
-
-                <div class="quest-division">Corpo</div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
-
-                <div class="quest-division">Espírito</div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
-
-                <div class="quest-division division-mente">Mente</div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Conhecimento</span></div><div id="hobby-conhecimento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-conhecimento" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('conhecimento')">+</button></div></div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Concentração</span></div><div id="hobby-concentracao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-concentracao" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('concentracao')">+</button></div></div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
-
-                <!-- NOVA SEÇÃO: OBRIGAÇÕES -->
-                <div class="quest-division">Obrigações</div>
-                <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">📋 Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
-            </div>
         </div>
     </div>
 
@@ -1272,7 +1363,12 @@
                         else cancel.classList.remove('hidden');
                     }
                     const overlay = document.getElementById('sys-modal-overlay');
-                    if (overlay) overlay.classList.remove('hidden');
+                    if (overlay) {
+                        overlay.classList.remove('hidden');
+                        overlay.style.animation = 'none';
+                        overlay.offsetHeight;
+                        overlay.style.animation = '';
+                    }
                 });
             },
             alert(msg) { return this.open('AVISO DO SISTEMA', msg, 'alert'); },
@@ -1280,7 +1376,13 @@
             prompt(msg, def = '') { return this.open('ENTRADA DE DADOS', msg, 'prompt', def); },
             close(val) {
                 const overlay = document.getElementById('sys-modal-overlay');
-                if (overlay) overlay.classList.add('hidden');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('closing');
+                    }, 250);
+                }
                 if (this.resolve) {
                     let res = this.resolve;
                     this.resolve = null;
@@ -1305,7 +1407,7 @@
             conhecimento: { type: '📚 CONHECIMENTO', debuff: 'mente' },
             concentracao: { type: '🧠 CONCENTRAÇÃO', debuff: 'mente' },
             baixa: { type: '🔋 HOBBY', debuff: 'mente' },
-            obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null } // nova categoria, sem debuff específico
+            obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null }
         };
 
         // ====== OBJETO SYS ======
@@ -1316,6 +1418,8 @@
             timerStart: 0,
             timerElapsed: 0,
             timerInterval: null,
+            currentWindow: 'system',
+            editContext: null,
 
             async usePoint(attr) {
                 if (this.db.points <= 0) return;
@@ -1340,7 +1444,6 @@
                 if (d) {
                     this.db = JSON.parse(d);
 
-                    // ===== MIGRAÇÃO DE ESTRUTURA ANTIGA (6 atributos -> 1 atributo) =====
                     if (this.db.attr && Object.keys(this.db.attr).length > 1) {
                         const oldAttrKeys = Object.keys(this.db.attr);
                         const firstKey = oldAttrKeys[0];
@@ -1413,7 +1516,6 @@
                         delete this.db.aura;
                     }
 
-                    // Migração: trainRewardGiven para objeto separado
                     if (!this.db.trainRewardGiven) {
                         this.db.trainRewardGiven = {};
                     }
@@ -1431,10 +1533,9 @@
                     if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
                     if (!this.db.hobbies.baixa) this.db.hobbies.baixa = [];
 
-                    // NOVA CATEGORIA: OBRIGAÇÕES
                     if (!this.db.hobbies.obrigacoes) this.db.hobbies.obrigacoes = [];
 
-                    if (!this.db.essences) this.db.essences = "[ INSERIR 3 ESSÊNCIAS ]";
+                    if (!this.db.essences) this.db.essences = "[ MBTI ]";
 
                     if (this.db.routine) delete this.db.routine;
                     if (this.db.commitments) delete this.db.commitments;
@@ -1446,16 +1547,13 @@
                         });
                     });
 
-                    // Garantir missConfig
                     if (!this.db.missConfig) this.db.missConfig = { counts: {}, names: {} };
                     if (!this.db.missConfig.counts) this.db.missConfig.counts = {};
                     if (!this.db.missConfig.names) this.db.missConfig.names = {};
 
-                    // Adicionar obrigacoes ao missConfig se não existir
                     if (!this.db.missConfig.counts.obrigacoes) this.db.missConfig.counts.obrigacoes = 1;
                     if (!this.db.missConfig.names.obrigacoes) this.db.missConfig.names.obrigacoes = '📋 OBRIGAÇÕES';
 
-                    // Garantir que this.db.last exista como string vazia se não definido
                     if (this.db.last === undefined || this.db.last === null) {
                         this.db.last = '';
                     }
@@ -1471,10 +1569,27 @@
             save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
 
             switchTab(t) {
-                ['system', 'train', 'skills', 'hobbies'].forEach(id => {
-                    let el = document.getElementById('tab-' + id);
-                    if (el) el.classList.toggle('hidden', id !== t);
+                // Fechar todas as janelas, exceto a nova
+                const allWindows = ['system', 'train', 'skills', 'hobbies'];
+                allWindows.forEach(id => {
+                    const el = document.getElementById('tab-' + id);
+                    if (el) {
+                        el.classList.add('hidden');
+                        el.classList.remove('closing');
+                    }
                 });
+
+                this.currentWindow = t;
+                const target = document.getElementById('tab-' + t);
+                if (target) {
+                    target.classList.remove('hidden');
+                    target.style.animation = 'none';
+                    target.offsetHeight;
+                    target.style.animation = '';
+                }
+
+                document.getElementById('window-backdrop').classList.toggle('active', t !== 'system');
+
                 const tabsMap = {
                     system: 'tab-sys-btn',
                     train: 'tab-train-btn',
@@ -1482,9 +1597,10 @@
                     hobbies: 'tab-hobbies-btn'
                 };
                 Object.keys(tabsMap).forEach(id => {
-                    let el = document.getElementById(tabsMap[id]);
-                    if (el) el.classList.toggle('active', id === t);
+                    let btn = document.getElementById(tabsMap[id]);
+                    if (btn) btn.classList.toggle('active', id === t);
                 });
+
                 if (t === 'skills') this.renderSkills();
                 this.render();
             },
@@ -1513,7 +1629,7 @@
                     prestige: 0,
                     eventToday: false,
                     seasonMonth: new Date().getMonth(),
-                    essences: "[ INSERIR 3 ESSÊNCIAS ]",
+                    essences: "[ MBTI ]",
                     missConfig: {
                         counts: { forca: 1, mobilidade: 1, espirito: 1, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
                         names: {
@@ -1538,7 +1654,6 @@
                 let isSunday = now.getDay() === 0;
                 let currentMonth = now.getMonth();
 
-                // BUG 1: Verificar temporada somente se last existir e for válido
                 if (this.db.last && this.db.last !== '' && this.db.seasonMonth !== undefined && this.db.seasonMonth !== null && this.db.seasonMonth !== currentMonth) {
                     await this.endSeason();
                     this.db.seasonMonth = currentMonth;
@@ -1587,7 +1702,6 @@
                                         penaltyTotal++;
                                         this.db.debuffs.mente = true;
                                     }
-                                    // NOVA CATEGORIA: OBRIGAÇÕES (penalidade geral, sem debuff específico)
                                     if (m.cat === 'obrigacoes') {
                                         penaltyTotal++;
                                     }
@@ -1595,9 +1709,9 @@
                             });
                         }
                         if (penaltyTotal > 0) {
-                            this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - penaltyTotal);
+                            this.applyPenaltyToAllAttrs(penaltyTotal);
                             await SystemModal.alert(
-                                "O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AO ATRIBUTO BASE.");
+                                "O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AOS ATRIBUTOS.");
                         }
                     }
 
@@ -1620,6 +1734,29 @@
                 }
             },
 
+            applyPenaltyToAllAttrs(penaltyTotal) {
+                let attrs = [];
+                attrs.push({ key: 'base', value: this.db.attr.ATTR });
+                this.db.customAttributes.forEach(a => attrs.push({ key: a.id, value: a.value }));
+
+                let remaining = penaltyTotal;
+                while (remaining > 0 && attrs.some(a => a.value > 1)) {
+                    for (let attr of attrs) {
+                        if (attr.value > 1 && remaining > 0) {
+                            attr.value--;
+                            remaining--;
+                        }
+                        if (remaining === 0) break;
+                    }
+                }
+
+                this.db.attr.ATTR = attrs[0].value;
+                for (let i = 1; i < attrs.length; i++) {
+                    const custom = this.db.customAttributes.find(a => a.id === attrs[i].key);
+                    if (custom) custom.value = attrs[i].value;
+                }
+            },
+
             async rollEvent() {
                 this.db.eventToday = true;
                 let r = Math.random();
@@ -1633,8 +1770,7 @@
                     msg = "✨ BÊNÇÃO DOS DEUSES: Todas as missões renderão EXP dobrado hoje!";
                 } else if (r < 0.60) {
                     this.db.debuffs.emboscada = true;
-                    msg =
-                        "⚔️ EMBOSCADA DETECTADA: O inimigo espreita. Complete um treino de Boss hoje ou perca Atributo Base amanhã.";
+                    msg = "⚔️ EMBOSCADA DETECTADA: O inimigo espreita. Complete um treino de Boss hoje ou perca Atributo Base amanhã.";
                 } else if (r < 0.70) {
                     if (this.db.points > 0) { this.db.points--;
                         msg = "👺 GOBLIN LADRÃO! Uma criatura esguia roubou 1 Ponto de Atributo seu durante a noite."; } else {
@@ -1749,22 +1885,17 @@
                     });
                 };
 
-                // Mobilidade
                 for (let i = 0; i < (counts.mobilidade || 0); i++) {
                     addMissForCat('mobilidade', "Cadastre Missão de Mobilidade", names.mobilidade || '🛡️ MOBILIDADE');
                 }
-                // Força
                 for (let i = 0; i < (counts.forca || 0); i++) {
                     addMissForCat('forca', "Cadastre Missão de Força", names.forca || '💪 FORÇA');
                 }
-                // Espírito
                 for (let i = 0; i < (counts.espirito || 0); i++) {
                     addMissForCat('espirito', "Cadastre Missão de Espírito", names.espirito || '✝️ ESPÍRITO');
                 }
-                // Hobby: separar criativo e baixa conforme regra
                 const hobbyCount = counts.hobby || 0;
                 if (hobbyCount === 1) {
-                    // Aleatório entre criativo e baixa
                     const criativoPool = (this.db.hobbies.criativo || []).map(h => ({...h, cat: 'criativo'}));
                     const baixaPool = (this.db.hobbies.baixa || []).map(h => ({...h, cat: 'baixa'}));
                     const pool = [...criativoPool, ...baixaPool];
@@ -1782,25 +1913,20 @@
                 } else if (hobbyCount > 1) {
                     const criativoCount = Math.ceil(hobbyCount / 2);
                     const baixaCount = Math.floor(hobbyCount / 2);
-                    // Criativo
                     for (let i = 0; i < criativoCount; i++) {
                         addMissForCat('criativo', "Cadastre missão Criativa", names.hobby || '🧠 HOBBY');
                     }
-                    // Baixa
                     for (let i = 0; i < baixaCount; i++) {
                         addMissForCat('baixa', "Cadastre missão de Baixa Energia", names.hobby || '🧠 HOBBY');
                     }
                 }
-                // Conhecimento
                 for (let i = 0; i < (counts.conhecimento || 0); i++) {
                     addMissForCat('conhecimento', "Cadastre missão de Conhecimento", names.conhecimento || '📚 CONHECIMENTO');
                 }
-                // Concentração
                 for (let i = 0; i < (counts.concentracao || 0); i++) {
                     addMissForCat('concentracao', "Cadastre missão de Concentração", names.concentracao || '🧠 CONCENTRAÇÃO');
                 }
 
-                // NOVA CATEGORIA: OBRIGAÇÕES
                 for (let i = 0; i < (counts.obrigacoes || 0); i++) {
                     addMissForCat('obrigacoes', "Cadastre Obrigação", names.obrigacoes || '📋 OBRIGAÇÕES');
                 }
@@ -1986,8 +2112,6 @@
                         this.db.debuffs.mente = false;
                     }
 
-                    // Obrigações não curam debuffs específicos (nada a fazer)
-
                     this.pop(e, "");
                 }
 
@@ -2005,6 +2129,17 @@
                 }
             },
 
+            moveMiss(i, dir, e) {
+                e.stopPropagation();
+                if (dir === -1 && i > 0) {
+                    [this.db.miss[i - 1], this.db.miss[i]] = [this.db.miss[i], this.db.miss[i - 1]];
+                } else if (dir === 1 && i < this.db.miss.length - 1) {
+                    [this.db.miss[i + 1], this.db.miss[i]] = [this.db.miss[i], this.db.miss[i + 1]];
+                }
+                this.save();
+                this.render();
+            },
+
             showMissDetail(i) {
                 let m = this.db.miss[i];
                 if (!m) return;
@@ -2017,15 +2152,69 @@
                     let hobbies = this.db.hobbies[cat] || [];
                     let idx = hobbies.findIndex(h => h.task === m.task);
                     if (idx !== -1) {
-                        this.edHobby(cat, idx, { stopPropagation: () => {} });
+                        this.openEditMissionPanel(cat, idx);
                     } else {
                         SystemModal.alert("Missão original não encontrada para edição.");
                     }
                 };
-                document.getElementById('mission-detail-overlay').classList.remove('hidden');
+                const overlay = document.getElementById('mission-detail-overlay');
+                overlay.classList.remove('hidden');
+                overlay.style.animation = 'none';
+                overlay.offsetHeight;
+                overlay.style.animation = '';
             },
             closeMissDetail() {
-                document.getElementById('mission-detail-overlay').classList.add('hidden');
+                const overlay = document.getElementById('mission-detail-overlay');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('closing');
+                    }, 250);
+                }
+            },
+
+            openEditMissionPanel(cat, idx) {
+                const hobby = this.db.hobbies[cat][idx];
+                if (!hobby) return;
+                this.editContext = { cat, idx };
+                document.getElementById('edit-mission-task').value = hobby.task;
+                document.getElementById('edit-mission-desc').value = hobby.desc || '';
+                const overlay = document.getElementById('edit-mission-overlay');
+                overlay.classList.remove('hidden');
+                overlay.style.animation = 'none';
+                overlay.offsetHeight;
+                overlay.style.animation = '';
+                setTimeout(() => document.getElementById('edit-mission-task').focus(), 100);
+            },
+            closeEditMissionPanel() {
+                const overlay = document.getElementById('edit-mission-overlay');
+                if (overlay) {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('closing');
+                    }, 250);
+                }
+                this.editContext = null;
+            },
+            async confirmEditMission() {
+                if (!this.editContext) return;
+                const { cat, idx } = this.editContext;
+                const taskInput = document.getElementById('edit-mission-task');
+                const descInput = document.getElementById('edit-mission-desc');
+                const hobby = this.db.hobbies[cat][idx];
+                if (hobby && taskInput) {
+                    const newTask = taskInput.value.trim() || hobby.task;
+                    const newDesc = descInput.value.trim() || '';
+                    if (await SystemModal.confirm("Salvar alterações?")) {
+                        hobby.task = newTask;
+                        hobby.desc = newDesc;
+                        this.save();
+                        this.closeEditMissionPanel();
+                        this.render();
+                    }
+                }
             },
 
             async edSkillName(rank, idx) {
@@ -2091,18 +2280,7 @@
 
             async edHobby(cat, i, e) {
                 if (e && e.stopPropagation) e.stopPropagation();
-                let hobby = this.db.hobbies[cat][i];
-                if (!hobby) return;
-                let newTask = await SystemModal.prompt("Editar nome da missão:", hobby.task);
-                if (newTask !== null && newTask !== undefined) {
-                    let newDesc = await SystemModal.prompt("Editar descrição (deixe vazio para limpar):", hobby.desc || '');
-                    if (newDesc !== null && newDesc !== undefined) {
-                        hobby.task = newTask;
-                        hobby.desc = newDesc || '';
-                        this.save();
-                        this.render();
-                    }
-                }
+                this.openEditMissionPanel(cat, i);
             },
 
             addTrain(cat) {
@@ -2436,6 +2614,8 @@
                 const hudLine = `rgba(${finalR}, ${finalG}, ${finalB}, 0.25)`;
                 const panelBorder = `rgba(${finalR}, ${finalG}, ${finalB}, 0.3)`;
                 const panelGlow = `0 0 20px rgba(${finalR}, ${finalG}, ${finalB}, 0.12), inset 0 0 30px rgba(${finalR}, ${finalG}, ${finalB}, 0.03)`;
+                const windowBorder = `rgba(${finalR}, ${finalG}, ${finalB}, 0.5)`;
+                const windowShadow = `0 0 30px rgba(${finalR}, ${finalG}, ${finalB}, 0.3), 0 0 60px rgba(${finalR}, ${finalG}, ${finalB}, 0.1)`;
 
                 const root = document.documentElement;
                 root.style.setProperty('--a', mainColor);
@@ -2448,6 +2628,8 @@
                 root.style.setProperty('--hud-line', hudLine);
                 root.style.setProperty('--panel-border', panelBorder);
                 root.style.setProperty('--panel-glow', panelGlow);
+                root.style.setProperty('--window-border', windowBorder);
+                root.style.setProperty('--window-shadow', windowShadow);
             },
 
             render() {
@@ -2511,12 +2693,10 @@
                 const energyBar = document.getElementById('energy-bar');
                 if (energyBar) energyBar.style.width = Math.min(100, (this.db.energy / aR) * 100) + "%";
 
-                // Renderizar TODOS os atributos em uma única grade
                 const grid = document.getElementById('attributes-grid');
                 if (grid) {
                     let html = '';
 
-                    // Atributo base
                     const baseKey = 'ATTR';
                     const baseVal = this.db.attr[baseKey] !== undefined ? this.db.attr[baseKey] : 1;
                     const baseName = (this.db.attrNames[baseKey] || '').trim() || 'SEM NOME';
@@ -2530,7 +2710,6 @@
                         </div>
                     `;
 
-                    // Atributos custom
                     if (this.db.customAttributes && this.db.customAttributes.length > 0) {
                         this.db.customAttributes.forEach(attr => {
                             const cName = (attr.name || '').trim() || 'SEM NOME';
@@ -2550,7 +2729,6 @@
                     grid.innerHTML = html;
                 }
 
-                // Atualizar botão de compra
                 const slotPrice = this.getAttributeSlotPrice();
                 const buyBtn = document.querySelector('#tab-system .btn-init[onclick="Sys.buyAttributeSlot()"]');
                 if (buyBtn) {
@@ -2579,7 +2757,6 @@
                 const trainsContainer = document.getElementById('trains-container');
                 if (trainsContainer) trainsContainer.innerHTML = tTotalH;
 
-                // Renderizar hobbies, incluindo obrigações
                 ['forca', 'mobilidade', 'espirito', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'].forEach(cat => {
                     let hH = "";
                     if (this.db.hobbies[cat]) {
@@ -2599,14 +2776,27 @@
                 let mH = "";
                 if (this.db.miss) {
                     this.db.miss.forEach((m, i) => {
+                        const moveUp = i > 0 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, -1, event)">▲</button>` : '';
+                        const moveDown = i < this.db.miss.length - 1 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, 1, event)">▼</button>` : '';
                         mH +=
-                            `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}"><div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;"><div style="display:flex; align-items:center; gap:10px; flex:1;"><div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div><div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div></div><div style="display:flex; align-items:center; gap:5px;">${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}<span class="m-info" onclick="event.stopPropagation(); Sys.showMissDetail(${i})">ℹ️</span></div></div></div>`;
+                            `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}">
+                                <div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;">
+                                    <div style="display:flex; align-items:center; gap:10px; flex:1;">
+                                        <div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div>
+                                        <div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div>
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:5px;">
+                                        ${moveUp}${moveDown}
+                                        ${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}
+                                        <span class="m-info" onclick="event.stopPropagation(); Sys.showMissDetail(${i})">ℹ️</span>
+                                    </div>
+                                </div>
+                            </div>`;
                     });
                 }
                 const missionUi = document.getElementById('mission-ui');
                 if (missionUi) missionUi.innerHTML = mH;
 
-                // Configuração de missões
                 let configHtml = '';
                 const catKeys = ['forca', 'mobilidade', 'espirito', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
                 catKeys.forEach(cat => {
@@ -2660,7 +2850,19 @@
         // ====== INICIALIZAÇÃO ======
         window.onload = () => {
             SystemModal.init();
+
+            document.getElementById('edit-mission-cancel').addEventListener('click', () => {
+                Sys.closeEditMissionPanel();
+            });
+            document.getElementById('edit-mission-confirm').addEventListener('click', () => {
+                Sys.confirmEditMission();
+            });
+
             Sys.init();
+
+            document.getElementById('window-backdrop').addEventListener('click', () => {
+                Sys.switchTab('system');
+            });
         };
     </script>
 </body>
