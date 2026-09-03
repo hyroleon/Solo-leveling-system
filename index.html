@@ -308,11 +308,11 @@
             position: relative;
         }
         .profile-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid var(--a);
-            box-shadow: var(--glow);
+            width: 90px;
+            height: 90px;
+            border-radius: 0;
+            border: 1px solid var(--a);
+            box-shadow: var(--glow-box);
             overflow: hidden;
             cursor: pointer;
             background: rgba(0, 0, 0, 0.5);
@@ -320,22 +320,38 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
         }
         .profile-circle::before {
             content: "";
             position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            border-top-color: var(--a);
-            border-bottom-color: var(--a);
-            animation: spin 4s linear infinite;
-            opacity: 0.5;
+            top: -4px;
+            left: -4px;
+            width: calc(100% + 8px);
+            height: calc(100% + 8px);
+            border: 1px solid var(--a);
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+            opacity: 0.6;
             pointer-events: none;
+            box-shadow: var(--glow);
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .profile-circle::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 70%, var(--a-dim) 100%);
+            background-size: 200% 200%;
+            animation: profileScan 3s linear infinite;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        @keyframes profileScan {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
         }
         .profile-circle img {
             width: 100%;
@@ -353,6 +369,8 @@
             opacity: 0.7;
             font-style: normal;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .lvl-badge {
@@ -1471,7 +1489,6 @@
         </div>
     </div>
 
-    <!-- ROTINA: overlay de edição -->
     <div id="routine-task-overlay" class="setup-overlay hidden" style="z-index: var(--z-modal);">
         <div class="setup-card" style="max-width: 350px; text-align: left;">
             <h2 style="color:var(--a); font-size:16px; text-align: center;" id="routine-task-overlay-title">NOVA TAREFA</h2>
@@ -1492,7 +1509,6 @@
         </div>
     </div>
 
-    <!-- Painel de escopo para rotina -->
     <div id="routine-scope-overlay" class="setup-overlay hidden" style="z-index: var(--z-confirmation);">
         <div class="setup-card" style="max-width: 350px; text-align: center;">
             <h2 style="color:var(--a); font-size:16px;">ONDE APLICAR?</h2>
@@ -1507,7 +1523,6 @@
 
     <div class="window-backdrop" id="window-backdrop"></div>
 
-    <!-- JANELAS DO SYSTEM -->
     <div id="tab-train" class="system-window hidden">
         <div class="window-title">TREINAMENTO</div>
         <div class="panel" style="text-align:center; margin-bottom:12px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
@@ -2910,29 +2925,62 @@
                 if (skillsEl) skillsEl.innerHTML = h;
             },
 
+            hslToRgb(h, s, l) {
+                s /= 100;
+                l /= 100;
+                const c = (1 - Math.abs(2 * l - 1)) * s;
+                const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+                const m = l - c / 2;
+                let r = 0, g = 0, b = 0;
+                if (h < 60) { r = c; g = x; b = 0; }
+                else if (h < 120) { r = x; g = c; b = 0; }
+                else if (h < 180) { r = 0; g = c; b = x; }
+                else if (h < 240) { r = 0; g = x; b = c; }
+                else if (h < 300) { r = x; g = 0; b = c; }
+                else { r = c; g = 0; b = x; }
+                return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+            },
+
             updateThemeByLevel() {
                 if (!this.db) return;
                 const lvl = this.db.lvl || 1;
+                const prestige = this.db.prestige || 0;
                 const progress = Math.min(1, (lvl - 1) / 99);
-                const r = Math.round(0 + (176 - 0) * progress);
-                const g = Math.round(229 + (38 - 229) * progress);
-                const b = 255;
-                const finalR = progress >= 1 ? 128 : r;
-                const finalG = progress >= 1 ? 0 : g;
-                const finalB = 255;
+                const cycle = prestige % 3;
 
-                const mainColor = `rgb(${finalR}, ${finalG}, ${finalB})`;
-                const mainDim = `rgba(${finalR}, ${finalG}, ${finalB}, 0.15)`;
-                const glow = `0 0 12px rgba(${finalR}, ${finalG}, ${finalB}, 0.7)`;
-                const glowBox = `0 0 15px rgba(${finalR}, ${finalG}, ${finalB}, 0.25), inset 0 0 20px rgba(${finalR}, ${finalG}, ${finalB}, 0.1)`;
+                let startHue, endHue;
+                if (cycle === 0) {
+                    startHue = 187; // ciano
+                    endHue = 270;   // roxo
+                } else if (cycle === 1) {
+                    startHue = 270; // roxo
+                    endHue = 30;    // laranja quente
+                } else {
+                    startHue = 30;  // laranja quente
+                    endHue = 187;   // ciano
+                }
+
+                let delta = endHue - startHue;
+                if (delta > 180) delta -= 360;
+                if (delta < -180) delta += 360;
+
+                let hue = startHue + delta * progress;
+                hue = ((hue % 360) + 360) % 360;
+
+                const [r, g, b] = this.hslToRgb(hue, 100, 50);
+
+                const mainColor = `rgb(${r}, ${g}, ${b})`;
+                const mainDim = `rgba(${r}, ${g}, ${b}, 0.15)`;
+                const glow = `0 0 12px rgba(${r}, ${g}, ${b}, 0.7)`;
+                const glowBox = `0 0 15px rgba(${r}, ${g}, ${b}, 0.25), inset 0 0 20px rgba(${r}, ${g}, ${b}, 0.1)`;
                 const stateIcon = mainColor;
                 const energyColor = mainColor;
                 const hudCorner = mainColor;
-                const hudLine = `rgba(${finalR}, ${finalG}, ${finalB}, 0.25)`;
-                const panelBorder = `rgba(${finalR}, ${finalG}, ${finalB}, 0.3)`;
-                const panelGlow = `0 0 20px rgba(${finalR}, ${finalG}, ${finalB}, 0.12), inset 0 0 30px rgba(${finalR}, ${finalG}, ${finalB}, 0.03)`;
-                const windowBorder = `rgba(${finalR}, ${finalG}, ${finalB}, 0.5)`;
-                const windowShadow = `0 0 30px rgba(${finalR}, ${finalG}, ${finalB}, 0.3), 0 0 60px rgba(${finalR}, ${finalG}, ${finalB}, 0.1)`;
+                const hudLine = `rgba(${r}, ${g}, ${b}, 0.25)`;
+                const panelBorder = `rgba(${r}, ${g}, ${b}, 0.3)`;
+                const panelGlow = `0 0 20px rgba(${r}, ${g}, ${b}, 0.12), inset 0 0 30px rgba(${r}, ${g}, ${b}, 0.03)`;
+                const windowBorder = `rgba(${r}, ${g}, ${b}, 0.5)`;
+                const windowShadow = `0 0 30px rgba(${r}, ${g}, ${b}, 0.3), 0 0 60px rgba(${r}, ${g}, ${b}, 0.1)`;
 
                 const root = document.documentElement;
                 root.style.setProperty('--a', mainColor);
@@ -3323,7 +3371,6 @@
                 const time = timeInput.value.trim();
                 const newBlock = blockSelect.value;
 
-                // Definir contexto de escopo para criação/edição
                 this.routineScopeContext = {
                     type: taskId === null ? 'create' : 'edit',
                     dayIndex,
