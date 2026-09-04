@@ -903,6 +903,24 @@
             text-shadow: var(--glow);
         }
 
+        .pin-btn {
+            background: none;
+            border: none;
+            color: var(--t-dim);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0 3px;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+        .pin-btn:hover {
+            color: var(--a);
+            text-shadow: var(--glow);
+        }
+        .pin-btn.pinned {
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+        }
+
         .skill-category {
             margin-bottom: 15px;
         }
@@ -1843,7 +1861,8 @@
                         counts: { forca: 1, mobilidade: 1, condicionamento: 0, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
                         names: { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', condicionamento: '🏃 CONDICIONAMENTO', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' }
                     },
-                    routineSystem: this.createDefaultRoutine()
+                    routineSystem: this.createDefaultRoutine(),
+                    pinnedMissions: []
                 };
             },
 
@@ -1856,7 +1875,6 @@
                 if (!this.db.skills) this.db.skills = def.skills;
                 if (!this.db.hobbies) this.db.hobbies = def.hobbies;
                 else {
-                    // garante que cada categoria de hobby exista
                     Object.keys(def.hobbies).forEach(cat => {
                         if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
                     });
@@ -1879,7 +1897,6 @@
                 else {
                     if (!this.db.missConfig.counts) this.db.missConfig.counts = def.missConfig.counts;
                     if (!this.db.missConfig.names) this.db.missConfig.names = def.missConfig.names;
-                    // garante novas categorias
                     Object.keys(def.missConfig.counts).forEach(cat => {
                         if (this.db.missConfig.counts[cat] === undefined) this.db.missConfig.counts[cat] = def.missConfig.counts[cat];
                     });
@@ -1889,6 +1906,7 @@
                 }
                 if (!this.db.routineSystem) this.db.routineSystem = def.routineSystem;
                 else this.ensureRoutineStructure();
+                if (!this.db.pinnedMissions) this.db.pinnedMissions = def.pinnedMissions;
             },
 
             createDefaultRoutine() {
@@ -2181,6 +2199,11 @@
             genMiss() {
                 const usedTasks = new Set();
 
+                // Marcar missões fixadas como usadas
+                this.db.pinnedMissions.forEach(pm => {
+                    if (pm.miss && pm.miss.task) usedTasks.add(pm.miss.task);
+                });
+
                 const pickUnique = (pool, fallbackMsg) => {
                     if (!pool || pool.length === 0) {
                         usedTasks.add(fallbackMsg);
@@ -2209,7 +2232,8 @@
                         xpG: 0,
                         energyG: 0,
                         skipped: false,
-                        cat: catKey
+                        cat: catKey,
+                        pinned: false
                     });
                 };
 
@@ -2241,7 +2265,8 @@
                         xpG: 0,
                         energyG: 0,
                         skipped: false,
-                        cat: picked.cat || 'criativo'
+                        cat: picked.cat || 'criativo',
+                        pinned: false
                     });
                 } else if (hobbyCount > 1) {
                     const criativoCount = Math.ceil(hobbyCount / 2);
@@ -2264,7 +2289,36 @@
                     addMissForCat('obrigacoes', "Cadastre Obrigação", names.obrigacoes || '📋 OBRIGAÇÕES');
                 }
 
+                // Inserir missões fixadas nas posições
+                this.db.pinnedMissions.forEach(pm => {
+                    const idx = pm.index;
+                    if (idx >= 0 && idx < missArray.length) {
+                        missArray[idx] = {...pm.miss, pinned: true};
+                    } else {
+                        // Se a posição não existir, adiciona ao final
+                        missArray.push({...pm.miss, pinned: true});
+                    }
+                });
+
                 this.db.miss = missArray;
+            },
+
+            togglePinMission(index, e) {
+                e.stopPropagation();
+                const miss = this.db.miss[index];
+                if (!miss) return;
+                miss.pinned = !miss.pinned;
+
+                if (miss.pinned) {
+                    // Adiciona à lista de fixadas
+                    this.db.pinnedMissions.push({ index, miss: {...miss, pinned: true} });
+                } else {
+                    // Remove da lista de fixadas
+                    this.db.pinnedMissions = this.db.pinnedMissions.filter(pm => pm.index !== index);
+                }
+
+                this.save();
+                this.render();
             },
 
             getMultiplier() {
@@ -3096,6 +3150,7 @@
                     this.db.miss.forEach((m, i) => {
                         const moveUp = i > 0 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, -1, event)">▲</button>` : '';
                         const moveDown = i < this.db.miss.length - 1 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, 1, event)">▼</button>` : '';
+                        const pinIcon = m.pinned ? '🔒' : '🔓';
                         mH +=
                             `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}">
                                 <div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;">
@@ -3104,6 +3159,7 @@
                                         <div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div>
                                     </div>
                                     <div style="display:flex; align-items:center; gap:5px;">
+                                        <button class="pin-btn ${m.pinned ? 'pinned' : ''}" onclick="Sys.togglePinMission(${i}, event)" title="${m.pinned ? 'Desafixar' : 'Fixar'}">${pinIcon}</button>
                                         ${moveUp}${moveDown}
                                         ${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}
                                         <span class="m-info" onclick="event.stopPropagation(); Sys.showMissDetail(${i})">ℹ️</span>
