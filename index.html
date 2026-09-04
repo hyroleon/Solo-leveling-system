@@ -400,7 +400,7 @@
 
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 4px;
             margin-bottom: 12px;
             width: 100%;
@@ -1211,217 +1211,6 @@
             text-shadow: var(--glow);
         }
 
-        /* ===== ROTINA ===== */
-        .routine-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 12px;
-            justify-content: center;
-        }
-        .routine-tab-btn {
-            background: rgba(10, 18, 30, 0.6);
-            border: 1px solid var(--b);
-            color: var(--t-dim);
-            padding: 6px 10px;
-            font-size: 9px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 0;
-            font-family: var(--font-mono);
-            transition: all 0.2s;
-            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-        }
-        .routine-tab-btn.active {
-            border-color: var(--a);
-            color: var(--t);
-            background: var(--a-dim);
-            box-shadow: 0 0 10px rgba(0,229,255,0.2);
-        }
-        .routine-block {
-            margin-bottom: 12px;
-        }
-        .routine-block-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--hud-line);
-            padding-bottom: 4px;
-            margin-bottom: 8px;
-        }
-        .routine-task-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 10px;
-            border: 1px solid var(--b);
-            background: rgba(0,0,0,0.3);
-            margin-bottom: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-        }
-        .routine-task-item:hover {
-            border-color: var(--a);
-            background: rgba(0,229,255,0.05);
-        }
-        .routine-task-item.checked {
-            opacity: 0.5;
-            text-decoration: line-through;
-        }
-        .routine-task-check {
-            width: 18px;
-            height: 18px;
-            border: 1px solid var(--b);
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            background: rgba(0,0,0,0.5);
-            font-size: 11px;
-            transition: all 0.2s;
-        }
-        .routine-task-item.checked .routine-task-check {
-            background: var(--a-dim);
-            color: var(--a);
-            border-color: var(--a);
-            box-shadow: 0 0 5px var(--a);
-        }
-        .routine-task-label {
-            flex: 1;
-            font-size: 13px;
-            color: var(--t);
-            font-family: var(--font-mono);
-        }
-        .routine-task-time {
-            font-size: 10px;
-            color: var(--t-dim);
-            margin-right: 8px;
-            font-family: var(--font-mono);
-        }
-        .routine-task-actions {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-        .routine-day-selector {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-bottom: 12px;
-        }
-        .routine-day-btn {
-            background: rgba(10,18,30,0.6);
-            border: 1px solid var(--b);
-            color: var(--t-dim);
-            padding: 6px 0;
-            font-size: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 0;
-            transition: all 0.2s;
-        }
-        .routine-day-btn.active {
-            border-color: var(--a);
-            color: var(--a);
-            background: var(--a-dim);
-            box-shadow: 0 0 8px rgba(0,229,255,0.2);
-        }
-        .routine-day-btn.today {
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-        .routine-progress-bar {
-            height: 6px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid var(--b);
-            margin: 8px 0;
-            overflow: hidden;
-        }
-        .routine-progress-fill {
-            height: 100%;
-            background: var(--a);
-            width: 0%;
-            box-shadow: 0 0 8px var(--a);
-            transition: width 0.4s;
-        }
-        .routine-now-card {
-            text-align: center;
-            padding: 15px;
-            border: 1px solid var(--a);
-            background: var(--a-dim);
-            box-shadow: 0 0 15px rgba(0,229,255,0.2);
-            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-            margin-bottom: 12px;
-        }
-        .routine-now-card h3 {
-            font-size: 16px;
-            margin-bottom: 6px;
-            color: var(--a);
-            text-shadow: var(--glow);
-        }
-        .routine-now-card .routine-task-label {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .routine-now-card .routine-task-time {
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        .routine-now-card button {
-            margin-top: 10px;
-            padding: 8px 16px;
-            background: var(--a);
-            border: none;
-            color: #000;
-            font-weight: 900;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 0;
-            font-family: var(--font-mono);
-        }
-        .routine-now-card button:hover {
-            background: #fff;
-            box-shadow: 0 0 10px var(--a);
-        }
-
-        /* Painel de escopo */
-        .scope-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        .scope-btn {
-            background: rgba(0,229,255,0.05);
-            border: 1px solid var(--a);
-            color: var(--a);
-            padding: 12px;
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 0;
-            transition: all 0.2s;
-            font-family: var(--font-mono);
-        }
-        .scope-btn:hover {
-            background: var(--a-dim);
-            box-shadow: var(--glow);
-        }
-        .scope-btn.cancel {
-            border-color: var(--b);
-            color: var(--t-dim);
-        }
-        .scope-btn.cancel:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
         @media (max-width: 400px) {
             .nav-btn {
                 font-size: 7px;
@@ -1443,16 +1232,6 @@
             .profile-circle {
                 width: 70px;
                 height: 70px;
-            }
-            .routine-task-item {
-                padding: 6px 6px;
-            }
-            .routine-task-label {
-                font-size: 11px;
-            }
-            .routine-day-btn {
-                font-size: 7px;
-                padding: 4px 0;
             }
             .window-title {
                 font-size: 16px;
@@ -1500,41 +1279,20 @@
             <input type="text" id="edit-mission-task" class="routine-input" placeholder="Nome da missão">
             <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DESCRIÇÃO</label>
             <textarea id="edit-mission-desc" class="routine-input" placeholder="Descrição (opcional)" style="height:80px; text-align:left;"></textarea>
+            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DIA ESPECÍFICO</label>
+            <select id="edit-mission-day" class="routine-input" style="text-align:center;">
+                <option value="null">TODOS OS DIAS</option>
+                <option value="0">DOMINGO</option>
+                <option value="1">SEGUNDA</option>
+                <option value="2">TERÇA</option>
+                <option value="3">QUARTA</option>
+                <option value="4">QUINTA</option>
+                <option value="5">SEXTA</option>
+                <option value="6">SÁBADO</option>
+            </select>
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
                 <button id="edit-mission-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
                 <button id="edit-mission-confirm" class="btn-init" style="margin-top:0;">SALVAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="routine-task-overlay" class="setup-overlay hidden" style="z-index: var(--z-modal);">
-        <div class="setup-card" style="max-width: 350px; text-align: left;">
-            <h2 style="color:var(--a); font-size:16px; text-align: center;" id="routine-task-overlay-title">NOVA TAREFA</h2>
-            <label class="stat-label" style="margin-bottom:4px;">NOME</label>
-            <input type="text" id="routine-task-name" class="routine-input" placeholder="Nome da tarefa">
-            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">HORÁRIO</label>
-            <input type="text" id="routine-task-time" class="routine-input" placeholder="ex: 06:15">
-            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">BLOCO</label>
-            <select id="routine-task-block" class="routine-input" style="text-align:center;">
-                <option value="morning">MANHÃ</option>
-                <option value="afternoon">TARDE</option>
-                <option value="night">NOITE</option>
-            </select>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button id="routine-task-cancel" class="btn-init" style="border-color: var(--b); color: var(--t-dim); margin-top:0;">CANCELAR</button>
-                <button id="routine-task-confirm" class="btn-init" style="margin-top:0;">SALVAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="routine-scope-overlay" class="setup-overlay hidden" style="z-index: var(--z-confirmation);">
-        <div class="setup-card" style="max-width: 350px; text-align: center;">
-            <h2 style="color:var(--a); font-size:16px;">ONDE APLICAR?</h2>
-            <p style="color:var(--t); font-size:13px; margin-bottom:15px;">Escolha o escopo da alteração</p>
-            <div class="scope-buttons">
-                <button class="scope-btn" id="scope-this-day">APENAS ESTE DIA</button>
-                <button class="scope-btn" id="scope-all-days">TODOS OS DIAS</button>
-                <button class="scope-btn cancel" id="scope-cancel">CANCELAR</button>
             </div>
         </div>
     </div>
@@ -1580,6 +1338,8 @@
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🏃 Condicionamento</span></div><div id="hobby-condicionamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-condicionamento" class="routine-input" placeholder="Novo Condicionamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('condicionamento')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🦾 Calejamento</span></div><div id="hobby-calejamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-calejamento" class="routine-input" placeholder="Novo Calejamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('calejamento')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Resistência</span></div><div id="hobby-resistencia-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-resistencia" class="routine-input" placeholder="Nova Resistência..."><button class="btn-add-rtn" onclick="Sys.addHobby('resistencia')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧼 Higiene</span></div><div id="hobby-higiene-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-higiene" class="routine-input" placeholder="Nova Higiene..."><button class="btn-add-rtn" onclick="Sys.addHobby('higiene')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🍽️ Alimentação</span></div><div id="hobby-alimentacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-alimentacao" class="routine-input" placeholder="Nova Alimentação..."><button class="btn-add-rtn" onclick="Sys.addHobby('alimentacao')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💧 Hidratação</span></div><div id="hobby-hidratacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-hidratacao" class="routine-input" placeholder="Nova Hidratação..."><button class="btn-add-rtn" onclick="Sys.addHobby('hidratacao')">+</button></div></div>
@@ -1604,24 +1364,12 @@
         <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
 
-    <div id="tab-routine" class="system-window hidden">
-        <div class="window-title">ROTINA</div>
-        <div class="routine-tabs">
-            <button class="routine-tab-btn active" id="routine-tab-daily" onclick="Sys.setRoutineView('daily')">DIÁRIA</button>
-            <button class="routine-tab-btn" id="routine-tab-weekly" onclick="Sys.setRoutineView('weekly')">SEMANAL</button>
-            <button class="routine-tab-btn" id="routine-tab-now" onclick="Sys.setRoutineView('now')">AGORA?</button>
-        </div>
-        <div id="routine-view-container"></div>
-        <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
-    </div>
-
     <div class="container">
         <div class="nav-tabs">
             <button class="nav-btn active" id="tab-sys-btn" onclick="Sys.switchTab('system')">STATUS</button>
             <button class="nav-btn" id="tab-train-btn" onclick="Sys.switchTab('train')">TREINOS</button>
             <button class="nav-btn" id="tab-skills-btn" onclick="Sys.switchTab('skills')">DUNGEON</button>
             <button class="nav-btn" id="tab-hobbies-btn" onclick="Sys.switchTab('hobbies')">QUESTS</button>
-            <button class="nav-btn" id="tab-routine-btn" onclick="Sys.switchTab('routine')">ROTINA</button>
         </div>
 
         <div id="tab-system">
@@ -1680,1905 +1428,656 @@
         </div>
     </div>
 
-    <script>
-        // ====== SISTEMA MODAL ======
-        const SystemModal = {
-            resolve: null,
-            init() {
-                const confirmBtn = document.getElementById('sys-modal-confirm');
-                const cancelBtn = document.getElementById('sys-modal-cancel');
-                const input = document.getElementById('sys-modal-input');
-                if (confirmBtn) {
-                    confirmBtn.onclick = () => {
-                        let val = true;
-                        if (input && !input.classList.contains('hidden')) val = input.value;
-                        this.close(val);
-                    };
-                }
-                if (cancelBtn) {
-                    cancelBtn.onclick = () => {
-                        this.close(false);
-                    };
-                }
-            },
-            open(title, msg, type, def = '') {
-                return new Promise(res => {
-                    this.resolve = res;
-                    const titleEl = document.getElementById('sys-modal-title');
-                    const msgEl = document.getElementById('sys-modal-msg');
-                    const input = document.getElementById('sys-modal-input');
-                    const cancel = document.getElementById('sys-modal-cancel');
-                    if (titleEl) titleEl.innerText = title;
-                    if (msgEl) msgEl.innerText = msg;
-                    if (input) {
-                        if (type === 'prompt') {
-                            input.classList.remove('hidden');
-                            input.value = def;
-                            setTimeout(() => input.focus(), 10);
-                        } else {
-                            input.classList.add('hidden');
-                            input.value = '';
-                        }
-                    }
-                    if (cancel) {
-                        if (type === 'alert') cancel.classList.add('hidden');
-                        else cancel.classList.remove('hidden');
-                    }
-                    const overlay = document.getElementById('sys-modal-overlay');
-                    if (overlay) {
-                        overlay.classList.remove('hidden');
-                        overlay.style.animation = 'none';
-                        overlay.offsetHeight;
-                        overlay.style.animation = '';
-                    }
-                });
-            },
-            alert(msg) { return this.open('AVISO DO SISTEMA', msg, 'alert'); },
-            confirm(msg) { return this.open('DECISÃO NECESSÁRIA', msg, 'confirm'); },
-            prompt(msg, def = '') { return this.open('ENTRADA DE DADOS', msg, 'prompt', def); },
-            close(val) {
-                const overlay = document.getElementById('sys-modal-overlay');
-                if (overlay) {
-                    overlay.classList.add('closing');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('closing');
-                    }, 250);
-                }
-                if (this.resolve) {
-                    let res = this.resolve;
-                    this.resolve = null;
-                    const input = document.getElementById('sys-modal-input');
-                    if (val === false && input && !input.classList.contains('hidden')) {
-                        res(null);
-                    } else {
-                        res(val);
-                    }
-                }
+<style>
+    .dynamic-row{display:flex;align-items:center;gap:6px;width:100%;min-width:0}
+    .dynamic-row .grow{flex:1;min-width:0}
+    .mini-btn{background:rgba(0,0,0,.45);border:1px solid var(--b);color:var(--t-dim);padding:4px 7px;font:900 9px var(--font-mono);cursor:pointer;white-space:nowrap}
+    .mini-btn:hover{border-color:var(--a);color:var(--a);box-shadow:0 0 7px rgba(0,229,255,.25)}
+    .mini-btn.danger{color:var(--danger);border-color:rgba(189,0,255,.45)}
+    .mini-btn.good{color:var(--state-icon);border-color:var(--state-icon)}
+    .mission-actions{display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
+    .mission-status{font:900 8px var(--font-mono);letter-spacing:1px;color:var(--state-icon);text-transform:uppercase}
+    .mission-status.skipped{color:var(--danger)}
+    .empty-state{padding:12px;text-align:center;color:var(--t-dim);font:10px var(--font-mono);border:1px dashed var(--b)}
+    .config-line{display:flex;align-items:center;gap:6px;margin:6px 0}
+    .config-line .config-name{flex:1;min-width:0;color:var(--t);font:10px var(--font-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .config-line .config-count{width:28px;text-align:center;color:var(--a);font:900 11px var(--font-mono)}
+    .skill-actions{display:flex;gap:4px;align-items:center}
+    @media (max-width:400px){.mini-btn{padding:4px 5px;font-size:8px}.mission-actions{gap:3px}}
+</style>
+<script>
+'use strict';
+
+const RANKS = ['E','D','C','B','A','S','SS+'];
+const HOBBY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'];
+const BODY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono'];
+const CATEGORY_MAP = {
+    forca:{type:'💪 FORÇA',debuff:'corpo'}, mobilidade:{type:'🛡️ MOBILIDADE',debuff:'corpo'}, condicionamento:{type:'🏃 CONDICIONAMENTO',debuff:'corpo'},
+    calejamento:{type:'🦾 CALEJAMENTO',debuff:'corpo'}, resistencia:{type:'🛡️ RESISTÊNCIA',debuff:'corpo'}, higiene:{type:'🧼 HIGIENE',debuff:'corpo'},
+    alimentacao:{type:'🍽️ ALIMENTAÇÃO',debuff:'corpo'}, hidratacao:{type:'💧 HIDRATAÇÃO',debuff:'corpo'}, sono:{type:'😴 SONO',debuff:'corpo'},
+    espirito:{type:'✝️ ESPÍRITO',debuff:'espirito'}, vinculos:{type:'🤝 VÍNCULOS',debuff:'espirito'}, criativo:{type:'🎨 HOBBY',debuff:'mente'},
+    conhecimento:{type:'📚 CONHECIMENTO',debuff:'mente'}, concentracao:{type:'🧠 CONCENTRAÇÃO',debuff:'mente'}, baixa:{type:'🔋 HOBBY',debuff:'mente'}, obrigacoes:{type:'📋 OBRIGAÇÕES',debuff:null}
+};
+const DAY_NAMES = ['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+
+function isObject(value){ return value !== null && typeof value === 'object' && !Array.isArray(value); }
+function finiteNumber(value, fallback, min, max){
+    const n = typeof value === 'number' ? value : Number(value);
+    if (!Number.isFinite(n)) return fallback;
+    let result = n;
+    if (Number.isFinite(min)) result = Math.max(min, result);
+    if (Number.isFinite(max)) result = Math.min(max, result);
+    return result;
+}
+function finiteInteger(value, fallback, min, max){ return Math.trunc(finiteNumber(value, fallback, min, max)); }
+function safeText(value, fallback=''){ return typeof value === 'string' ? value.trim() : fallback; }
+function cloneData(value){ return JSON.parse(JSON.stringify(value)); }
+function escapeHTML(value){
+    return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+function currentDateKey(){ return new Date().toLocaleDateString('pt-BR'); }
+
+const SystemModal = {
+    resolve:null,
+    kind:null,
+    initialized:false,
+    init(){
+        if (this.initialized) return;
+        this.initialized = true;
+        const confirmBtn = document.getElementById('sys-modal-confirm');
+        const cancelBtn = document.getElementById('sys-modal-cancel');
+        const input = document.getElementById('sys-modal-input');
+        if (confirmBtn) confirmBtn.addEventListener('click', () => {
+            const value = input && !input.classList.contains('hidden') ? input.value : true;
+            this.close(value);
+        });
+        if (cancelBtn) cancelBtn.addEventListener('click', () => this.close(false));
+        if (input) input.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); this.close(input.value); } });
+        const overlay = document.getElementById('sys-modal-overlay');
+        if (overlay) overlay.addEventListener('click', event => { if (event.target === overlay && this.kind !== 'alert') this.close(false); });
+    },
+    open(title, msg, type, def=''){
+        this.init();
+        if (this.resolve) { const previous = this.resolve; const previousKind = this.kind; this.resolve = null; this.kind = null; previous(previousKind === 'prompt' ? null : false); }
+        this.kind = type;
+        return new Promise(resolve => {
+            this.resolve = resolve;
+            const titleEl = document.getElementById('sys-modal-title');
+            const msgEl = document.getElementById('sys-modal-msg');
+            const input = document.getElementById('sys-modal-input');
+            const cancel = document.getElementById('sys-modal-cancel');
+            const overlay = document.getElementById('sys-modal-overlay');
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = msg;
+            if (input) {
+                const promptMode = type === 'prompt';
+                input.classList.toggle('hidden', !promptMode);
+                input.value = promptMode ? String(def ?? '') : '';
             }
-        };
-
-        // ====== CONSTANTES ======
-        const RANKS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS+'];
-
-        const CATEGORY_MAP = {
-            forca: { type: '💪 FORÇA', debuff: 'corpo' },
-            mobilidade: { type: '🛡️ MOBILIDADE', debuff: 'corpo' },
-            condicionamento: { type: '🏃 CONDICIONAMENTO', debuff: 'corpo' },
-            higiene: { type: '🧼 HIGIENE', debuff: 'corpo' },
-            alimentacao: { type: '🍽️ ALIMENTAÇÃO', debuff: 'corpo' },
-            hidratacao: { type: '💧 HIDRATAÇÃO', debuff: 'corpo' },
-            sono: { type: '😴 SONO', debuff: 'corpo' },
-            espirito: { type: '✝️ ESPÍRITO', debuff: 'espirito' },
-            vinculos: { type: '🤝 VÍNCULOS', debuff: 'espirito' },
-            criativo: { type: '🎨 HOBBY', debuff: 'mente' },
-            conhecimento: { type: '📚 CONHECIMENTO', debuff: 'mente' },
-            concentracao: { type: '🧠 CONCENTRAÇÃO', debuff: 'mente' },
-            baixa: { type: '🔋 HOBBY', debuff: 'mente' },
-            obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null }
-        };
-
-        // ====== OBJETO SYS ======
-        const Sys = {
-            db: null,
-            key: 'monarch_v8_permanent',
-            timerState: 0,
-            timerStart: 0,
-            timerElapsed: 0,
-            timerInterval: null,
-            currentWindow: 'system',
-            editContext: null,
-            routineView: 'daily',
-            routineSelectedDay: new Date().getDay(),
-            routineEditContext: null,
-            routineScopeContext: null,
-
-            async usePoint(attr) {
-                if (this.db.points <= 0) return;
-                this.db.points--;
-
-                if (attr === 'ATTR') {
-                    this.db.attr.ATTR++;
-                } else if (attr.startsWith('custom_')) {
-                    const id = attr.replace('custom_', '');
-                    const custom = this.db.customAttributes.find(a => a.id === id);
-                    if (custom) {
-                        custom.value++;
-                    }
-                }
-
-                this.save();
-                this.render();
-            },
-
-            async init() {
-                let d = localStorage.getItem(this.key);
-                if (d) {
-                    try {
-                        this.db = JSON.parse(d);
-                    } catch (e) {
-                        console.warn('Save corrompido, criando novo estado padrão.');
-                        this.db = null;
-                    }
-                }
-
-                if (!this.db || typeof this.db !== 'object') {
-                    this.db = this.getDefaultState();
-                } else {
-                    this.normalizeState();
-                }
-
-                this.initTimer();
-                await this.check();
-                this.render();
-            },
-
-            getDefaultState() {
-                return {
-                    points: 0,
-                    name: '',
-                    attr: { ATTR: 1 },
-                    attrNames: { ATTR: "" },
-                    customAttributes: [],
-                    miss: [],
-                    skills: [],
-                    hobbies: { forca: [], mobilidade: [], condicionamento: [], higiene: [], alimentacao: [], hidratacao: [], sono: [], espirito: [], vinculos: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
-                    trains: { puxada: [], empurrada: [], core: [] },
-                    trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
-                    trainRewardGiven: {},
-                    customCali: { E: [], D: [], C: [], B: [], A: [], S: [] },
-                    lvl: 1,
-                    energy: 0,
-                    activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
-                    debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
-                    stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
-                    prestige: 0,
-                    eventToday: false,
-                    seasonMonth: new Date().getMonth(),
-                    essences: "MBTI",
-                    startDate: new Date().toISOString().split('T')[0],
-                    missConfig: {
-                        counts: { forca: 1, mobilidade: 1, condicionamento: 0, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
-                        names: { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', condicionamento: '🏃 CONDICIONAMENTO', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' }
-                    },
-                    routineSystem: this.createDefaultRoutine(),
-                    pinnedMissions: []
-                };
-            },
-
-            normalizeState() {
-                const def = this.getDefaultState();
-                if (!this.db.attr || typeof this.db.attr !== 'object') this.db.attr = def.attr;
-                if (!this.db.attrNames) this.db.attrNames = def.attrNames;
-                if (!this.db.customAttributes) this.db.customAttributes = def.customAttributes;
-                if (!this.db.miss) this.db.miss = def.miss;
-                if (!this.db.skills) this.db.skills = def.skills;
-                if (!this.db.hobbies) this.db.hobbies = def.hobbies;
-                else {
-                    Object.keys(def.hobbies).forEach(cat => {
-                        if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
-                    });
-                }
-                if (!this.db.trains) this.db.trains = def.trains;
-                if (!this.db.trainTitles) this.db.trainTitles = def.trainTitles;
-                if (!this.db.trainRewardGiven) this.db.trainRewardGiven = def.trainRewardGiven;
-                if (!this.db.customCali) this.db.customCali = def.customCali;
-                if (!this.db.lvl) this.db.lvl = def.lvl;
-                if (this.db.energy === undefined) this.db.energy = def.energy;
-                if (!this.db.activeBuffs) this.db.activeBuffs = def.activeBuffs;
-                if (!this.db.debuffs) this.db.debuffs = def.debuffs;
-                if (!this.db.stats) this.db.stats = def.stats;
-                if (this.db.prestige === undefined) this.db.prestige = def.prestige;
-                if (this.db.eventToday === undefined) this.db.eventToday = def.eventToday;
-                if (this.db.seasonMonth === undefined) this.db.seasonMonth = def.seasonMonth;
-                if (!this.db.essences) this.db.essences = def.essences;
-                if (!this.db.startDate) this.db.startDate = def.startDate;
-                if (!this.db.missConfig) this.db.missConfig = def.missConfig;
-                else {
-                    if (!this.db.missConfig.counts) this.db.missConfig.counts = def.missConfig.counts;
-                    if (!this.db.missConfig.names) this.db.missConfig.names = def.missConfig.names;
-                    Object.keys(def.missConfig.counts).forEach(cat => {
-                        if (this.db.missConfig.counts[cat] === undefined) this.db.missConfig.counts[cat] = def.missConfig.counts[cat];
-                    });
-                    Object.keys(def.missConfig.names).forEach(cat => {
-                        if (!this.db.missConfig.names[cat]) this.db.missConfig.names[cat] = def.missConfig.names[cat];
-                    });
-                }
-                if (!this.db.routineSystem) this.db.routineSystem = def.routineSystem;
-                else this.ensureRoutineStructure();
-                if (!this.db.pinnedMissions) this.db.pinnedMissions = def.pinnedMissions;
-            },
-
-            createDefaultRoutine() {
-                const days = {};
-                const defaultTasks = {
-                    morning: [
-                        { id: 'm1', label: 'Acordar e levantar', time: '06:00' },
-                        { id: 'm2', label: 'Higiene pessoal', time: '06:30' },
-                        { id: 'm3', label: 'Café da manhã', time: '07:00' }
-                    ],
-                    afternoon: [
-                        { id: 'a1', label: 'Almoçar', time: '12:30' },
-                        { id: 'a2', label: 'Descanso', time: '14:00' }
-                    ],
-                    night: [
-                        { id: 'n1', label: 'Jantar', time: '19:00' },
-                        { id: 'n2', label: 'Preparar para amanhã', time: '21:00' },
-                        { id: 'n3', label: 'Dormir', time: '22:00' }
-                    ]
-                };
-                for (let d = 0; d < 7; d++) {
-                    days[d] = {
-                        morning: defaultTasks.morning.map(t => ({...t, done: false})),
-                        afternoon: defaultTasks.afternoon.map(t => ({...t, done: false})),
-                        night: defaultTasks.night.map(t => ({...t, done: false})),
-                        rewards: { morning: false, afternoon: false, night: false }
-                    };
-                }
-                return { days };
-            },
-
-            ensureRoutineStructure() {
-                if (!this.db.routineSystem) this.db.routineSystem = { days: {} };
-                if (!this.db.routineSystem.days) this.db.routineSystem.days = {};
-                for (let d = 0; d < 7; d++) {
-                    if (!this.db.routineSystem.days[d]) this.db.routineSystem.days[d] = {};
-                    if (!this.db.routineSystem.days[d].morning) this.db.routineSystem.days[d].morning = [];
-                    if (!this.db.routineSystem.days[d].afternoon) this.db.routineSystem.days[d].afternoon = [];
-                    if (!this.db.routineSystem.days[d].night) this.db.routineSystem.days[d].night = [];
-                    if (!this.db.routineSystem.days[d].rewards) this.db.routineSystem.days[d].rewards = { morning: false, afternoon: false, night: false };
-                    ['morning','afternoon','night'].forEach(block => {
-                        this.db.routineSystem.days[d][block].forEach(t => {
-                            if (t.done === undefined) t.done = false;
-                        });
-                    });
-                }
-            },
-
-            save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
-
-            getDaysPlayed() {
-                const start = new Date(this.db.startDate + 'T00:00:00');
-                const now = new Date();
-                const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-                return diff >= 0 ? diff : 0;
-            },
-
-            switchTab(t) {
-                const allWindows = ['system', 'train', 'skills', 'hobbies', 'routine'];
-                allWindows.forEach(id => {
-                    const el = document.getElementById('tab-' + id);
-                    if (el) {
-                        el.classList.add('hidden');
-                        el.classList.remove('closing');
-                    }
-                });
-
-                this.currentWindow = t;
-                const target = document.getElementById('tab-' + t);
-                if (target) {
-                    target.classList.remove('hidden');
-                    target.style.animation = 'none';
-                    target.offsetHeight;
-                    target.style.animation = '';
-                }
-
-                document.getElementById('window-backdrop').classList.toggle('active', t !== 'system');
-
-                const tabsMap = {
-                    system: 'tab-sys-btn',
-                    train: 'tab-train-btn',
-                    skills: 'tab-skills-btn',
-                    hobbies: 'tab-hobbies-btn',
-                    routine: 'tab-routine-btn'
-                };
-                Object.keys(tabsMap).forEach(id => {
-                    let btn = document.getElementById(tabsMap[id]);
-                    if (btn) btn.classList.toggle('active', id === t);
-                });
-
-                if (t === 'skills') this.renderSkills();
-                if (t === 'routine') this.renderRoutine();
-                this.render();
-            },
-
-            finalize() {
-                let n = document.getElementById('setup-name').value;
-                if (!n) return;
-                this.db = this.getDefaultState();
-                this.db.name = n.toUpperCase();
-                this.genMiss();
-                this.save();
-                document.getElementById('setup-screen').classList.add('hidden');
-                this.render();
-            },
-
-            async check() {
-                let now = new Date();
-                let today = now.toLocaleDateString('pt-BR');
-                let isSunday = now.getDay() === 0;
-                let currentMonth = now.getMonth();
-
-                if (this.db.last && this.db.last !== '' && this.db.seasonMonth !== undefined && this.db.seasonMonth !== null && this.db.seasonMonth !== currentMonth) {
-                    await this.endSeason();
-                    this.db.seasonMonth = currentMonth;
-                }
-
-                if (this.db.last === '' || this.db.last === undefined || this.db.last === null) {
-                    this.db.last = today;
-                    this.save();
-                    return;
-                }
-
-                if (this.db.last !== today) {
-                    if (this.db.debuffs.emboscada) {
-                        this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - 2);
-                        await SystemModal.alert("⚔️ FALHA NA EMBOSCADA: Você não completou o treino de Boss ontem. -2 no Atributo Base.");
-                        this.db.debuffs.emboscada = false;
-                    }
-
-                    if (this.db.attr.ATTR > 1) this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - 1);
-                    if (this.db.customAttributes) {
-                        this.db.customAttributes.forEach(attr => {
-                            if (attr.value > 1) attr.value = Math.max(1, attr.value - 1);
-                        });
-                    }
-
-                    if (this.db.activeBuffs.penaltyImmunity > 0 || isSunday) {
-                        if (this.db.activeBuffs.penaltyImmunity > 0 && !isSunday) {
-                            this.db.activeBuffs.penaltyImmunity--;
-                        }
-                    } else {
-                        let penaltyTotal = 0;
-                        if (this.db.miss && Date.now() > (this.db.missionBlockUntil || 0)) {
-                            this.db.miss.forEach(m => {
-                                if (!m.done && !m.skipped) {
-                                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'condicionamento' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
-                                        penaltyTotal++;
-                                        this.db.debuffs.corpo = true;
-                                    }
-                                    if (m.cat === 'espirito' || m.cat === 'vinculos') {
-                                        penaltyTotal++;
-                                        this.db.debuffs.espirito = true;
-                                    }
-                                    if (m.cat === 'criativo' || m.cat === 'baixa' || m.cat === 'conhecimento' || m.cat === 'concentracao') {
-                                        penaltyTotal++;
-                                        this.db.debuffs.mente = true;
-                                    }
-                                    if (m.cat === 'obrigacoes') {
-                                        penaltyTotal++;
-                                    }
-                                }
-                            });
-                        }
-                        if (penaltyTotal > 0) {
-                            this.applyPenaltyToAllAttrs(penaltyTotal);
-                            await SystemModal.alert("O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AOS ATRIBUTOS.");
-                        }
-                    }
-
-                    this.db.activeBuffs.doubleXP = false;
-                    if (this.db.trains) {
-                        Object.keys(this.db.trains).forEach(k => {
-                            this.db.trains[k].forEach(ex => ex.done = false);
-                            this.db.trainRewardGiven[k] = false;
-                        });
-                    }
-
-                    this.db.last = today;
-                    this.db.eventToday = false;
-                    this.genMiss();
-                    this.save();
-                }
-
-                if (!this.db.eventToday) {
-                    await this.rollEvent();
-                }
-            },
-
-            applyPenaltyToAllAttrs(penaltyTotal) {
-                let attrs = [];
-                attrs.push({ key: 'base', value: this.db.attr.ATTR });
-                this.db.customAttributes.forEach(a => attrs.push({ key: a.id, value: a.value }));
-
-                let remaining = penaltyTotal;
-                while (remaining > 0 && attrs.some(a => a.value > 1)) {
-                    for (let attr of attrs) {
-                        if (attr.value > 1 && remaining > 0) {
-                            attr.value--;
-                            remaining--;
-                        }
-                        if (remaining === 0) break;
-                    }
-                }
-
-                this.db.attr.ATTR = attrs[0].value;
-                for (let i = 1; i < attrs.length; i++) {
-                    const custom = this.db.customAttributes.find(a => a.id === attrs[i].key);
-                    if (custom) custom.value = attrs[i].value;
-                }
-            },
-
-            async rollEvent() {
-                this.db.eventToday = true;
-                let r = Math.random();
-                let msg = "";
-
-                if (r < 0.20) {
-                    this.db.energy += 50;
-                    msg = "🎁 BAÚ ENCONTRADO! Você vasculhou a área e encontrou +50 Energia.";
-                } else if (r < 0.35) {
-                    this.db.activeBuffs.doubleXP = true;
-                    msg = "✨ BÊNÇÃO DOS DEUSES: Todas as missões renderão EXP dobrado hoje!";
-                } else if (r < 0.60) {
-                    this.db.debuffs.emboscada = true;
-                    msg = "⚔️ EMBOSCADA DETECTADA: O inimigo espreita. Complete um treino de Boss hoje ou perca Atributo Base amanhã.";
-                } else if (r < 0.70) {
-                    if (this.db.points > 0) { this.db.points--;
-                        msg = "👺 GOBLIN LADRÃO! Uma criatura esguia roubou 1 Ponto de Atributo seu durante a noite."; } else {
-                        msg = "👺 GOBLIN LADRÃO apareceu, mas você não tinha pontos para ele roubar."; }
-                } else if (r < 0.85) {
-                    this.db.activeBuffs.penaltyImmunity = 1;
-                    msg = "♨️ FONTE TERMAL: Você descansou. Imunidade total a penalidades amanhã.";
-                } else if (r < 0.95) {
-                    this.db.points++;
-                    this.db.energy = Math.max(0, this.db.energy - 20);
-                    msg = "🏺 RELÍQUIA QUEBRADA: O artefato consumiu -20 Energia, mas concedeu +1 Ponto de Atributo.";
-                } else {
-                    msg = "🌬️ O dia está tranquilo. Nenhum evento ocorreu.";
-                }
-
-                this.checkLvl();
-                this.save();
-                if (msg) await SystemModal.alert("EVENTO DIÁRIO:\n\n" + msg);
-                this.render();
-            },
-
-            async endSeason() {
-                let score = "C";
-                let t = this.db.stats.seasonTrains || 0;
-                let q = this.db.stats.seasonQuests || 0;
-                let b = this.db.stats.seasonBosses || 0;
-
-                let total = t + (q * 0.5) + (b * 5);
-                if (total >= 100) score = "S";
-                else if (total >= 70) score = "A";
-                else if (total >= 40) score = "B";
-
-                let sm = this.db.seasonMonth;
-                if (sm === 0) sm = 12;
-
-                let rep = `🌌 TEMPORADA ${sm} ENCERRADA! 🌌
-        \n- Treinos Completos: ${t}
-        \n- Quests Executadas: ${q}
-        \n- Chefes Derrotados: ${b}
-        \n>>> NOTA FINAL: [ ${score} ] <<<`;
-
-                await SystemModal.alert(rep);
-
-                this.db.stats.seasonTrains = 0;
-                this.db.stats.seasonQuests = 0;
-                this.db.stats.seasonBosses = 0;
-                this.save();
-            },
-
-            getRank() {
-                for (const rank of RANKS) {
-                    const skills = this.db.customCali[rank] || [];
-                    if (skills.length === 0) return rank;
-                    const allDone = skills.every(skill => this.db.skills.includes(skill));
-                    if (!allDone) return rank;
-                }
-                return 'SS+';
-            },
-
-            getDisplayRank() {
-                return this.db.customRank || this.getRank();
-            },
-
-            genMiss() {
-                const usedTasks = new Set();
-
-                // Marcar missões fixadas como usadas
-                this.db.pinnedMissions.forEach(pm => {
-                    if (pm.miss && pm.miss.task) usedTasks.add(pm.miss.task);
-                });
-
-                const pickUnique = (pool, fallbackMsg) => {
-                    if (!pool || pool.length === 0) {
-                        usedTasks.add(fallbackMsg);
-                        return { task: fallbackMsg, desc: '' };
-                    }
-                    let filtered = pool.filter(h => !usedTasks.has(h.task));
-                    if (filtered.length === 0) filtered = pool;
-                    const picked = filtered[Math.floor(Math.random() * filtered.length)];
-                    usedTasks.add(picked.task);
-                    return picked;
-                };
-
-                let config = this.db.missConfig;
-                let counts = config.counts;
-                let names = config.names;
-                let missArray = [];
-
-                const addMissForCat = (catKey, fallback, typeLabel) => {
-                    let pool = this.db.hobbies[catKey] || [];
-                    let picked = pickUnique(pool, fallback);
-                    missArray.push({
-                        type: typeLabel,
-                        task: picked.task,
-                        desc: picked.desc || '',
-                        done: false,
-                        xpG: 0,
-                        energyG: 0,
-                        skipped: false,
-                        cat: catKey,
-                        pinned: false
-                    });
-                };
-
-                const bodyCats = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono'];
-                bodyCats.forEach(cat => {
-                    for (let i = 0; i < (counts[cat] || 0); i++) {
-                        addMissForCat(cat, `Cadastre missão de ${names[cat] || cat}`, names[cat] || cat);
-                    }
-                });
-
-                for (let i = 0; i < (counts.espirito || 0); i++) {
-                    addMissForCat('espirito', "Cadastre Missão de Espírito", names.espirito || '✝️ ESPÍRITO');
-                }
-                for (let i = 0; i < (counts.vinculos || 0); i++) {
-                    addMissForCat('vinculos', "Cadastre Vínculo", names.vinculos || '🤝 VÍNCULOS');
-                }
-
-                const hobbyCount = counts.hobby || 0;
-                if (hobbyCount === 1) {
-                    const criativoPool = (this.db.hobbies.criativo || []).map(h => ({...h, cat: 'criativo'}));
-                    const baixaPool = (this.db.hobbies.baixa || []).map(h => ({...h, cat: 'baixa'}));
-                    const pool = [...criativoPool, ...baixaPool];
-                    let picked = pickUnique(pool, "Cadastre um Hobby");
-                    missArray.push({
-                        type: names.hobby || '🧠 HOBBY',
-                        task: picked.task,
-                        desc: picked.desc || '',
-                        done: false,
-                        xpG: 0,
-                        energyG: 0,
-                        skipped: false,
-                        cat: picked.cat || 'criativo',
-                        pinned: false
-                    });
-                } else if (hobbyCount > 1) {
-                    const criativoCount = Math.ceil(hobbyCount / 2);
-                    const baixaCount = Math.floor(hobbyCount / 2);
-                    for (let i = 0; i < criativoCount; i++) {
-                        addMissForCat('criativo', "Cadastre missão Criativa", names.hobby || '🧠 HOBBY');
-                    }
-                    for (let i = 0; i < baixaCount; i++) {
-                        addMissForCat('baixa', "Cadastre missão de Baixa Energia", names.hobby || '🧠 HOBBY');
-                    }
-                }
-
-                for (let i = 0; i < (counts.conhecimento || 0); i++) {
-                    addMissForCat('conhecimento', "Cadastre missão de Conhecimento", names.conhecimento || '📚 CONHECIMENTO');
-                }
-                for (let i = 0; i < (counts.concentracao || 0); i++) {
-                    addMissForCat('concentracao', "Cadastre missão de Concentração", names.concentracao || '🧠 CONCENTRAÇÃO');
-                }
-                for (let i = 0; i < (counts.obrigacoes || 0); i++) {
-                    addMissForCat('obrigacoes', "Cadastre Obrigação", names.obrigacoes || '📋 OBRIGAÇÕES');
-                }
-
-                // Inserir missões fixadas nas posições
-                this.db.pinnedMissions.forEach(pm => {
-                    const idx = pm.index;
-                    if (idx >= 0 && idx < missArray.length) {
-                        missArray[idx] = {...pm.miss, pinned: true};
-                    } else {
-                        // Se a posição não existir, adiciona ao final
-                        missArray.push({...pm.miss, pinned: true});
-                    }
-                });
-
-                this.db.miss = missArray;
-            },
-
-            togglePinMission(index, e) {
-                e.stopPropagation();
-                const miss = this.db.miss[index];
-                if (!miss) return;
-                miss.pinned = !miss.pinned;
-
-                if (miss.pinned) {
-                    // Adiciona à lista de fixadas
-                    this.db.pinnedMissions.push({ index, miss: {...miss, pinned: true} });
-                } else {
-                    // Remove da lista de fixadas
-                    this.db.pinnedMissions = this.db.pinnedMissions.filter(pm => pm.index !== index);
-                }
-
-                this.save();
-                this.render();
-            },
-
-            getMultiplier() {
-                let mult = 1.0;
-                if (this.db.activeBuffs && this.db.activeBuffs.doubleXP) mult *= 2;
-                let presBonus = 1 + ((this.db.prestige || 0) * 0.10);
-                return mult * presBonus;
-            },
-
-            async toggleSkill(s, rank, e) {
-                if (e.target.tagName === 'B') return;
-                const rankIndex = RANKS.indexOf(rank);
-                const currentRankIndex = RANKS.indexOf(this.getRank());
-                if (rankIndex === -1 || currentRankIndex === -1) return;
-                if (rankIndex > currentRankIndex) return;
-                if (this.db.skills.includes(s)) {
-                    this.db.skills = this.db.skills.filter(skill => skill !== s);
-                    this.db.points = Math.max(0, this.db.points - 5);
-                } else {
-                    this.db.skills.push(s);
-                    this.db.points += 5;
-                    this.db.stats.totalBosses++;
-                    this.db.stats.seasonBosses++;
-                    this.pop(e, `+5 PONTOS DE ATRIBUTO\nBOSS ABATIDO`);
-                }
-                this.save();
-                this.render();
-                this.renderSkills();
-            },
-
-            addSkill(rank) {
-                let inp = document.getElementById('inp-skill-' + rank);
-                if (inp && inp.value) {
-                    this.db.customCali[rank].push(inp.value);
-                    inp.value = "";
-                    this.save();
-                    this.renderSkills();
-                }
-            },
-
-            async delSkill(rank, idx, e) {
-                e.stopPropagation();
-                if (await SystemModal.confirm("Remover esta maestria?")) {
-                    let name = this.db.customCali[rank][idx];
-                    this.db.customCali[rank].splice(idx, 1);
-                    this.db.skills = this.db.skills.filter(s => s !== name);
-                    this.save();
-                    this.renderSkills();
-                }
-            },
-
-            moveSkill(rank, i, dir, e) {
-                e.stopPropagation();
-                let arr = this.db.customCali[rank];
-                if (dir === -1 && i > 0)[arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
-                if (dir === 1 && i < arr.length - 1)[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-                this.save();
-                this.renderSkills();
-            },
-
-            async toggleTrain(cat, i, e) {
-                const item = this.db.trains[cat]?.[i];
-                if (!item) return;
-                if (item.done) {
-                    item.done = false;
-                    this.db.energy -= item.gain;
-                    this.db.stats.totalTrains = Math.max(0, this.db.stats.totalTrains - 1);
-                    this.db.stats.seasonTrains = Math.max(0, this.db.stats.seasonTrains - 1);
-                    this.pop(e, `-${item.gain} AURA`);
-                    const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
-                    if (!treinoCompleto && this.db.trainRewardGiven[cat]) {
-                        this.db.attr.ATTR = Math.max(1, this.db.attr.ATTR - 1);
-                        this.db.trainRewardGiven[cat] = false;
-                        this.pop(e, "-1 Atributo Base");
-                    }
-                } else {
-                    item.done = true;
-                    item.gain = Math.floor(25 * this.getMultiplier());
-                    this.db.energy += item.gain;
-                    this.db.stats.totalTrains++;
-                    this.db.stats.seasonTrains++;
-                    if (this.db.debuffs.emboscada) {
-                        this.db.debuffs.emboscada = false;
-                        this.pop(e, "EMBOSCADA EVITADA!");
-                    }
-                    const treinoCompleto = this.db.trains[cat].every(ex => ex.done);
-                    if (treinoCompleto && !this.db.trainRewardGiven[cat]) {
-                        this.db.attr.ATTR++;
-                        this.db.trainRewardGiven[cat] = true;
-                        this.pop(e, `+${item.gain} AURA\n+1 Atributo Base`);
-                    } else {
-                        this.pop(e, `+${item.gain} AURA`);
-                    }
-                }
-                this.checkLvl();
-                this.save();
-                this.render();
-            },
-
-            async doMiss(i, e) {
-                const m = this.db.miss?.[i];
-                if (!m || m.skipped) return;
-                if (m.done) {
-                    m.done = false;
-                    this.db.energy -= m.energyG;
-                    this.db.stats.seasonQuests = Math.max(0, this.db.stats.seasonQuests - 1);
-                    if (m.cat === 'conhecimento') {
-                        this.db.stats.totalKnowledge = Math.max(0, this.db.stats.totalKnowledge - 1);
-                    }
-                    this.pop(e, "");
-                } else {
-                    m.done = true;
-                    if (m.cat === 'conhecimento') {
-                        this.db.stats.totalKnowledge++;
-                    }
-                    this.db.stats.seasonQuests++;
-                    const mult = this.getMultiplier();
-                    m.xpG = Math.floor(10 * mult);
-                    m.energyG = Math.floor(25 * mult);
-                    if (this.db.debuffs.corpo || this.db.debuffs.mente || this.db.debuffs.espirito) {
-                        m.xpG = Math.floor(m.xpG * 0.7);
-                        m.energyG = Math.floor(m.energyG * 0.7);
-                    }
-                    this.db.energy += m.energyG;
-                    this.db.points += 2;
-                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'condicionamento' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
-                        this.db.debuffs.corpo = false;
-                    }
-                    if (m.cat === 'espirito' || m.cat === 'vinculos') {
-                        this.db.debuffs.espirito = false;
-                    }
-                    if (m.cat === 'criativo' || m.cat === 'baixa' || m.cat === 'conhecimento' || m.cat === 'concentracao') {
-                        this.db.debuffs.mente = false;
-                    }
-                    this.pop(e, "");
-                }
-                this.checkLvl();
-                this.save();
-                this.render();
-            },
-
-            async skipMiss(i, e) {
-                e.stopPropagation();
-                if (await SystemModal.confirm("Deseja pular esta missão sem receber punição?")) {
-                    this.db.miss[i].skipped = true;
-                    this.save();
-                    this.render();
-                }
-            },
-
-            moveMiss(i, dir, e) {
-                e.stopPropagation();
-                if (dir === -1 && i > 0) {
-                    [this.db.miss[i - 1], this.db.miss[i]] = [this.db.miss[i], this.db.miss[i - 1]];
-                } else if (dir === 1 && i < this.db.miss.length - 1) {
-                    [this.db.miss[i + 1], this.db.miss[i]] = [this.db.miss[i], this.db.miss[i + 1]];
-                }
-                this.save();
-                this.render();
-            },
-
-            showMissDetail(i) {
-                let m = this.db.miss[i];
-                if (!m) return;
-                let body = `📌 TIPO: ${m.type}\n\n📋 NOME: ${m.task}\n\n📝 DESCRIÇÃO: ${m.desc || 'Nenhuma descrição cadastrada.'}`;
-                document.getElementById('mission-detail-title').innerText = "DETALHES DA MISSÃO";
-                document.getElementById('mission-detail-body').innerText = body;
-                document.getElementById('mission-detail-edit').onclick = () => {
-                    this.closeMissDetail();
-                    let cat = m.cat;
-                    let hobbies = this.db.hobbies[cat] || [];
-                    let idx = hobbies.findIndex(h => h.task === m.task);
-                    if (idx !== -1) {
-                        this.openEditMissionPanel(cat, idx);
-                    } else {
-                        SystemModal.alert("Missão original não encontrada para edição.");
-                    }
-                };
-                const overlay = document.getElementById('mission-detail-overlay');
-                overlay.classList.remove('hidden');
+            if (cancel) cancel.classList.toggle('hidden', type === 'alert');
+            if (overlay) {
+                overlay.classList.remove('hidden','closing');
                 overlay.style.animation = 'none';
-                overlay.offsetHeight;
+                void overlay.offsetHeight;
                 overlay.style.animation = '';
-            },
-            closeMissDetail() {
-                const overlay = document.getElementById('mission-detail-overlay');
-                if (overlay) {
-                    overlay.classList.add('closing');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('closing');
-                    }, 250);
-                }
-            },
-
-            openEditMissionPanel(cat, idx) {
-                const hobby = this.db.hobbies[cat][idx];
-                if (!hobby) return;
-                this.editContext = { cat, idx };
-                document.getElementById('edit-mission-task').value = hobby.task;
-                document.getElementById('edit-mission-desc').value = hobby.desc || '';
-                const overlay = document.getElementById('edit-mission-overlay');
-                overlay.classList.remove('hidden');
-                overlay.style.animation = 'none';
-                overlay.offsetHeight;
-                overlay.style.animation = '';
-                setTimeout(() => document.getElementById('edit-mission-task').focus(), 100);
-            },
-            closeEditMissionPanel() {
-                const overlay = document.getElementById('edit-mission-overlay');
-                if (overlay) {
-                    overlay.classList.add('closing');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('closing');
-                    }, 250);
-                }
-                this.editContext = null;
-            },
-            async confirmEditMission() {
-                if (!this.editContext) return;
-                const { cat, idx } = this.editContext;
-                const taskInput = document.getElementById('edit-mission-task');
-                const descInput = document.getElementById('edit-mission-desc');
-                const hobby = this.db.hobbies[cat][idx];
-                if (hobby && taskInput) {
-                    const newTask = taskInput.value.trim() || hobby.task;
-                    const newDesc = descInput.value.trim() || '';
-                    if (await SystemModal.confirm("Salvar alterações?")) {
-                        hobby.task = newTask;
-                        hobby.desc = newDesc;
-                        this.save();
-                        this.closeEditMissionPanel();
-                        this.render();
-                    }
-                }
-            },
-
-            async edSkillName(rank, idx) {
-                let oldName = this.db.customCali[rank][idx];
-                let newName = await SystemModal.prompt("Renomear Habilidade:", oldName);
-                if (newName) {
-                    if (this.db.skills.includes(oldName)) this.db.skills = this.db.skills.map(s => s === oldName ? newName : s);
-                    this.db.customCali[rank][idx] = newName;
-                    this.save();
-                    this.renderSkills();
-                }
-            },
-
-            async edTrainTitle(cat) {
-                let newT = await SystemModal.prompt("Novo nome:", this.db.trainTitles[cat]);
-                if (newT) {
-                    this.db.trainTitles[cat] = newT;
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async createNewTrainTable() {
-                let name = await SystemModal.prompt("Nome do novo grupo de treino (Ex: PERNAS):");
-                if (name) {
-                    let id = "tr_" + Date.now();
-                    this.db.trains[id] = [];
-                    this.db.trainTitles[id] = name.toUpperCase();
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async delTrainTable(cat) {
-                if (await SystemModal.confirm("EXCLUIR ESTA TABELA DE TREINO COMPLETAMENTE?")) {
-                    delete this.db.trains[cat];
-                    delete this.db.trainTitles[cat];
-                    delete this.db.trainRewardGiven[cat];
-                    this.save();
-                    this.render();
-                }
-            },
-
-            addHobby(cat) {
-                let inp = document.getElementById('inp-' + cat);
-                if (inp && inp.value) {
-                    if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
-                    this.db.hobbies[cat].push({ task: inp.value, desc: '' });
-                    inp.value = "";
-                    this.save();
-                    this.render();
-                }
-            },
-            async delHobby(cat, i, e) {
-                e.stopPropagation();
-                if (await SystemModal.confirm("Remover?")) {
-                    this.db.hobbies[cat].splice(i, 1);
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async edHobby(cat, i, e) {
-                if (e && e.stopPropagation) e.stopPropagation();
-                this.openEditMissionPanel(cat, i);
-            },
-
-            addTrain(cat) {
-                let inp = document.getElementById('inp-' + cat);
-                if (inp && inp.value) {
-                    this.db.trains[cat].push({ task: inp.value, done: false, gain: 0 });
-                    inp.value = "";
-                    this.save();
-                    this.render();
-                }
-            },
-            delTrain(cat, i, e) {
-                e.stopPropagation();
-                this.db.trains[cat].splice(i, 1);
-                this.save();
-                this.render();
-            },
-            async edTrainName(cat, i, e) {
-                e.stopPropagation();
-                let old = this.db.trains[cat][i].task;
-                let n = await SystemModal.prompt("Editar Exercício:", old);
-                if (n !== null && n !== undefined) {
-                    this.db.trains[cat][i].task = n;
-                    this.save();
-                    this.render();
-                }
-            },
-            moveTrain(cat, i, dir, e) {
-                e.stopPropagation();
-                let arr = this.db.trains[cat];
-                if (dir === -1 && i > 0)[arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
-                if (dir === 1 && i < arr.length - 1)[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-                this.save();
-                this.render();
-            },
-
-            checkLvl() {
-                let req = this.db.lvl * 100;
-                while (this.db.energy >= req && this.db.lvl < 100) {
-                    this.db.energy -= req;
-                    this.db.lvl++;
-                    req = this.db.lvl * 100;
-                }
-                if (this.db.lvl >= 100) {
-                    this.db.lvl = 100;
-                }
-                while (this.db.energy < 0 && this.db.lvl > 1) {
-                    this.db.lvl--;
-                    let prevReq = this.db.lvl * 100;
-                    this.db.energy += prevReq;
-                }
-            },
-
-            async doPrestige() {
-                if (this.db.lvl < 100) return;
-                if (await SystemModal.confirm("RENASCER? Você perderá seu Nível e Energia, mas receberá um Multiplicador de +10% Aura e manterá seus Bosses, Atributos e Conquistas.")) {
-                    this.db.prestige = (this.db.prestige || 0) + 1;
-                    this.db.lvl = 1;
-                    this.db.energy = 0;
-                    this.save();
-                    this.render();
-                    await SystemModal.alert("🌌 VOCÊ RENASCEU. O CICLO RECOMEÇA, MAS VOCÊ ESTÁ MAIS FORTE.");
-                }
-            },
-
-            getAttributeSlotPrice() {
-                const totalAttrs = 1 + (this.db.customAttributes ? this.db.customAttributes.length : 0);
-                return 300 + ((totalAttrs - 1) * 100);
-            },
-
-            async buyAttributeSlot() {
-                if (!this.db.customAttributes) this.db.customAttributes = [];
-                const preco = this.getAttributeSlotPrice();
-                if (this.db.energy < preco) {
-                    await SystemModal.alert("ENERGIA INSUFICIENTE.");
-                    return;
-                }
-                if (await SystemModal.confirm(`COMPRAR NOVO ATRIBUTO POR ${preco} ENERGIA?`)) {
-                    const newAttr = {
-                        id: 'attr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                        name: "",
-                        value: 1,
-                        purchasePrice: preco
-                    };
-                    this.db.customAttributes.push(newAttr);
-                    this.db.energy -= preco;
-                    this.checkLvl();
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async removeCustomAttr(id) {
-                const attr = this.db.customAttributes.find(a => a.id === id);
-                if (!attr) return;
-                const refund = Math.floor(attr.purchasePrice * 0.5);
-                if (await SystemModal.confirm(`REMOVER ATRIBUTO?\n\nVocê receberá ${refund} Energia de volta.`)) {
-                    this.db.customAttributes = this.db.customAttributes.filter(a => a.id !== id);
-                    this.db.energy += refund;
-                    this.checkLvl();
-                    this.save();
-                    this.render();
-                }
-            },
-
-            startTimer() {
-                if (this.timerState === 1) return;
-                this.timerStart = Date.now() - this.timerElapsed;
-                this.timerState = 1;
-                localStorage.setItem('monarch_timer_start', this.timerStart);
-                localStorage.setItem('monarch_timer_state', this.timerState);
-                if (!this.timerInterval) this.timerInterval = setInterval(() => this.updateTimerUI(), 1000);
-            },
-            pauseTimer() {
-                if (this.timerState !== 1) return;
-                this.timerState = 2;
-                this.timerElapsed = Date.now() - this.timerStart;
-                localStorage.setItem('monarch_timer_elapsed', this.timerElapsed);
-                localStorage.setItem('monarch_timer_state', this.timerState);
-                clearInterval(this.timerInterval);
-                this.timerInterval = null;
-                this.updateTimerUI();
-            },
-            resetTimer() {
-                this.timerState = 0;
-                this.timerElapsed = 0;
-                localStorage.setItem('monarch_timer_elapsed', 0);
-                localStorage.setItem('monarch_timer_state', 0);
-                clearInterval(this.timerInterval);
-                this.timerInterval = null;
-                this.updateTimerUI();
-            },
-            updateTimerUI() {
-                let el = document.getElementById('timer-display');
-                if (!el) return;
-                let ms = this.timerElapsed;
-                if (this.timerState === 1) ms = Date.now() - this.timerStart;
-                let s = Math.floor(ms / 1000);
-                let hrs = String(Math.floor(s / 3600)).padStart(2, '0');
-                let mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
-                let secs = String(s % 60).padStart(2, '0');
-                el.innerText = `${hrs}:${mins}:${secs}`;
-            },
-            initTimer() {
-                let state = Number(localStorage.getItem('monarch_timer_state')) || 0;
-                if (state === 1) {
-                    this.timerState = 1;
-                    this.timerStart = Number(localStorage.getItem('monarch_timer_start')) || Date.now();
-                    this.timerInterval = setInterval(() => this.updateTimerUI(), 1000);
-                } else if (state === 2) {
-                    this.timerState = 2;
-                    this.timerElapsed = Number(localStorage.getItem('monarch_timer_elapsed')) || 0;
-                }
-                this.updateTimerUI();
-            },
-
-            pop(e, txt) {
-                if (!e) return;
-                const p = document.createElement('div');
-                p.className = 'xp-float';
-                p.innerText = txt;
-                p.style.left = (e.clientX || 0) + 'px';
-                p.style.top = (e.clientY || 0) + 'px';
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1000);
-            },
-            upImg(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        this.db.pic = ev.target.result;
-                        this.save();
-                        this.render();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            },
-            async edEnergy() {
-                let v = await SystemModal.prompt("Aura:");
-                if (v !== null && v !== undefined) {
-                    let num = Number(v);
-                    if (!Number.isNaN(num)) {
-                        this.db.energy = num;
-                        this.checkLvl();
-                        this.save();
-                        this.render();
-                    }
-                }
-            },
-            async edPoints() {
-                let v = await SystemModal.prompt("Pontos de Atributo:", this.db.points);
-                if (v !== null && v !== undefined) {
-                    let num = Number(v);
-                    if (!Number.isNaN(num)) {
-                        this.db.points = num;
-                        this.save();
-                        this.render();
-                    }
-                }
-            },
-            async edRank() {
-                let v = await SystemModal.prompt("Rank:");
-                if (v !== null && v !== undefined && v !== '') {
-                    this.db.customRank = v.toUpperCase();
-                    this.save();
-                    this.render();
-                }
-            },
-            async edEssences() {
-                let v = await SystemModal.prompt("Insira seu MBTI:", this.db.essences);
-                if (v !== null && v !== undefined && v !== '') {
-                    this.db.essences = v.toUpperCase();
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async edSt(s) {
-                let v = await SystemModal.prompt("Ajustar atributo:", this.db.attr[s]);
-                if (v !== null && v !== undefined) {
-                    let num = Number(v);
-                    if (!Number.isNaN(num)) {
-                        if (num < 1) num = 1;
-                        this.db.attr[s] = num;
-                        this.save();
-                        this.render();
-                    }
-                }
-            },
-
-            async edCustomAttrValue(id) {
-                const attr = this.db.customAttributes.find(a => a.id === id);
-                if (!attr) return;
-                let v = await SystemModal.prompt("Ajustar atributo:", attr.value);
-                if (v !== null && v !== undefined) {
-                    let num = Number(v);
-                    if (!Number.isNaN(num)) {
-                        if (num < 1) num = 1;
-                        attr.value = num;
-                        this.save();
-                        this.render();
-                    }
-                }
-            },
-
-            async edAttrName(attr) {
-                let current = this.db.attrNames[attr] || "";
-                let newName = await SystemModal.prompt("Novo nome para o atributo:", current);
-                if (newName !== null && newName !== undefined && newName !== '') {
-                    this.db.attrNames[attr] = newName;
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async edCustomAttrName(id) {
-                const attr = this.db.customAttributes.find(a => a.id === id);
-                if (!attr) return;
-                let newName = await SystemModal.prompt("Novo nome para o atributo:", attr.name || "");
-                if (newName !== null && newName !== undefined && newName !== '') {
-                    attr.name = newName;
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async shuffleMiss() {
-                if (await SystemModal.confirm("Sortear novas?")) {
-                    this.genMiss();
-                    this.save();
-                    this.render();
-                }
-            },
-
-            async reset() {
-                if (await SystemModal.confirm("FORMATAR TUDO?")) {
-                    localStorage.clear();
-                    location.reload();
-                }
-            },
-
-            renderSkills() {
-                let h = "";
-                const mRI = RANKS.indexOf(this.getRank());
-                ['E', 'D', 'C', 'B', 'A', 'S'].forEach(r => {
-                    const rI = RANKS.indexOf(r);
-                    const l = rI > mRI;
-                    h += `<div class="skill-category"><span class="skill-rank-label">RANK ${r} ${l?'(LOCK)':''}</span>`;
-                    if (this.db.customCali[r]) {
-                        this.db.customCali[r].forEach((s, idx) => {
-                            const m = this.db.skills.includes(s);
-                            h += `<div class="skill-item ${m?'mastered':''}" style="opacity:${l?0.2:1}">  
-                                <b onclick="Sys.edSkillName('${r}', ${idx})" style="cursor:pointer; flex:1">${s}</b>  
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},-1,event)">▲</button>
-                                    <button class="btn-order" onclick="Sys.moveSkill('${r}',${idx},1,event)">▼</button>
-                                    <span style="opacity:0.3; font-size:10px; cursor:pointer;" onclick="Sys.delSkill('${r}', ${idx}, event)">✕</span>
-                                    <div class="check-box" onclick="Sys.toggleSkill('${s}', '${r}', event)">${m?'✓':''}</div>
-                                </div>  
-                            </div>`;
-                        });
-                    }
-                    h += `<div class="routine-input-wrap"><input type="text" id="inp-skill-${r}" class="routine-input" placeholder="Nova Habilidade Rank ${r}..."><button class="btn-add-rtn" onclick="Sys.addSkill('${r}')">+</button></div></div>`;
-                });
-                const skillsEl = document.getElementById('skills-list-ui');
-                if (skillsEl) skillsEl.innerHTML = h;
-            },
-
-            hslToRgb(h, s, l) {
-                s /= 100;
-                l /= 100;
-                const c = (1 - Math.abs(2 * l - 1)) * s;
-                const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-                const m = l - c / 2;
-                let r = 0, g = 0, b = 0;
-                if (h < 60) { r = c; g = x; b = 0; }
-                else if (h < 120) { r = x; g = c; b = 0; }
-                else if (h < 180) { r = 0; g = c; b = x; }
-                else if (h < 240) { r = 0; g = x; b = c; }
-                else if (h < 300) { r = x; g = 0; b = c; }
-                else { r = c; g = 0; b = x; }
-                return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
-            },
-
-            updateThemeByLevel() {
-                if (!this.db) return;
-                const lvl = this.db.lvl || 1;
-                const prestige = this.db.prestige || 0;
-                const progress = Math.min(1, (lvl - 1) / 99);
-                const cycle = prestige % 3;
-
-                let startHue, endHue;
-                if (cycle === 0) {
-                    startHue = 187; // ciano
-                    endHue = 270;   // roxo
-                } else if (cycle === 1) {
-                    startHue = 270; // roxo
-                    endHue = 30;    // laranja quente
-                } else {
-                    startHue = 30;  // laranja quente
-                    endHue = 187;   // ciano
-                }
-
-                let delta = endHue - startHue;
-                if (delta > 180) delta -= 360;
-                if (delta < -180) delta += 360;
-
-                let hue = startHue + delta * progress;
-                hue = ((hue % 360) + 360) % 360;
-
-                const [r, g, b] = this.hslToRgb(hue, 100, 50);
-
-                const mainColor = `rgb(${r}, ${g}, ${b})`;
-                const mainDim = `rgba(${r}, ${g}, ${b}, 0.15)`;
-                const glow = `0 0 12px rgba(${r}, ${g}, ${b}, 0.7)`;
-                const glowBox = `0 0 15px rgba(${r}, ${g}, ${b}, 0.25), inset 0 0 20px rgba(${r}, ${g}, ${b}, 0.1)`;
-                const stateIcon = mainColor;
-                const energyColor = mainColor;
-                const hudCorner = mainColor;
-                const hudLine = `rgba(${r}, ${g}, ${b}, 0.25)`;
-                const panelBorder = `rgba(${r}, ${g}, ${b}, 0.3)`;
-                const panelGlow = `0 0 20px rgba(${r}, ${g}, ${b}, 0.12), inset 0 0 30px rgba(${r}, ${g}, ${b}, 0.03)`;
-                const windowBorder = `rgba(${r}, ${g}, ${b}, 0.5)`;
-                const windowShadow = `0 0 30px rgba(${r}, ${g}, ${b}, 0.3), 0 0 60px rgba(${r}, ${g}, ${b}, 0.1)`;
-
-                const root = document.documentElement;
-                root.style.setProperty('--a', mainColor);
-                root.style.setProperty('--a-dim', mainDim);
-                root.style.setProperty('--glow', glow);
-                root.style.setProperty('--glow-box', glowBox);
-                root.style.setProperty('--state-icon', stateIcon);
-                root.style.setProperty('--energy-color', energyColor);
-                root.style.setProperty('--hud-corner', hudCorner);
-                root.style.setProperty('--hud-line', hudLine);
-                root.style.setProperty('--panel-border', panelBorder);
-                root.style.setProperty('--panel-glow', panelGlow);
-                root.style.setProperty('--window-border', windowBorder);
-                root.style.setProperty('--window-shadow', windowShadow);
-            },
-
-            render() {
-                if (!this.db) return;
-                this.updateThemeByLevel();
-
-                if (this.db.pic) {
-                    const img = document.getElementById('p-img');
-                    const ph = document.getElementById('p-img-placeholder');
-                    if (img) { img.src = this.db.pic;
-                        img.classList.remove('hidden'); }
-                    if (ph) ph.classList.add('hidden');
-                }
-                const pName = document.getElementById('p-name');
-                if (pName) pName.innerText = this.db.name;
-                const ess = document.getElementById('essences-ui');
-                if (ess) ess.innerText = this.db.essences || 'MBTI';
-                const lvlUi = document.getElementById('lvl-ui');
-                if (lvlUi) lvlUi.innerText = "LVL " + this.db.lvl;
-                const daysPlayedEl = document.getElementById('days-played');
-                if (daysPlayedEl) daysPlayedEl.innerText = this.getDaysPlayed();
-
-                const presUi = document.getElementById('prestige-ui');
-                if (presUi) {
-                    if (this.db.prestige > 0) {
-                        presUi.innerText = "Prestígio: " + this.db.prestige;
-                    } else {
-                        presUi.innerText = "";
-                    }
-                }
-
-                const btnPrestige = document.getElementById('btn-prestige');
-                if (btnPrestige) {
-                    if (this.db.lvl >= 100) btnPrestige.classList.remove('hidden');
-                    else btnPrestige.classList.add('hidden');
-                }
-
-                let buffTxt = "";
-                if (this.db.activeBuffs.doubleXP) buffTxt += " | 🔥 XP DUPLO";
-                if (this.db.activeBuffs.penaltyImmunity > 0) buffTxt += " | 🛡️ IMUNIDADE";
-                if (this.db.prestige > 0) buffTxt += ` | 👑 +${this.db.prestige * 10}% AURA`;
-                if (buffTxt.startsWith(" | ")) buffTxt = buffTxt.slice(3);
-                const dayBuffs = document.getElementById('day-buffs');
-                if (dayBuffs) dayBuffs.innerText = buffTxt;
-
-                let debuffTxt = "";
-                if (this.db.debuffs.corpo) debuffTxt += "🚫 FADIGA (CORPO) ";
-                if (this.db.debuffs.mente) debuffTxt += "🌫️ NÉVOA (MENTE) ";
-                if (this.db.debuffs.espirito) debuffTxt += "🌑 VIOLETA (ESPÍRITO) ";
-                if (this.db.debuffs.emboscada) debuffTxt += "⚔️ ALVO DE EMBOSCADA ";
-                if (debuffTxt !== "") debuffTxt = "⚠️ DEBUFFS: " + debuffTxt + "[-30% GAIN]";
-                const dayDebuffs = document.getElementById('day-debuffs');
-                if (dayDebuffs) dayDebuffs.innerText = debuffTxt;
-
-                let rId = this.getDisplayRank();
-                const rankUi = document.getElementById('rank-ui');
-                if (rankUi) rankUi.innerText = rId;
-                const pointsUi = document.getElementById('points-ui');
-                if (pointsUi) pointsUi.innerText = this.db.points;
-                let aR = this.db.lvl * 100;
-                const energyVal = document.getElementById('energy-val');
-                if (energyVal) energyVal.innerText = Math.floor(this.db.energy) + " / " + aR;
-                const energyBar = document.getElementById('energy-bar');
-                if (energyBar) energyBar.style.width = Math.min(100, (this.db.energy / aR) * 100) + "%";
-
-                const grid = document.getElementById('attributes-grid');
-                if (grid) {
-                    let html = '';
-
-                    const baseKey = 'ATTR';
-                    const baseVal = this.db.attr[baseKey] !== undefined ? this.db.attr[baseKey] : 1;
-                    const baseName = (this.db.attrNames[baseKey] || '').trim() || 'SEM NOME';
-                    html += `
-                        <div class="attr-card">
-                            <span class="stat-label" onclick="Sys.edAttrName('${baseKey}')" style="cursor:pointer;">${baseName}</span>
-                            <span class="attr-value" onclick="Sys.edSt('${baseKey}')">${baseVal}</span>
-                            <div class="attr-controls">
-                                <button class="btn-add-rtn" onclick="Sys.usePoint('${baseKey}')">+</button>
-                            </div>
-                        </div>
-                    `;
-
-                    if (this.db.customAttributes && this.db.customAttributes.length > 0) {
-                        this.db.customAttributes.forEach(attr => {
-                            const cName = (attr.name || '').trim() || 'SEM NOME';
-                            html += `
-                                <div class="attr-card">
-                                    <span class="stat-label" onclick="Sys.edCustomAttrName('${attr.id}')" style="cursor:pointer;">${cName}</span>
-                                    <span class="attr-value" onclick="Sys.edCustomAttrValue('${attr.id}')">${attr.value}</span>
-                                    <div class="attr-controls">
-                                        <button class="btn-add-rtn" onclick="Sys.usePoint('custom_${attr.id}')">+</button>
-                                        <span class="btn-slot-remove" onclick="Sys.removeCustomAttr('${attr.id}')">✕</span>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    grid.innerHTML = html;
-                }
-
-                const slotPrice = this.getAttributeSlotPrice();
-                const buyBtn = document.querySelector('#tab-system .btn-init[onclick="Sys.buyAttributeSlot()"]');
-                if (buyBtn) {
-                    buyBtn.innerText = `🏪 COMPRAR ATRIBUTO (${slotPrice} ENERGIA)`;
-                }
-
-                let tTotalH = "";
-                Object.keys(this.db.trains).forEach(cat => {
-                    let tItemsH = "";
-                    this.db.trains[cat].forEach((ex, i) => {
-                        tItemsH +=
-                            `<div class="routine-item ${ex.done?'checked':''}" onclick="Sys.toggleTrain('${cat}', ${i}, event)">  
-                                <div class="routine-check">${ex.done?'✓':''}</div>  
-                                <span style="flex:1">${ex.task}</span>  
-                                <div style="display:flex; gap:8px;">  
-                                    <button class="btn-order" onclick="Sys.moveTrain('${cat}',${i},-1,event)">▲</button>  
-                                    <button class="btn-order" onclick="Sys.moveTrain('${cat}',${i},1,event)">▼</button>  
-                                    <span style="opacity:0.3; cursor:pointer;" onclick="Sys.edTrainName('${cat}', ${i}, event)">✎</span>  
-                                    <span style="opacity:0.3; cursor:pointer;" onclick="Sys.delTrain('${cat}', ${i}, event)">✕</span>  
-                                </div>  
-                            </div>`;
-                    });
-                    tTotalH +=
-                        `<div class="routine-box"><div class="routine-header"><span class="stat-label" onclick="Sys.edTrainTitle('${cat}')" style="cursor:pointer">${this.db.trainTitles[cat]}</span><div style="display:flex; gap:5px;"><button class="btn-all-train" style="border-color:var(--danger); color:var(--danger)" onclick="Sys.delTrainTable('${cat}')">Excluir</button></div></div><div id="train-${cat}-ui" class="routine-list">${tItemsH}</div><div class="routine-input-wrap"><input type="text" id="inp-${cat}" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addTrain('${cat}')">+</button></div></div>`;
-                });
-                const trainsContainer = document.getElementById('trains-container');
-                if (trainsContainer) trainsContainer.innerHTML = tTotalH;
-
-                const allCats = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'];
-                allCats.forEach(cat => {
-                    let hH = "";
-                    if (this.db.hobbies[cat]) {
-                        this.db.hobbies[cat].forEach((h, i) => {
-                            hH +=
-                                `<div class="routine-item">
-                                    <span style="flex:1">${h.task}${h.desc ? ' <small style="color:var(--t-dim)">(' + h.desc + ')</small>' : ''}</span>
-                                    <span style="opacity:0.3; cursor:pointer; margin-right:8px;" onclick="Sys.edHobby('${cat}', ${i}, event)">✎</span>
-                                    <span style="opacity:0.3; cursor:pointer" onclick="Sys.delHobby('${cat}', ${i}, event)">✕</span>
-                                </div>`;
-                        });
-                    }
-                    let el = document.getElementById(`hobby-${cat}-ui`);
-                    if (el) el.innerHTML = hH;
-                });
-
-                let mH = "";
-                if (this.db.miss) {
-                    this.db.miss.forEach((m, i) => {
-                        const moveUp = i > 0 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, -1, event)">▲</button>` : '';
-                        const moveDown = i < this.db.miss.length - 1 ? `<button class="btn-order" onclick="Sys.moveMiss(${i}, 1, event)">▼</button>` : '';
-                        const pinIcon = m.pinned ? '🔒' : '🔓';
-                        mH +=
-                            `<div class="mission-item ${m.done?'done':''}" onclick="Sys.doMiss(${i}, event)" style="${m.skipped?'opacity:0.3; border-left-color:var(--danger); box-shadow:none;':''}">
-                                <div style="display:flex; align-items:center; gap:10px; justify-content:space-between; width:100%;">
-                                    <div style="display:flex; align-items:center; gap:10px; flex:1;">
-                                        <div class="routine-check">${m.done?'✓':(m.skipped?'✕':'')}</div>
-                                        <div style="flex:1"><span class="m-type">${m.type} ${m.skipped?'(PULADA)':''}</span><span class="m-task" style="${m.skipped?'text-decoration:line-through;':''}">${m.task}</span></div>
-                                    </div>
-                                    <div style="display:flex; align-items:center; gap:5px;">
-                                        <button class="pin-btn ${m.pinned ? 'pinned' : ''}" onclick="Sys.togglePinMission(${i}, event)" title="${m.pinned ? 'Desafixar' : 'Fixar'}">${pinIcon}</button>
-                                        ${moveUp}${moveDown}
-                                        ${!m.done && !m.skipped ? `<button class="btn-shuffle" style="padding:4px 8px; font-size:9px; border-color:var(--danger); color:var(--danger);" onclick="Sys.skipMiss(${i}, event)">Pular</button>` : ''}
-                                        <span class="m-info" onclick="event.stopPropagation(); Sys.showMissDetail(${i})">ℹ️</span>
-                                    </div>
-                                </div>
-                            </div>`;
-                    });
-                }
-                const missionUi = document.getElementById('mission-ui');
-                if (missionUi) missionUi.innerHTML = mH;
-
-                let configHtml = '';
-                const catKeys = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
-                catKeys.forEach(cat => {
-                    let count = this.db.missConfig.counts[cat] || 0;
-                    let name = this.db.missConfig.names[cat] || cat;
-                    configHtml +=
-                        `<div class="custom-slot-item" style="flex-wrap:wrap; gap:8px;">
-                            <span style="cursor:pointer; flex:1; min-width:120px;" onclick="Sys.renameMissClass('${cat}')">${name}</span>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <button class="btn-order" onclick="Sys.adjustMissCount('${cat}', -1)">−</button>
-                                <span style="font-weight:900; min-width:20px; text-align:center;">${count}</span>
-                                <button class="btn-order" onclick="Sys.adjustMissCount('${cat}', 1)">+</button>
-                            </div>
-                        </div>`;
-                });
-                const missConfigUi = document.getElementById('miss-config-ui');
-                if (missConfigUi) missConfigUi.innerHTML = configHtml;
-            },
-
-            async renameMissClass(cat) {
-                const current = this.db.missConfig.names[cat] || cat;
-                const newName = await SystemModal.prompt("Novo nome para a classe de missão:", current);
-                if (!newName) return;
-                this.db.missConfig.names[cat] = newName;
-                this.genMiss();
-                this.save();
-                this.render();
-            },
-
-            adjustMissCount(cat, delta) {
-                const current = this.db.missConfig.counts[cat] || 0;
-                const newValue = Math.max(0, current + delta);
-                if (newValue === current) return;
-                this.db.missConfig.counts[cat] = newValue;
-                this.genMiss();
-                this.save();
-                this.render();
-            },
-
-            // ===== ROTINA FUNCTIONS =====
-            setRoutineView(view) {
-                this.routineView = view;
-                if (view === 'weekly' && !this.routineSelectedDay) {
-                    this.routineSelectedDay = new Date().getDay();
-                }
-                if (view === 'daily') this.routineSelectedDay = new Date().getDay();
-                document.querySelectorAll('.routine-tab-btn').forEach(btn => btn.classList.remove('active'));
-                document.getElementById(`routine-tab-${view}`).classList.add('active');
-                this.renderRoutine();
-            },
-
-            renderRoutine() {
-                if (!this.db.routineSystem) this.db.routineSystem = this.createDefaultRoutine();
-                this.ensureRoutineStructure();
-                const container = document.getElementById('routine-view-container');
-                if (!container) return;
-                if (this.routineView === 'daily') {
-                    container.innerHTML = this.renderRoutineDaily();
-                } else if (this.routineView === 'weekly') {
-                    container.innerHTML = this.renderRoutineWeekly();
-                } else if (this.routineView === 'now') {
-                    container.innerHTML = this.renderRoutineNow();
-                }
-            },
-
-            renderRoutineDaily() {
-                const today = new Date().getDay();
-                const dayData = this.db.routineSystem.days[today] || { morning: [], afternoon: [], night: [] };
-                let total = dayData.morning.length + dayData.afternoon.length + dayData.night.length;
-                let done = [...dayData.morning, ...dayData.afternoon, ...dayData.night].filter(t => t.done).length;
-                let percent = total > 0 ? Math.round((done / total) * 100) : 0;
-                let dateStr = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-                let timeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-                let h = `<div style="text-align:center; margin-bottom:10px; font-size:11px; color:var(--t-dim); font-family:var(--font-mono);">${dateStr} • ${timeStr}</div>`;
-                h += `<div class="stat-label" style="text-align:center;">PROGRESSO DO DIA</div>`;
-                h += `<div style="text-align:center; font-size:20px; font-weight:900; color:var(--a); text-shadow:var(--glow); margin:4px 0;">${percent}%</div>`;
-                h += `<div class="routine-progress-bar"><div class="routine-progress-fill" style="width:${percent}%"></div></div>`;
-
-                h += this.renderRoutineBlock('morning', 'MANHÃ', '06:00 — 12:00', today);
-                h += this.renderRoutineBlock('afternoon', 'TARDE', '12:00 — 18:00', today);
-                h += this.renderRoutineBlock('night', 'NOITE', '18:00 — 22:30', today);
-                return h;
-            },
-
-            renderRoutineBlock(block, label, timeRange, dayIndex) {
-                const tasks = this.db.routineSystem.days[dayIndex][block] || [];
-                let h = `<div class="routine-block"><div class="routine-block-header"><span class="stat-label" style="color:var(--a)">${label} <span style="font-size:8px;">(${timeRange})</span></span><button class="btn-add-rtn" style="width:auto; padding:2px 8px;" onclick="Sys.openRoutineTaskEditor(${dayIndex},'${block}')">+</button></div>`;
-                if (tasks.length === 0) {
-                    h += `<div style="font-size:10px; color:var(--t-dim); opacity:0.5; padding:6px;">Sem tarefas</div>`;
-                } else {
-                    tasks.forEach((task, idx) => {
-                        h += `<div class="routine-task-item ${task.done?'checked':''}" onclick="Sys.toggleRoutineTask(${dayIndex},'${block}',${idx},event)">
-                            <div class="routine-task-check" onclick="event.stopPropagation(); Sys.toggleRoutineTask(${dayIndex},'${block}',${idx},event)">${task.done?'✓':''}</div>
-                            <span class="routine-task-label">${task.label}</span>
-                            ${task.time ? `<span class="routine-task-time">${task.time}</span>` : ''}
-                            <div class="routine-task-actions" onclick="event.stopPropagation();">
-                                <button class="btn-order" onclick="Sys.requestRoutineMove(${dayIndex},'${block}',${idx},-1,event)">↑</button>
-                                <button class="btn-order" onclick="Sys.requestRoutineMove(${dayIndex},'${block}',${idx},1,event)">↓</button>
-                                <button class="btn-order" onclick="Sys.editRoutineTask(${dayIndex},'${block}',${idx},event)">✎</button>
-                                <button class="btn-order" style="color:var(--danger);" onclick="Sys.requestRoutineDelete(${dayIndex},'${block}',${idx},event)">✕</button>
-                            </div>
-                        </div>`;
-                    });
-                }
-                h += `</div>`;
-                return h;
-            },
-
-            renderRoutineWeekly() {
-                const days = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
-                const today = new Date().getDay();
-                let h = `<div class="routine-day-selector">`;
-                days.forEach((d, i) => {
-                    const isActive = i === this.routineSelectedDay;
-                    const isToday = i === today;
-                    h += `<button class="routine-day-btn ${isActive?'active':''} ${isToday?'today':''}" onclick="Sys.selectRoutineDay(${i})">${d}</button>`;
-                });
-                h += `</div>`;
-
-                const dayData = this.db.routineSystem.days[this.routineSelectedDay] || { morning: [], afternoon: [], night: [] };
-                h += this.renderRoutineBlock('morning', 'MANHÃ', '06:00 — 12:00', this.routineSelectedDay);
-                h += this.renderRoutineBlock('afternoon', 'TARDE', '12:00 — 18:00', this.routineSelectedDay);
-                h += this.renderRoutineBlock('night', 'NOITE', '18:00 — 22:30', this.routineSelectedDay);
-                return h;
-            },
-
-            renderRoutineNow() {
-                const today = new Date().getDay();
-                const dayData = this.db.routineSystem.days[today] || { morning: [], afternoon: [], night: [] };
-                const blocks = ['morning', 'afternoon', 'night'];
-                let nextTask = null;
-                let nextBlock = null;
-                for (let b of blocks) {
-                    const tasks = dayData[b] || [];
-                    const found = tasks.find(t => !t.done);
-                    if (found) {
-                        nextTask = found;
-                        nextBlock = b;
-                        break;
-                    }
-                }
-                if (!nextTask) {
-                    return `<div class="routine-now-card"><h3>🎉 TUDO CONCLUÍDO</h3><p style="font-size:14px; color:var(--t);">Nenhuma tarefa pendente para hoje.</p></div>`;
-                }
-                const blockName = nextBlock === 'morning' ? 'MANHÃ' : nextBlock === 'afternoon' ? 'TARDE' : 'NOITE';
-                return `<div class="routine-now-card">
-                    <h3>PRÓXIMA TAREFA</h3>
-                    <div class="routine-task-label">${nextTask.label}</div>
-                    <div class="routine-task-time">${nextTask.time || ''}</div>
-                    <div style="font-size:10px; color:var(--t-dim); margin-top:4px;">${blockName}</div>
-                    <button onclick="Sys.completeNowTask()">CONCLUIR</button>
-                </div>`;
-            },
-
-            selectRoutineDay(day) {
-                this.routineSelectedDay = day;
-                this.renderRoutine();
-            },
-
-            openRoutineTaskEditor(dayIndex, block, taskId = null) {
-                this.routineEditContext = { dayIndex, block, taskId };
-                const overlay = document.getElementById('routine-task-overlay');
-                document.getElementById('routine-task-overlay-title').innerText = taskId !== null ? 'EDITAR TAREFA' : 'NOVA TAREFA';
-                document.getElementById('routine-task-name').value = '';
-                document.getElementById('routine-task-time').value = '';
-                document.getElementById('routine-task-block').value = block;
-                if (taskId !== null) {
-                    const task = this.db.routineSystem.days[dayIndex][block][taskId];
-                    if (task) {
-                        document.getElementById('routine-task-name').value = task.label;
-                        document.getElementById('routine-task-time').value = task.time || '';
-                        document.getElementById('routine-task-block').value = block;
-                    }
-                }
-                overlay.classList.remove('hidden');
-                overlay.style.animation = 'none';
-                overlay.offsetHeight;
-                overlay.style.animation = '';
-                setTimeout(() => document.getElementById('routine-task-name').focus(), 100);
-            },
-
-            closeRoutineTaskEditor() {
-                const overlay = document.getElementById('routine-task-overlay');
-                if (overlay) {
-                    overlay.classList.add('closing');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('closing');
-                    }, 250);
-                }
-                this.routineEditContext = null;
-            },
-
-            async saveRoutineTask() {
-                if (!this.routineEditContext) return;
-                const { dayIndex, block, taskId } = this.routineEditContext;
-                const nameInput = document.getElementById('routine-task-name');
-                const timeInput = document.getElementById('routine-task-time');
-                const blockSelect = document.getElementById('routine-task-block');
-                const label = nameInput.value.trim();
-                if (!label) {
-                    await SystemModal.alert("Nome da tarefa é obrigatório.");
-                    return;
-                }
-                const time = timeInput.value.trim();
-                const newBlock = blockSelect.value;
-
-                this.routineScopeContext = {
-                    type: taskId === null ? 'create' : 'edit',
-                    dayIndex,
-                    block,
-                    taskId,
-                    label,
-                    time,
-                    newBlock
-                };
-                this.openRoutineScopePanel();
-                this.closeRoutineTaskEditor();
-            },
-
-            requestRoutineMove(dayIndex, block, idx, dir, e) {
-                e.stopPropagation();
-                this.routineScopeContext = {
-                    type: 'move',
-                    dayIndex,
-                    block,
-                    idx,
-                    dir
-                };
-                this.openRoutineScopePanel();
-            },
-
-            requestRoutineDelete(dayIndex, block, idx, e) {
-                e.stopPropagation();
-                this.routineScopeContext = {
-                    type: 'delete',
-                    dayIndex,
-                    block,
-                    idx
-                };
-                this.openRoutineScopePanel();
-            },
-
-            openRoutineScopePanel() {
-                const overlay = document.getElementById('routine-scope-overlay');
-                overlay.classList.remove('hidden');
-                overlay.style.animation = 'none';
-                overlay.offsetHeight;
-                overlay.style.animation = '';
-            },
-
-            closeRoutineScopePanel() {
-                const overlay = document.getElementById('routine-scope-overlay');
-                if (overlay) {
-                    overlay.classList.add('closing');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('closing');
-                    }, 250);
-                }
-                this.routineScopeContext = null;
-            },
-
-            handleRoutineScopeChoice(scope) {
-                if (!this.routineScopeContext) return;
-                const ctx = this.routineScopeContext;
-                this.closeRoutineScopePanel();
-
-                if (scope === 'cancel') return;
-
-                const daysToAffect = scope === 'all' ? [0,1,2,3,4,5,6] : [ctx.dayIndex];
-
-                switch (ctx.type) {
-                    case 'create':
-                        daysToAffect.forEach(d => {
-                            const newTask = {
-                                id: 'r' + Date.now() + Math.random().toString(36).substr(2,5),
-                                label: ctx.label,
-                                time: ctx.time,
-                                done: false
-                            };
-                            this.db.routineSystem.days[d][ctx.newBlock].push(newTask);
-                        });
-                        break;
-                    case 'edit':
-                        daysToAffect.forEach(d => {
-                            const day = this.db.routineSystem.days[d];
-                            if (ctx.taskId !== null && ctx.taskId >= 0 && ctx.taskId < day[ctx.block].length) {
-                                const task = day[ctx.block][ctx.taskId];
-                                task.label = ctx.label;
-                                task.time = ctx.time;
-                                if (ctx.newBlock !== ctx.block) {
-                                    const [removed] = day[ctx.block].splice(ctx.taskId, 1);
-                                    day[ctx.newBlock].push(removed);
-                                }
-                            }
-                        });
-                        break;
-                    case 'move':
-                        daysToAffect.forEach(d => {
-                            const tasks = this.db.routineSystem.days[d][ctx.block];
-                            const newIdx = ctx.idx + ctx.dir;
-                            if (newIdx >= 0 && newIdx < tasks.length) {
-                                [tasks[ctx.idx], tasks[newIdx]] = [tasks[newIdx], tasks[ctx.idx]];
-                            }
-                        });
-                        break;
-                    case 'delete':
-                        daysToAffect.forEach(d => {
-                            const tasks = this.db.routineSystem.days[d][ctx.block];
-                            if (ctx.idx >= 0 && ctx.idx < tasks.length) {
-                                tasks.splice(ctx.idx, 1);
-                            }
-                        });
-                        break;
-                }
-                this.save();
-                this.renderRoutine();
-            },
-
-            async toggleRoutineTask(dayIndex, block, idx, e) {
-                e.stopPropagation();
-                const task = this.db.routineSystem.days[dayIndex][block][idx];
-                if (!task) return;
-                const action = task.done ? 'DESFAZER CONCLUSÃO?' : 'CONFIRMAR CONCLUSÃO?';
-                if (await SystemModal.confirm(action)) {
-                    task.done = !task.done;
-                    this.checkRoutineBlockReward(dayIndex, block, e);
-                    this.save();
-                    this.renderRoutine();
-                }
-            },
-
-            checkRoutineBlockReward(dayIndex, block, evt) {
-                const day = this.db.routineSystem.days[dayIndex];
-                const tasks = day[block];
-                const allDone = tasks.every(t => t.done);
-                if (allDone && !day.rewards[block]) {
-                    day.rewards[block] = true;
-                    let xp = 0;
-                    if (block === 'morning') xp = 100;
-                    else if (block === 'afternoon') xp = 50;
-                    else if (block === 'night') xp = 25;
-                    this.db.energy += xp;
-                    this.checkLvl();
-                    this.pop(evt, `+${xp} XP`);
-                }
-            },
-
-            editRoutineTask(dayIndex, block, idx, e) {
-                e.stopPropagation();
-                this.openRoutineTaskEditor(dayIndex, block, idx);
-            },
-
-            async completeNowTask() {
-                const today = new Date().getDay();
-                const blocks = ['morning', 'afternoon', 'night'];
-                for (let b of blocks) {
-                    const tasks = this.db.routineSystem.days[today][b];
-                    const idx = tasks.findIndex(t => !t.done);
-                    if (idx !== -1) {
-                        if (await SystemModal.confirm("CONFIRMAR CONCLUSÃO?")) {
-                            tasks[idx].done = true;
-                            this.checkRoutineBlockReward(today, b, null);
-                            this.save();
-                            this.renderRoutine();
-                        }
-                        return;
-                    }
-                }
             }
+            if (type === 'prompt' && input) input.focus();
+        });
+    },
+    alert(msg){ return this.open('AVISO DO SISTEMA', msg, 'alert'); },
+    confirm(msg){ return this.open('DECISÃO NECESSÁRIA', msg, 'confirm'); },
+    prompt(msg, def=''){ return this.open('ENTRADA DE DADOS', msg, 'prompt', def); },
+    close(value){
+        const overlay = document.getElementById('sys-modal-overlay');
+        if (overlay) { overlay.classList.add('hidden'); overlay.classList.remove('closing'); }
+        const resolver = this.resolve;
+        const kind = this.kind;
+        this.resolve = null;
+        this.kind = null;
+        if (resolver) resolver(kind === 'prompt' && value === false ? null : value);
+    }
+};
+
+const Sys = {
+    db:null,
+    key:'monarch_v8_permanent',
+    timerState:0,
+    timerStart:0,
+    timerElapsed:0,
+    timerInterval:null,
+    currentWindow:'system',
+    editContext:null,
+    detailContext:null,
+    initialized:false,
+
+    getDefaultState(){
+        const today = new Date();
+        const categories = {};
+        HOBBY_CATEGORIES.forEach(cat => { categories[cat] = []; });
+        const names = {
+            forca:'💪 FORÇA',mobilidade:'🛡️ MOBILIDADE',condicionamento:'🏃 CONDICIONAMENTO',calejamento:'🦾 CALEJAMENTO',resistencia:'🛡️ RESISTÊNCIA',
+            higiene:'🧼 HIGIENE',alimentacao:'🍽️ ALIMENTAÇÃO',hidratacao:'💧 HIDRATAÇÃO',sono:'😴 SONO',espirito:'✝️ ESPÍRITO',vinculos:'🤝 VÍNCULOS',
+            hobby:'🧠 HOBBY',conhecimento:'📚 CONHECIMENTO',concentracao:'🧠 CONCENTRAÇÃO',obrigacoes:'📋 OBRIGAÇÕES'
         };
-
-        // ====== INICIALIZAÇÃO ======
-        window.onload = () => {
-            SystemModal.init();
-
-            document.getElementById('edit-mission-cancel').addEventListener('click', () => {
-                Sys.closeEditMissionPanel();
-            });
-            document.getElementById('edit-mission-confirm').addEventListener('click', () => {
-                Sys.confirmEditMission();
-            });
-
-            document.getElementById('routine-task-cancel').addEventListener('click', () => {
-                Sys.closeRoutineTaskEditor();
-            });
-            document.getElementById('routine-task-confirm').addEventListener('click', () => {
-                Sys.saveRoutineTask();
-            });
-
-            document.getElementById('scope-this-day').addEventListener('click', () => {
-                Sys.handleRoutineScopeChoice('this');
-            });
-            document.getElementById('scope-all-days').addEventListener('click', () => {
-                Sys.handleRoutineScopeChoice('all');
-            });
-            document.getElementById('scope-cancel').addEventListener('click', () => {
-                Sys.handleRoutineScopeChoice('cancel');
-            });
-
-            Sys.init();
-
-            document.getElementById('window-backdrop').addEventListener('click', () => {
-                Sys.switchTab('system');
-            });
+        return {
+            points:0,name:'',attr:{ATTR:1},attrNames:{ATTR:''},customAttributes:[],miss:[],skills:[],hobbies:categories,
+            trains:{puxada:[],empurrada:[],core:[]},trainTitles:{puxada:'[01] PUXADA',empurrada:'[02] EMPURRADA',core:'[03] CORE'},trainRewardGiven:{},
+            customCali:{E:[],D:[],C:[],B:[],A:[],S:[], 'SS+':[]},lvl:1,energy:0,activeBuffs:{doubleXP:false,penaltyImmunity:0},
+            debuffs:{corpo:false,mente:false,espirito:false,emboscada:false},stats:{totalTrains:0,totalKnowledge:0,totalBosses:0,seasonTrains:0,seasonQuests:0,seasonBosses:0},
+            prestige:0,eventToday:false,seasonMonth:today.getMonth(),essences:'MBTI',startDate:today.toISOString().split('T')[0],last:'',
+            missConfig:{counts:{forca:1,mobilidade:1,condicionamento:0,calejamento:0,resistencia:0,higiene:0,alimentacao:0,hidratacao:0,sono:0,espirito:1,vinculos:0,hobby:2,conhecimento:1,concentracao:1,obrigacoes:1},names},
+            pinnedMissions:[],profileImage:'',customRank:'',missionBlockUntil:0
         };
-    </script>
+    },
+
+    normalizeMission(mission){
+        const m = isObject(mission) ? mission : {};
+        return {
+            type:safeText(m.type,'MISSÃO'),task:safeText(m.task,'Missão sem nome') || 'Missão sem nome',desc:safeText(m.desc,''),done:Boolean(m.done),
+            xpG:finiteInteger(m.xpG,0,0,100000),energyG:finiteInteger(m.energyG,0,0,100000),skipped:Boolean(m.skipped),cat:HOBBY_CATEGORIES.includes(m.cat)?m.cat:'obrigacoes',
+            pinned:Boolean(m.pinned),day:m.day === null || m.day === undefined || m.day === '' ? null : finiteInteger(m.day, null, 0, 6),sourceCat:HOBBY_CATEGORIES.includes(m.sourceCat)?m.sourceCat:null,
+            sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null
+        };
+    },
+
+    normalizeState(){
+        const def = this.getDefaultState();
+        const raw = isObject(this.db) ? this.db : {};
+        const out = {...def, ...raw};
+        out.name = safeText(raw.name,'');
+        out.points = finiteInteger(raw.points,0,0,1000000);
+        out.lvl = finiteInteger(raw.lvl,1,1,9999);
+        out.energy = finiteInteger(raw.energy,0,0,100000000);
+        out.prestige = finiteInteger(raw.prestige,0,0,9999);
+        out.seasonMonth = finiteInteger(raw.seasonMonth,def.seasonMonth,0,11);
+        out.eventToday = Boolean(raw.eventToday);
+        out.last = safeText(raw.last,'');
+        out.startDate = /^\d{4}-\d{2}-\d{2}$/.test(safeText(raw.startDate,'')) ? raw.startDate : def.startDate;
+        out.essences = safeText(raw.essences,def.essences) || def.essences;
+        out.customRank = safeText(raw.customRank,'');
+        out.profileImage = typeof raw.profileImage === 'string' ? raw.profileImage : '';
+        out.missionBlockUntil = finiteNumber(raw.missionBlockUntil,0,0,Number.MAX_SAFE_INTEGER);
+
+        out.attr = isObject(raw.attr) ? {...raw.attr} : {};
+        out.attr.ATTR = finiteInteger(out.attr.ATTR,1,1,1000000);
+        Object.keys(out.attr).forEach(key => { if (key !== 'ATTR') delete out.attr[key]; });
+        out.attrNames = isObject(raw.attrNames) ? {...raw.attrNames} : {};
+        out.attrNames.ATTR = safeText(out.attrNames.ATTR,'');
+        out.customAttributes = Array.isArray(raw.customAttributes) ? raw.customAttributes.map((item,index) => {
+            const a = isObject(item) ? item : {};
+            const id = safeText(a.id,'') || `custom_${Date.now()}_${index}`;
+            return {id,name:safeText(a.name,'ATRIBUTO'),value:finiteInteger(a.value,1,1,1000000)};
+        }).filter((a,index,array) => array.findIndex(x => x.id === a.id) === index) : [];
+
+        out.skills = Array.isArray(raw.skills) ? raw.skills.map(x => safeText(x,'')).filter(Boolean).filter((x,i,a) => a.indexOf(x) === i) : [];
+        out.customCali = {};
+        RANKS.forEach(rank => { out.customCali[rank] = Array.isArray(raw.customCali && raw.customCali[rank]) ? raw.customCali[rank].map(x => safeText(x,'')).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i) : []; });
+
+        out.hobbies = {};
+        HOBBY_CATEGORIES.forEach(cat => {
+            const source = raw.hobbies && Array.isArray(raw.hobbies[cat]) ? raw.hobbies[cat] : [];
+            out.hobbies[cat] = source.map(item => {
+                if (typeof item === 'string') return {task:item.trim(),desc:'',day:null};
+                const h = isObject(item) ? item : {};
+                return {task:safeText(h.task,''),desc:safeText(h.desc,''),day:h.day === null || h.day === undefined || h.day === '' ? null : finiteInteger(h.day,null,0,6)};
+            }).filter(item => item.task);
+        });
+
+        out.trains = {};
+        const sourceTrains = isObject(raw.trains) ? raw.trains : {};
+        Object.keys(sourceTrains).forEach(cat => {
+            if (!/^[a-zA-Z0-9_-]+$/.test(cat)) return;
+            const arr = Array.isArray(sourceTrains[cat]) ? sourceTrains[cat] : [];
+            out.trains[cat] = arr.map((item,index) => {
+                const t = typeof item === 'string' ? {name:item} : (isObject(item) ? item : {});
+                return {name:safeText(t.name,`Exercício ${index+1}`) || `Exercício ${index+1}`,done:Boolean(t.done)};
+            });
+        });
+        ['puxada','empurrada','core'].forEach(cat => { if (!Array.isArray(out.trains[cat])) out.trains[cat] = cloneData(def.trains[cat]); });
+        out.trainTitles = isObject(raw.trainTitles) ? {...raw.trainTitles} : {};
+        Object.keys(out.trains).forEach(cat => { out.trainTitles[cat] = safeText(out.trainTitles[cat],cat.toUpperCase()) || cat.toUpperCase(); });
+        out.trainRewardGiven = isObject(raw.trainRewardGiven) ? {...raw.trainRewardGiven} : {};
+        Object.keys(out.trains).forEach(cat => { out.trainRewardGiven[cat] = Boolean(out.trainRewardGiven[cat]); });
+
+        out.miss = Array.isArray(raw.miss) ? raw.miss.map(m => this.normalizeMission(m)) : [];
+        out.pinnedMissions = Array.isArray(raw.pinnedMissions) ? raw.pinnedMissions.map(pm => {
+            const p = isObject(pm) ? pm : {};
+            return {index:finiteInteger(p.index,0,0,100000),miss:this.normalizeMission(p.miss)};
+        }) : [];
+        out.pinnedMissions = out.pinnedMissions.filter((pm,i,a)=>a.findIndex(x=>x.index===pm.index)===i);
+
+        const defCounts = def.missConfig.counts;
+        const defNames = def.missConfig.names;
+        const rawConfig = isObject(raw.missConfig) ? raw.missConfig : {};
+        out.missConfig = {counts:{},names:{}};
+        Object.keys(defCounts).forEach(cat => { out.missConfig.counts[cat] = finiteInteger(rawConfig.counts && rawConfig.counts[cat],defCounts[cat],0,20); });
+        Object.keys(defNames).forEach(cat => { out.missConfig.names[cat] = safeText(rawConfig.names && rawConfig.names[cat],defNames[cat]) || defNames[cat]; });
+
+        const defBuffs = def.activeBuffs, rawBuffs = isObject(raw.activeBuffs) ? raw.activeBuffs : {};
+        out.activeBuffs = {doubleXP:Boolean(rawBuffs.doubleXP),penaltyImmunity:finiteInteger(rawBuffs.penaltyImmunity,defBuffs.penaltyImmunity,0,99)};
+        const rawDebuffs = isObject(raw.debuffs) ? raw.debuffs : {};
+        out.debuffs = {corpo:Boolean(rawDebuffs.corpo),mente:Boolean(rawDebuffs.mente),espirito:Boolean(rawDebuffs.espirito),emboscada:Boolean(rawDebuffs.emboscada)};
+        const rawStats = isObject(raw.stats) ? raw.stats : {};
+        out.stats = {};
+        Object.keys(def.stats).forEach(key => { out.stats[key] = finiteInteger(rawStats[key],0,0,100000000); });
+        this.db = out;
+    },
+
+    save(){
+        if (!this.db || !isObject(this.db)) return false;
+        try { localStorage.setItem(this.key,JSON.stringify(this.db)); return true; }
+        catch(error){ console.warn('Não foi possível salvar o estado do Sistema Monarca.',error); return false; }
+    },
+
+    getDaysPlayed(){
+        const start = new Date(`${this.db.startDate}T00:00:00`);
+        const diff = Math.floor((Date.now()-start.getTime())/86400000);
+        return Number.isFinite(diff) && diff >= 0 ? diff : 0;
+    },
+
+    async init(){
+        let raw = null;
+        try { raw = localStorage.getItem(this.key); }
+        catch(error){ console.warn('Leitura do save indisponível; usando estado inicial.',error); }
+        if (raw !== null) {
+            try { const parsed = JSON.parse(raw); this.db = isObject(parsed) ? parsed : null; }
+            catch(error){ console.warn('Save corrompido; iniciando estado seguro.',error); this.db = null; }
+        }
+        if (!this.db) this.db = this.getDefaultState();
+        this.normalizeState();
+        this.initTimer();
+        if (this.db.name) {
+            await this.check();
+            this.genMissIfNeeded();
+            this.save();
+        }
+        this.updateThemeByLevel();
+        this.render();
+        this.initialized = true;
+    },
+
+    genMissIfNeeded(){ if (this.db.name && (!Array.isArray(this.db.miss) || this.db.miss.length === 0)) { this.genMiss(); } },
+
+    async finalize(){
+        const field = document.getElementById('setup-name');
+        const name = field ? field.value.trim() : '';
+        if (!name) { await SystemModal.alert('INSIRA UM CODINOME PARA INICIALIZAR O SISTEMA.'); if (field) field.focus(); return false; }
+        this.db = this.getDefaultState();
+        this.db.name = name.toUpperCase();
+        this.db.last = currentDateKey();
+        this.db.eventToday = true;
+        this.normalizeState();
+        this.genMiss();
+        this.save();
+        const setup = document.getElementById('setup-screen');
+        if (setup) setup.classList.add('hidden');
+        this.switchTab('system');
+        this.render();
+        return true;
+    },
+
+    async check(){
+        if (!this.db || !this.db.name) return;
+        const today = currentDateKey();
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const isSunday = now.getDay() === 0;
+        if (this.db.last && this.db.seasonMonth !== currentMonth) {
+            await this.endSeason();
+            this.db.seasonMonth = currentMonth;
+        }
+        if (!this.db.last) { this.db.last = today; this.genMiss(); this.save(); return; }
+        if (this.db.last !== today) {
+            if (this.db.debuffs.emboscada) {
+                this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-2);
+                this.db.debuffs.emboscada = false;
+                await SystemModal.alert('⚔️ FALHA NA EMBOSCADA: você não completou o treino de Boss ontem. -2 no Atributo Base.');
+            }
+            if (this.db.attr.ATTR > 1) this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-1);
+            this.db.customAttributes.forEach(attr => { attr.value = Math.max(1,attr.value-1); });
+            let penaltyTotal = 0;
+            if (this.db.activeBuffs.penaltyImmunity > 0 && !isSunday) this.db.activeBuffs.penaltyImmunity--;
+            else if (!isSunday && Date.now() > this.db.missionBlockUntil) {
+                this.db.miss.forEach(m => {
+                    if (m.done || m.skipped) return;
+                    penaltyTotal++;
+                    if (CATEGORY_MAP[m.cat] && CATEGORY_MAP[m.cat].debuff) this.db.debuffs[CATEGORY_MAP[m.cat].debuff] = true;
+                });
+            }
+            if (penaltyTotal) { this.applyPenaltyToAllAttrs(penaltyTotal); await SystemModal.alert('O SISTEMA DETECTOU FALHA NAS OBRIGAÇÕES DIÁRIAS. PENALIDADES APLICADAS AOS ATRIBUTOS.'); }
+            this.db.activeBuffs.doubleXP = false;
+            Object.keys(this.db.trains).forEach(cat => { this.db.trains[cat].forEach(ex => { ex.done = false; }); this.db.trainRewardGiven[cat] = false; });
+            this.db.last = today;
+            this.db.eventToday = false;
+            this.genMiss();
+            this.save();
+        }
+        if (!this.db.eventToday) await this.rollEvent();
+    },
+
+    applyPenaltyToAllAttrs(amount){
+        let remaining = Math.max(0,finiteInteger(amount,0,0,100000));
+        const attrs = [{key:'ATTR',value:this.db.attr.ATTR},...this.db.customAttributes.map(a=>({key:a.id,value:a.value}))];
+        while (remaining > 0 && attrs.some(a=>a.value > 1)) {
+            for (const attr of attrs) { if (attr.value > 1 && remaining > 0) { attr.value--; remaining--; } if (!remaining) break; }
+        }
+        this.db.attr.ATTR = attrs[0].value;
+        attrs.slice(1).forEach(item => { const found = this.db.customAttributes.find(a=>a.id===item.key); if (found) found.value=item.value; });
+    },
+
+    async rollEvent(){
+        if (!this.db || this.db.eventToday) return;
+        this.db.eventToday = true;
+        const r = Math.random();
+        let msg = '';
+        if (r < .20) { this.db.energy += 50; msg='🎁 BAÚ ENCONTRADO! Você vasculhou a área e encontrou +50 Energia.'; }
+        else if (r < .35) { this.db.activeBuffs.doubleXP=true; msg='✨ BÊNÇÃO DOS DEUSES: todas as missões renderão EXP dobrado hoje!'; }
+        else if (r < .60) { this.db.debuffs.emboscada=true; msg='⚔️ EMBOSCADA DETECTADA: complete um treino de Boss hoje ou perca Atributo Base amanhã.'; }
+        else if (r < .70) { if (this.db.points>0) { this.db.points--; msg='👺 GOBLIN LADRÃO! Uma criatura roubou 1 Ponto de Atributo.'; } else msg='👺 GOBLIN LADRÃO apareceu, mas não havia pontos para roubar.'; }
+        else if (r < .85) { this.db.activeBuffs.penaltyImmunity=1; msg='♨️ FONTE TERMAL: imunidade total a penalidades amanhã.'; }
+        else if (r < .95) { this.db.points++; this.db.energy=Math.max(0,this.db.energy-20); msg='🏺 RELÍQUIA QUEBRADA: -20 Energia, mas +1 Ponto de Atributo.'; }
+        else msg='🌬️ O dia está tranquilo. Nenhum evento ocorreu.';
+        this.checkLvl();
+        this.save();
+        await SystemModal.alert(`EVENTO DIÁRIO:\n\n${msg}`);
+        this.render();
+    },
+
+    async endSeason(){
+        const t=this.db.stats.seasonTrains||0,q=this.db.stats.seasonQuests||0,b=this.db.stats.seasonBosses||0;
+        const total=t+q*.5+b*5;
+        const score=total>=100?'S':total>=70?'A':total>=40?'B':'C';
+        let month=this.db.seasonMonth===0?12:this.db.seasonMonth;
+        await SystemModal.alert(`🌌 TEMPORADA ${month} ENCERRADA! 🌌\n\n- Treinos Completos: ${t}\n- Quests Executadas: ${q}\n- Chefes Derrotados: ${b}\n>>> NOTA FINAL: [ ${score} ] <<<`);
+        this.db.stats.seasonTrains=0; this.db.stats.seasonQuests=0; this.db.stats.seasonBosses=0; this.save();
+    },
+
+    getRank(){
+        for (const rank of RANKS) { const list=this.db.customCali[rank]||[]; if (!list.length) return rank; if (!list.every(skill=>this.db.skills.includes(skill))) return rank; }
+        return 'SS+';
+    },
+    getDisplayRank(){ return this.db.customRank || this.getRank(); },
+    getMultiplier(){ return (this.db.activeBuffs.doubleXP?2:1)*(1+(this.db.prestige||0)*.10); },
+
+    sourceForPinned(pm){
+        const m=pm.miss||{};
+        if (m.sourceCat && Number.isInteger(m.sourceIndex) && this.db.hobbies[m.sourceCat] && this.db.hobbies[m.sourceCat][m.sourceIndex]) {
+            const h=this.db.hobbies[m.sourceCat][m.sourceIndex];
+            return this.normalizeMission({...m,task:h.task,desc:h.desc,day:h.day,cat:m.sourceCat});
+        }
+        return this.normalizeMission(m);
+    },
+    genMiss(){
+        if (!this.db) return;
+        const today=new Date().getDay();
+        const used=new Set();
+        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>pm.miss.day===null||pm.miss.day===today);
+        pins.forEach(pm=>used.add(pm.miss.task));
+        const pick=(cat,fallback)=>{
+            const pool=(this.db.hobbies[cat]||[]).map((h,index)=>({h,index})).filter(x=>x.h.day===null||x.h.day===today);
+            const candidates=pool.filter(x=>!used.has(x.h.task));
+            const selected=(candidates.length?candidates:(pool.length?pool:[]));
+            if (!selected.length) return {task:fallback,desc:'',day:null,sourceCat:null,sourceIndex:null};
+            const chosen=selected[Math.floor(Math.random()*selected.length)];
+            used.add(chosen.h.task);
+            return {task:chosen.h.task,desc:chosen.h.desc,day:chosen.h.day,sourceCat:cat,sourceIndex:chosen.index};
+        };
+        const result=[]; const counts=this.db.missConfig.counts,names=this.db.missConfig.names;
+        const add=(cat,fallback,type)=>{ const p=pick(cat,fallback); result.push(this.normalizeMission({...p,type,cat,done:false,skipped:false,pinned:false})); };
+        BODY_CATEGORIES.forEach(cat=>{ for(let i=0;i<(counts[cat]||0);i++) add(cat,`Cadastre missão de ${names[cat]||cat}`,names[cat]||cat); });
+        for(let i=0;i<(counts.espirito||0);i++) add('espirito','Cadastre Missão de Espírito',names.espirito);
+        for(let i=0;i<(counts.vinculos||0);i++) add('vinculos','Cadastre Vínculo',names.vinculos);
+        const hobbyCount=counts.hobby||0;
+        if(hobbyCount===1){
+            const mixed=[...(this.db.hobbies.criativo||[]).map((h,index)=>({h,index,cat:'criativo'})),...(this.db.hobbies.baixa||[]).map((h,index)=>({h,index,cat:'baixa'}))].filter(x=>x.h.day===null||x.h.day===today);
+            const candidates=mixed.filter(x=>!used.has(x.h.task)); const chosen=(candidates.length?candidates:mixed)[Math.floor(Math.random()*(candidates.length?candidates.length:mixed.length))];
+            if(chosen){used.add(chosen.h.task);result.push(this.normalizeMission({type:names.hobby,cat:chosen.cat,task:chosen.h.task,desc:chosen.h.desc,day:chosen.h.day,sourceCat:chosen.cat,sourceIndex:chosen.index}));}
+            else result.push(this.normalizeMission({type:names.hobby,cat:'criativo',task:'Cadastre um Hobby'}));
+        } else if(hobbyCount>1){ for(let i=0;i<Math.ceil(hobbyCount/2);i++) add('criativo','Cadastre missão Criativa',names.hobby); for(let i=0;i<Math.floor(hobbyCount/2);i++) add('baixa','Cadastre missão de Baixa Energia',names.hobby); }
+        for(let i=0;i<(counts.conhecimento||0);i++) add('conhecimento','Cadastre missão de Conhecimento',names.conhecimento);
+        for(let i=0;i<(counts.concentracao||0);i++) add('concentracao','Cadastre missão de Concentração',names.concentracao);
+        for(let i=0;i<(counts.obrigacoes||0);i++) add('obrigacoes','Cadastre Obrigação',names.obrigacoes);
+        pins.forEach(pm=>{ const mission=this.normalizeMission({...pm.miss,pinned:true,done:false,skipped:false}); if(pm.index>=0&&pm.index<result.length) result[pm.index]=mission; else result.push(mission); });
+        this.db.miss=result;
+    },
+
+    switchTab(tab){
+        const allowed=['system','train','skills','hobbies']; if(!allowed.includes(tab)) tab='system';
+        allowed.forEach(id=>{const el=document.getElementById(`tab-${id}`);if(el){el.classList.toggle('hidden',id!==tab);el.classList.remove('closing');}});
+        this.currentWindow=tab;
+        const backdrop=document.getElementById('window-backdrop'); if(backdrop) backdrop.classList.toggle('active',tab!=='system');
+        const map={system:'tab-sys-btn',train:'tab-train-btn',skills:'tab-skills-btn',hobbies:'tab-hobbies-btn'};
+        Object.keys(map).forEach(key=>{const btn=document.getElementById(map[key]);if(btn)btn.classList.toggle('active',key===tab);});
+        this.render();
+    },
+
+    usePoint(attr){
+        if(!this.db || this.db.points<=0) return;
+        if(attr==='ATTR') this.db.attr.ATTR++;
+        else { const found=this.db.customAttributes.find(a=>a.id===attr.replace(/^custom_/ ,'')); if(!found) return; found.value++; }
+        this.db.points--; this.save(); this.render();
+    },
+
+    async doMiss(index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();
+        const miss=this.db.miss[index]; if(!miss||miss.done||miss.skipped)return;
+        miss.done=true; const reward=Math.round((10+(miss.cat==='conhecimento'?5:0))*this.getMultiplier()); const energy=Math.round((5+(miss.cat==='obrigacoes'?2:0))*this.getMultiplier());
+        miss.xpG=reward;miss.energyG=energy;this.db.energy+=energy;this.db.stats.seasonQuests++;this.db.stats.totalKnowledge+=(miss.cat==='conhecimento'?1:0);this.checkLvl();this.save();this.pop(event,`+${reward} EXP\n+${energy} ENERGIA`);this.render();
+    },
+    async skipMiss(index,event){
+        if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss||miss.done||miss.skipped)return;
+        if(await SystemModal.confirm('Pular esta missão? Ela não concederá recompensa e poderá gerar penalidade.')){miss.skipped=true;this.save();this.render();}
+    },
+    moveMiss(index,direction,event){
+        if(event&&event.stopPropagation)event.stopPropagation(); const target=index+direction;if(target<0||target>=this.db.miss.length)return;[this.db.miss[index],this.db.miss[target]]=[this.db.miss[target],this.db.miss[index]];
+        this.db.pinnedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.save();this.render();
+    },
+    togglePinMission(index,event){
+        if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss)return;
+        if(miss.pinned){miss.pinned=false;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>pm.index!==index);}
+        else {miss.pinned=true;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>pm.index!==index);this.db.pinnedMissions.push({index,miss:cloneData(miss)});}
+        this.save();this.render();
+    },
+    showMissDetail(index){
+        const miss=this.db.miss[index];if(!miss)return;this.detailContext=index;
+        const title=document.getElementById('mission-detail-title'),body=document.getElementById('mission-detail-body'),overlay=document.getElementById('mission-detail-overlay'),edit=document.getElementById('mission-detail-edit');
+        if(title)title.textContent=miss.type||'MISSÃO';
+        if(body)body.textContent=`${miss.task}\n\n${miss.desc||'Sem descrição cadastrada.'}\n\nDIA: ${miss.day===null?'TODOS OS DIAS':DAY_NAMES[miss.day]}\nSTATUS: ${miss.done?'CONCLUÍDA':miss.skipped?'PULADA':'PENDENTE'}`;
+        if(edit){edit.onclick=()=>{this.closeMissDetail();if(miss.sourceCat!==null&&miss.sourceIndex!==null)this.edHobby(miss.sourceCat,miss.sourceIndex);else SystemModal.alert('Esta é uma missão automática; cadastre uma missão na categoria correspondente para editá-la.');};}
+        if(overlay)overlay.classList.remove('hidden');
+    },
+    closeMissDetail(){const overlay=document.getElementById('mission-detail-overlay');if(overlay){overlay.classList.add('hidden');overlay.classList.remove('closing');}this.detailContext=null;},
+    openEditMissionPanel(cat,index){
+        this.editContext={cat,idx:index};const overlay=document.getElementById('edit-mission-overlay');if(overlay)overlay.classList.remove('hidden');const task=document.getElementById('edit-mission-task');if(task)task.focus();
+    },
+    closeEditMissionPanel(){const overlay=document.getElementById('edit-mission-overlay');if(overlay){overlay.classList.add('hidden');overlay.classList.remove('closing');}this.editContext=null;},
+    async confirmEditMission(){
+        if(!this.editContext)return;const {cat,idx}=this.editContext;const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][idx];if(!hobby)return;
+        const taskEl=document.getElementById('edit-mission-task'),descEl=document.getElementById('edit-mission-desc'),dayEl=document.getElementById('edit-mission-day');const task=(taskEl&&taskEl.value.trim())||hobby.task;const desc=descEl?descEl.value.trim():'';const day=dayEl&&dayEl.value!=='null'?finiteInteger(dayEl.value,null,0,6):null;
+        if(!(await SystemModal.confirm('Salvar alterações?')))return;hobby.task=task;hobby.desc=desc;hobby.day=day;this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===idx){pm.miss.task=task;pm.miss.desc=desc;pm.miss.day=day;}});this.genMiss();this.save();this.closeEditMissionPanel();this.render();
+    },
+
+    addHobby(cat){
+        if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`);const task=input?input.value.trim():'';if(!task)return;this.db.hobbies[cat].push({task,desc:'',day:null});if(input)input.value='';this.genMiss();this.save();this.render();
+    },
+    async delHobby(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.hobbies[cat];if(!arr||!arr[index])return;if(!(await SystemModal.confirm(`Excluir a missão "${arr[index].task}"?`)))return;arr.splice(index,1);this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex>index)pm.miss.sourceIndex--;});this.genMiss();this.save();this.render();
+    },
+    edHobby(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const task=document.getElementById('edit-mission-task'),desc=document.getElementById('edit-mission-desc'),day=document.getElementById('edit-mission-day');if(task)task.value=hobby.task;if(desc)desc.value=hobby.desc||'';if(day)day.value=hobby.day===null?'null':String(hobby.day);this.openEditMissionPanel(cat,index);
+    },
+
+    addTrain(cat){
+        if(!this.db.trains[cat])return;SystemModal.prompt('Nome do exercício:').then(value=>{const name=safeText(value,'');if(!name)return;this.db.trains[cat].push({name,done:false});this.db.trainRewardGiven[cat]=false;this.save();this.renderTrains();});
+    },
+    delTrain(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();if(!this.db.trains[cat]||!this.db.trains[cat][index])return;SystemModal.confirm(`Excluir "${this.db.trains[cat][index].name}"?`).then(ok=>{if(!ok)return;this.db.trains[cat].splice(index,1);this.db.trainRewardGiven[cat]=false;this.save();this.renderTrains();});
+    },
+    edTrainName(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const item=this.db.trains[cat]&&this.db.trains[cat][index];if(!item)return;SystemModal.prompt('Novo nome do exercício:',item.name).then(value=>{const name=safeText(value,'');if(!name)return;item.name=name;this.save();this.renderTrains();});
+    },
+    moveTrain(cat,index,direction,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.trains[cat],target=index+direction;if(!arr||target<0||target>=arr.length)return;[arr[index],arr[target]]=[arr[target],arr[index]];this.save();this.renderTrains();
+    },
+    toggleTrain(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.trains[cat],item=arr&&arr[index];if(!item)return;item.done=!item.done;
+        if(item.done){const energy=Math.round(5*this.getMultiplier());this.db.energy+=energy;this.db.stats.totalTrains++;this.db.stats.seasonTrains++;if(/boss|chefe/i.test(`${this.db.trainTitles[cat]} ${item.name}`)){this.db.stats.totalBosses++;this.db.stats.seasonBosses++;this.db.debuffs.emboscada=false;}}
+        const complete=arr.length>0&&arr.every(x=>x.done);if(complete&&!this.db.trainRewardGiven[cat]){this.db.trainRewardGiven[cat]=true;this.db.energy+=Math.round(10*this.getMultiplier());this.pop(event,'GRUPO COMPLETO\n+ENERGIA');}else if(!complete)this.db.trainRewardGiven[cat]=false;this.checkLvl();this.save();this.render();
+    },
+    async edTrainTitle(cat){
+        const title=await SystemModal.prompt('Nome do grupo:',this.db.trainTitles[cat]||cat.toUpperCase());const value=safeText(title,'');if(!value)return;this.db.trainTitles[cat]=value;this.save();this.renderTrains();
+    },
+    async createNewTrainTable(){
+        const title=await SystemModal.prompt('Nome do novo grupo de treino:');const value=safeText(title,'');if(!value)return;let key=`group_${Date.now()}`;while(this.db.trains[key])key+=`_${Math.floor(Math.random()*1000)}`;this.db.trains[key]=[];this.db.trainTitles[key]=value;this.db.trainRewardGiven[key]=false;this.save();this.renderTrains();
+    },
+    async delTrainTable(cat){
+        if(['puxada','empurrada','core'].includes(cat))return SystemModal.alert('Os três grupos-base não podem ser removidos.');if(!(await SystemModal.confirm(`Excluir o grupo "${this.db.trainTitles[cat]||cat}"?`)))return;delete this.db.trains[cat];delete this.db.trainTitles[cat];delete this.db.trainRewardGiven[cat];this.save();this.renderTrains();
+    },
+
+    addSkill(rank){
+        if(!RANKS.includes(rank))return;SystemModal.prompt(`Nova skill para o rank ${rank}:`).then(value=>{const skill=safeText(value,'');if(!skill)return;if(this.db.customCali[rank].includes(skill))return;this.db.customCali[rank].push(skill);this.save();this.renderSkills();});
+    },
+    toggleSkill(skill,rank,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const idx=this.db.skills.indexOf(skill);if(idx>=0){this.db.skills.splice(idx,1);}else{this.db.skills.push(skill);this.db.stats.totalKnowledge++;}this.save();this.renderSkills();this.render();
+    },
+    async delSkill(rank,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const skill=this.db.customCali[rank]&&this.db.customCali[rank][index];if(!skill)return;if(!(await SystemModal.confirm(`Excluir a skill "${skill}"?`)))return;this.db.customCali[rank].splice(index,1);this.db.skills=this.db.skills.filter(x=>x!==skill);this.save();this.renderSkills();this.render();
+    },
+    moveSkill(rank,index,direction,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.customCali[rank],target=index+direction;if(!arr||target<0||target>=arr.length)return;[arr[index],arr[target]]=[arr[target],arr[index]];this.save();this.renderSkills();
+    },
+    async edSkillName(rank,index){
+        const old=this.db.customCali[rank][index],value=safeText(await SystemModal.prompt('Novo nome da skill:',old),'');if(!value||value===old)return;this.db.customCali[rank][index]=value;const learned=this.db.skills.indexOf(old);if(learned>=0)this.db.skills[learned]=value;this.save();this.renderSkills();
+    },
+
+    getEnergyRequired(){return Math.max(100,finiteInteger(this.db.lvl,1,1,9999)*100);},
+    checkLvl(){
+        let leveled=false;
+        let required=this.getEnergyRequired();
+        while(this.db.energy>=required){
+            this.db.energy-=required;
+            this.db.lvl++;
+            this.db.points++;
+            leveled=true;
+            required=this.getEnergyRequired();
+        }
+        if(leveled){this.updateThemeByLevel();this.pop(null,`LEVEL UP!\nLVL ${this.db.lvl}`);}
+        this.db.energy=Math.max(0,this.db.energy);
+    },
+    async doPrestige(){
+        if(this.db.lvl<10)return SystemModal.alert('RENASCER requer pelo menos LVL 10.');if(!(await SystemModal.confirm('Renascimento reinicia o nível, energia e pontos, mas preserva skills, atributos, missões e histórico. Continuar?')))return;this.db.prestige++;this.db.lvl=1;this.db.energy=0;this.db.points=0;this.db.activeBuffs={doubleXP:false,penaltyImmunity:0};this.updateThemeByLevel();this.save();this.render();
+    },
+    getAttributeSlotPrice(){return 5+(this.db.customAttributes.length*5);},
+    async buyAttributeSlot(){
+        const price=this.getAttributeSlotPrice();if(this.db.points<price)return SystemModal.alert(`Pontos insuficientes. Custo atual: ${price}.`);const name=safeText(await SystemModal.prompt(`Nome do atributo personalizado (custo ${price} pontos):`),'');if(!name)return;const id=`custom_${Date.now()}_${Math.floor(Math.random()*1000)}`;this.db.customAttributes.push({id,name,value:1});this.db.points-=price;this.save();this.render();
+    },
+    async removeCustomAttr(id){
+        const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;if(!(await SystemModal.confirm(`Remover o atributo "${found.name}"?`)))return;this.db.customAttributes=this.db.customAttributes.filter(a=>a.id!==id);this.save();this.render();
+    },
+    async edEnergy(){const maximum=this.getEnergyRequired()-1;const value=await SystemModal.prompt(`Energia atual (0 a ${maximum}):`,String(this.db.energy));if(value===null)return;this.db.energy=finiteInteger(value,this.db.energy,0,maximum);this.checkLvl();this.save();this.render();},
+    async edAttrValue(){const value=await SystemModal.prompt('Valor do atributo base:',String(this.db.attr.ATTR));if(value===null)return;this.db.attr.ATTR=finiteInteger(value,this.db.attr.ATTR,1,1000000);this.save();this.render();},
+    async edPoints(){const value=await SystemModal.prompt('Pontos de atributo:',String(this.db.points));if(value===null)return;this.db.points=finiteInteger(value,this.db.points,0,1000000);this.save();this.render();},
+    async edRank(){const value=safeText(await SystemModal.prompt('Rank manual (deixe vazio para automático):',this.db.customRank),'');this.db.customRank=RANKS.includes(value)?value:'';this.save();this.render();},
+    async edEssences(){const value=safeText(await SystemModal.prompt('MBTI / Essências:',this.db.essences),'');if(!value)return;this.db.essences=value;this.save();this.render();},
+    async edSt(stat){if(!Object.prototype.hasOwnProperty.call(this.db.stats,stat))return;const value=await SystemModal.prompt('Valor:',String(this.db.stats[stat]));if(value===null)return;this.db.stats[stat]=finiteInteger(value,this.db.stats[stat],0,100000000);this.save();this.render();},
+    async edCustomAttrValue(id){const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;const value=await SystemModal.prompt(`Valor de ${found.name}:`,String(found.value));if(value===null)return;found.value=finiteInteger(value,found.value,1,1000000);this.save();this.render();},
+    async edAttrName(attr){const old=this.db.attrNames[attr]||'ATRIBUTO BASE',value=safeText(await SystemModal.prompt('Nome do atributo:',old),'');if(!value)return;this.db.attrNames[attr]=value;this.save();this.render();},
+    async edCustomAttrName(id){const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;const value=safeText(await SystemModal.prompt('Nome do atributo:',found.name),'');if(!value)return;found.name=value;this.save();this.render();},
+    async shuffleMiss(){if(!(await SystemModal.confirm('Sortear novamente as modificações diárias? Missões atuais não concluídas serão substituídas.')))return;this.genMiss();this.save();this.render();},
+    async reset(){
+        if(!(await SystemModal.confirm('FORMATAR NÚCLEO DO SISTEMA? O save atual será removido permanentemente.')))return;
+        try{localStorage.removeItem(this.key);}catch(error){console.warn('Não foi possível remover o save antigo.',error);}
+        this.db=this.getDefaultState();this.timerState=0;this.timerElapsed=0;this.timerStart=0;if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}this.currentWindow='system';
+        this.switchTab('system');const setup=document.getElementById('setup-screen'),field=document.getElementById('setup-name');if(field)field.value='';if(setup){setup.classList.remove('hidden');setup.classList.remove('closing');}this.render();if(field)field.focus();
+    },
+
+    startTimer(){if(this.timerState===1)return;this.timerState=1;this.timerStart=Date.now()-this.timerElapsed;this.timerInterval=setInterval(()=>this.updateTimerUI(),250);this.updateTimerUI();},
+    pauseTimer(){if(this.timerState!==1)return;this.timerElapsed=Date.now()-this.timerStart;this.timerState=2;if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}this.updateTimerUI();},
+    resetTimer(){this.timerState=0;this.timerElapsed=0;this.timerStart=0;if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}this.updateTimerUI();},
+    updateTimerUI(){const display=document.getElementById('timer-display');if(!display)return;const elapsed=this.timerState===1?Date.now()-this.timerStart:this.timerElapsed;const total=Math.max(0,Math.floor(elapsed/1000)),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;display.textContent=[h,m,s].map(x=>String(x).padStart(2,'0')).join(':');},
+    initTimer(){this.timerState=0;this.timerElapsed=0;this.timerStart=0;this.updateTimerUI();},
+    pop(event,text){const node=document.createElement('div');node.className='xp-float';node.textContent=text;const x=event&&event.clientX?event.clientX:window.innerWidth/2,y=event&&event.clientY?event.clientY:window.innerHeight/2;node.style.left=`${Math.max(8,x-50)}px`;node.style.top=`${Math.max(8,y-20)}px`;document.body.appendChild(node);node.addEventListener('animationend',()=>node.remove(),{once:true});},
+    upImg(event){const file=event&&event.target&&event.target.files?event.target.files[0]:null;if(!file||!file.type.startsWith('image/'))return;const reader=new FileReader();reader.onload=()=>{this.db.profileImage=String(reader.result||'');this.save();this.render();};reader.onerror=()=>SystemModal.alert('Não foi possível carregar a imagem.');reader.readAsDataURL(file);},
+
+    renderAttributes(){
+        const grid=document.getElementById('attributes-grid');if(!grid)return;const items=[{id:'ATTR',label:this.db.attrNames.ATTR||'ATRIBUTO BASE',value:this.db.attr.ATTR,custom:false},...this.db.customAttributes.map(a=>({id:a.id,label:a.name,value:a.value,custom:true}))];
+        grid.innerHTML=items.map(item=>`<div class="attr-card"><span class="stat-label" title="Editar nome" data-attr-name="${escapeHTML(item.id)}">${escapeHTML(item.label)}</span><span class="attr-value" title="Editar valor" data-attr-value="${escapeHTML(item.id)}">${item.value}</span><div class="attr-controls"><button class="btn-add-rtn" data-use-point="${escapeHTML(item.custom?'custom_'+item.id:'ATTR')}" title="Usar ponto">+</button>${item.custom?`<button class="btn-slot-remove" data-remove-attr="${escapeHTML(item.id)}" title="Remover">×</button>`:''}</div></div>`).join('');
+        grid.querySelectorAll('[data-attr-name]').forEach(el=>el.addEventListener('click',()=>el.dataset.attrName==='ATTR'?this.edAttrName('ATTR'):this.edCustomAttrName(el.dataset.attrName)));
+        grid.querySelectorAll('[data-attr-value]').forEach(el=>el.addEventListener('click',()=>el.dataset.attrValue==='ATTR'?this.edAttrValue():this.edCustomAttrValue(el.dataset.attrValue)));
+        grid.querySelectorAll('[data-use-point]').forEach(el=>el.addEventListener('click',event=>this.usePoint(el.dataset.usePoint)));
+        grid.querySelectorAll('[data-remove-attr]').forEach(el=>el.addEventListener('click',()=>this.removeCustomAttr(el.dataset.removeAttr)));
+    },
+
+    renderMissions(){
+        const container=document.getElementById('mission-ui');if(!container)return;if(!this.db.miss.length){container.innerHTML='<div class="empty-state">Nenhuma modificação diária configurada.</div>';return;}
+        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Fixar missão">${m.pinned?'◆':'◇'}</button><span class="m-info" data-detail="${index}" title="Detalhes">ⓘ</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
+        container.querySelectorAll('[data-mission]').forEach(el=>el.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('[data-detail]'))return;this.showMissDetail(Number(el.dataset.mission));}));
+        container.querySelectorAll('[data-pin]').forEach(el=>el.addEventListener('click',event=>this.togglePinMission(Number(el.dataset.pin),event)));
+        container.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>this.showMissDetail(Number(el.dataset.detail))));
+        container.querySelectorAll('[data-do-mission]').forEach(el=>el.addEventListener('click',event=>this.doMiss(Number(el.dataset.doMission),event)));
+        container.querySelectorAll('[data-skip-mission]').forEach(el=>el.addEventListener('click',event=>this.skipMiss(Number(el.dataset.skipMission),event)));
+        container.querySelectorAll('[data-move-mission]').forEach(el=>el.addEventListener('click',event=>this.moveMiss(Number(el.dataset.moveMission),Number(el.dataset.dir),event)));
+    },
+
+    renderTrains(){
+        const container=document.getElementById('trains-container');if(!container)return;const keys=Object.keys(this.db.trains);if(!keys.length){container.innerHTML='<div class="empty-state">Nenhum grupo de treino.</div>';return;}
+        container.innerHTML=keys.map(cat=>{const arr=this.db.trains[cat]||[];return `<div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">${escapeHTML(this.db.trainTitles[cat]||cat.toUpperCase())}</span><span><button class="mini-btn" data-edit-train-title="${escapeHTML(cat)}">EDITAR</button>${['puxada','empurrada','core'].includes(cat)?'':`<button class="mini-btn danger" data-delete-train-group="${escapeHTML(cat)}">EXCLUIR</button>`}</span></div><ul class="routine-list">${arr.length?arr.map((item,index)=>`<li class="routine-item ${item.done?'checked':''}" data-train-row="${escapeHTML(cat)}" data-train-index="${index}"><span class="routine-check" data-toggle-train="${escapeHTML(cat)}" data-train-i="${index}">${item.done?'✓':''}</span><span class="grow">${escapeHTML(item.name)}</span><button class="btn-order" data-move-train="${escapeHTML(cat)}" data-train-i="${index}" data-dir="-1">▲</button><button class="btn-order" data-move-train="${escapeHTML(cat)}" data-train-i="${index}" data-dir="1">▼</button><button class="btn-order" data-edit-train="${escapeHTML(cat)}" data-train-i="${index}">✎</button><button class="btn-order" data-delete-train="${escapeHTML(cat)}" data-train-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Adicione exercícios ao grupo.</li>'}</ul><div class="routine-input-wrap"><button class="btn-add-rtn" data-add-train="${escapeHTML(cat)}">+</button><span class="stat-label" style="margin:0">${arr.filter(x=>x.done).length}/${arr.length} CONCLUÍDOS</span></div></div>`;}).join('');
+        container.querySelectorAll('[data-edit-train-title]').forEach(el=>el.addEventListener('click',()=>this.edTrainTitle(el.dataset.editTrainTitle)));
+        container.querySelectorAll('[data-delete-train-group]').forEach(el=>el.addEventListener('click',()=>this.delTrainTable(el.dataset.deleteTrainGroup)));
+        container.querySelectorAll('[data-add-train]').forEach(el=>el.addEventListener('click',()=>this.addTrain(el.dataset.addTrain)));
+        container.querySelectorAll('[data-toggle-train]').forEach(el=>el.addEventListener('click',event=>this.toggleTrain(el.dataset.toggleTrain,Number(el.dataset.trainI),event)));
+        container.querySelectorAll('[data-edit-train]').forEach(el=>el.addEventListener('click',event=>this.edTrainName(el.dataset.editTrain,Number(el.dataset.trainI),event)));
+        container.querySelectorAll('[data-delete-train]').forEach(el=>el.addEventListener('click',event=>this.delTrain(el.dataset.deleteTrain,Number(el.dataset.trainI),event)));
+        container.querySelectorAll('[data-move-train]').forEach(el=>el.addEventListener('click',event=>this.moveTrain(el.dataset.moveTrain,Number(el.dataset.trainI),Number(el.dataset.dir),event)));
+    },
+
+    renderSkills(){
+        const list=document.getElementById('skills-list-ui');if(!list)return;list.innerHTML=RANKS.map(rank=>{const skills=this.db.customCali[rank]||[];return `<div class="skill-category"><span class="skill-rank-label">RANK ${escapeHTML(rank)} <button class="mini-btn" data-add-skill="${escapeHTML(rank)}">+ SKILL</button></span>${skills.length?skills.map((skill,index)=>{const mastered=this.db.skills.includes(skill);return `<div class="skill-item ${mastered?'mastered':''}"><span class="check-box" data-toggle-skill="${escapeHTML(skill)}" data-skill-rank="${escapeHTML(rank)}">${mastered?'✓':''}</span><span class="grow" style="margin-left:8px;font-size:11px">${escapeHTML(skill)}</span><div class="skill-actions"><button class="btn-order" data-edit-skill="${escapeHTML(rank)}" data-skill-i="${index}">✎</button><button class="btn-order" data-move-skill="${escapeHTML(rank)}" data-skill-i="${index}" data-dir="-1">▲</button><button class="btn-order" data-move-skill="${escapeHTML(rank)}" data-skill-i="${index}" data-dir="1">▼</button><button class="btn-order" data-delete-skill="${escapeHTML(rank)}" data-skill-i="${index}">×</button></div></div>`;}).join(''):'<div class="empty-state">Nenhuma skill cadastrada.</div>'}</div>`;}).join('');
+        list.querySelectorAll('[data-add-skill]').forEach(el=>el.addEventListener('click',()=>this.addSkill(el.dataset.addSkill)));
+        list.querySelectorAll('[data-toggle-skill]').forEach(el=>el.addEventListener('click',event=>this.toggleSkill(el.dataset.toggleSkill,el.dataset.skillRank,event)));
+        list.querySelectorAll('[data-edit-skill]').forEach(el=>el.addEventListener('click',()=>this.edSkillName(el.dataset.editSkill,Number(el.dataset.skillI))));
+        list.querySelectorAll('[data-delete-skill]').forEach(el=>el.addEventListener('click',event=>this.delSkill(el.dataset.deleteSkill,Number(el.dataset.skillI),event)));
+        list.querySelectorAll('[data-move-skill]').forEach(el=>el.addEventListener('click',event=>this.moveSkill(el.dataset.moveSkill,Number(el.dataset.skillI),Number(el.dataset.dir),event)));
+    },
+
+    renderHobbies(){
+        HOBBY_CATEGORIES.forEach(cat=>{const list=document.getElementById(`hobby-${cat}-ui`);if(!list)return;const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${DAY_NAMES[item.day]}]</small>`:''}</span><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',event=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),event)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',event=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),event)));});
+        const config=document.getElementById('miss-config-ui');if(!config)return;const keys=['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono','espirito','vinculos','hobby','conhecimento','concentracao','obrigacoes'];config.innerHTML=keys.map(cat=>`<div class="config-line"><span class="config-name" title="Renomear categoria">${escapeHTML(this.db.missConfig.names[cat]||cat.toUpperCase())}</span><button class="mini-btn" data-rename-cat="${cat}">✎</button><button class="mini-btn" data-adjust-cat="${cat}" data-delta="-1">−</button><span class="config-count">${this.db.missConfig.counts[cat]||0}</span><button class="mini-btn" data-adjust-cat="${cat}" data-delta="1">+</button></div>`).join('');config.querySelectorAll('[data-rename-cat]').forEach(el=>el.addEventListener('click',()=>this.renameMissClass(el.dataset.renameCat)));config.querySelectorAll('[data-adjust-cat]').forEach(el=>el.addEventListener('click',()=>this.adjustMissCount(el.dataset.adjustCat,Number(el.dataset.delta))));
+    },
+
+    adjustMissCount(cat,delta){if(!Object.prototype.hasOwnProperty.call(this.db.missConfig.counts,cat))return;this.db.missConfig.counts[cat]=finiteInteger(this.db.missConfig.counts[cat]+delta,0,0,20);this.genMiss();this.save();this.render();},
+    async renameMissClass(cat){if(!Object.prototype.hasOwnProperty.call(this.db.missConfig.names,cat))return;const value=safeText(await SystemModal.prompt('Nome exibido da categoria:',this.db.missConfig.names[cat]),'');if(!value)return;this.db.missConfig.names[cat]=value;this.genMiss();this.save();this.render();},
+
+    hslToRgb(h,s,l){
+        h=((h%360)+360)%360;s=Math.max(0,Math.min(1,s));l=Math.max(0,Math.min(1,l));const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;let r=0,g=0,b=0;if(h<60)[r,g,b]=[c,x,0];else if(h<120)[r,g,b]=[x,c,0];else if(h<180)[r,g,b]=[0,c,x];else if(h<240)[r,g,b]=[0,x,c];else if(h<300)[r,g,b]=[x,0,c];else[r,g,b]=[c,0,x];return [Math.round((r+m)*255),Math.round((g+m)*255),Math.round((b+m)*255)];
+    },
+    updateThemeByLevel(){
+        if(!this.db)return;const hue=(185+(this.db.lvl-1)*13+(this.db.prestige||0)*28)%360;const [r,g,b]=this.hslToRgb(hue,.95,.52);const color=`rgb(${r}, ${g}, ${b})`;const dim=`rgba(${r}, ${g}, ${b}, .15)`;const glow=`0 0 12px rgba(${r}, ${g}, ${b}, .7)`;const box=`0 0 15px rgba(${r}, ${g}, ${b}, .25), inset 0 0 20px rgba(${r}, ${g}, ${b}, .1)`;const root=document.documentElement;root.style.setProperty('--a',color);root.style.setProperty('--a-dim',dim);root.style.setProperty('--glow',glow);root.style.setProperty('--glow-box',box);root.style.setProperty('--state-icon',color);root.style.setProperty('--energy-color',color);root.style.setProperty('--hud-corner',color);root.style.setProperty('--hud-line',`rgba(${r}, ${g}, ${b}, .25)`);root.style.setProperty('--panel-border',`rgba(${r}, ${g}, ${b}, .3)`);root.style.setProperty('--panel-glow',`0 0 20px rgba(${r}, ${g}, ${b}, .12), inset 0 0 30px rgba(${r}, ${g}, ${b}, .03)`);root.style.setProperty('--b',`rgb(${Math.round(r*.25)}, ${Math.round(g*.25)}, ${Math.round(b*.25)})`);
+    },
+
+    render(){
+        if(!this.db)return;this.normalizeState();this.updateThemeByLevel();
+        const setup=document.getElementById('setup-screen');if(setup)setup.classList.toggle('hidden',Boolean(this.db.name));
+        const name=document.getElementById('p-name');if(name)name.textContent=this.db.name||'--';
+        const img=document.getElementById('p-img'),placeholder=document.getElementById('p-img-placeholder');if(img&&placeholder){if(this.db.profileImage){img.src=this.db.profileImage;img.classList.remove('hidden');placeholder.classList.add('hidden');}else{img.removeAttribute('src');img.classList.add('hidden');placeholder.classList.remove('hidden');}}
+        const level=document.getElementById('lvl-ui');if(level)level.textContent=`LVL ${this.db.lvl}`;const essence=document.getElementById('essences-ui');if(essence)essence.textContent=this.db.essences||'MBTI';const prestige=document.getElementById('prestige-ui');if(prestige)prestige.textContent=this.db.prestige?`PRESTÍGIO ${this.db.prestige}`:'';
+        const buffs=[];if(this.db.activeBuffs.doubleXP)buffs.push('✦ BÊNÇÃO: EXP DUPLO');if(this.db.activeBuffs.penaltyImmunity)buffs.push('✦ IMUNIDADE A PENALIDADES');const buffEl=document.getElementById('day-buffs');if(buffEl)buffEl.textContent=buffs.join('  ');const debuffs=[];if(this.db.debuffs.corpo)debuffs.push('⚠ DEBUFF CORPO');if(this.db.debuffs.mente)debuffs.push('⚠ DEBUFF MENTE');if(this.db.debuffs.espirito)debuffs.push('⚠ DEBUFF ESPÍRITO');if(this.db.debuffs.emboscada)debuffs.push('⚠ EMBOSCADA');const debuffEl=document.getElementById('day-debuffs');if(debuffEl)debuffEl.textContent=debuffs.join('  ');
+        const rank=document.getElementById('rank-ui');if(rank)rank.textContent=this.getDisplayRank();const points=document.getElementById('points-ui');if(points)points.textContent=String(this.db.points);const maxEnergy=this.getEnergyRequired();const energy=document.getElementById('energy-val');if(energy)energy.textContent=`${this.db.energy} / ${maxEnergy}`;const bar=document.getElementById('energy-bar');if(bar)bar.style.width=`${Math.min(100,(this.db.energy/maxEnergy)*100)}%`;const days=document.getElementById('days-played');if(days)days.textContent=String(this.getDaysPlayed());const prestigeBtn=document.getElementById('btn-prestige');if(prestigeBtn)prestigeBtn.classList.toggle('hidden',this.db.lvl<10);
+        this.renderAttributes();this.renderMissions();this.renderTrains();this.renderSkills();this.renderHobbies();this.updateTimerUI();
+    }
+};
+
+window.addEventListener('DOMContentLoaded',async()=>{
+    SystemModal.init();
+    const cancel=document.getElementById('edit-mission-cancel'),confirm=document.getElementById('edit-mission-confirm'),backdrop=document.getElementById('window-backdrop');
+    if(cancel)cancel.addEventListener('click',()=>Sys.closeEditMissionPanel());
+    if(confirm)confirm.addEventListener('click',()=>Sys.confirmEditMission());
+    if(backdrop)backdrop.addEventListener('click',()=>Sys.switchTab('system'));
+    const detailOverlay=document.getElementById('mission-detail-overlay');if(detailOverlay)detailOverlay.addEventListener('click',event=>{if(event.target===detailOverlay)Sys.closeMissDetail();});
+    const editOverlay=document.getElementById('edit-mission-overlay');if(editOverlay)editOverlay.addEventListener('click',event=>{if(event.target===editOverlay)Sys.closeEditMissionPanel();});
+    await Sys.init();
+    const setupName=document.getElementById('setup-name');if(setupName&&!Sys.db.name)setupName.focus();
+});
+</script>
 </body>
 </html>
