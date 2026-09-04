@@ -1523,6 +1523,7 @@
 
     <div class="window-backdrop" id="window-backdrop"></div>
 
+    <!-- JANELAS DO SYSTEM -->
     <div id="tab-train" class="system-window hidden">
         <div class="window-title">TREINAMENTO</div>
         <div class="panel" style="text-align:center; margin-bottom:12px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
@@ -1560,6 +1561,7 @@
             <div class="quest-division">CORPO</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🏃 Condicionamento</span></div><div id="hobby-condicionamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-condicionamento" class="routine-input" placeholder="Novo Condicionamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('condicionamento')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧼 Higiene</span></div><div id="hobby-higiene-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-higiene" class="routine-input" placeholder="Nova Higiene..."><button class="btn-add-rtn" onclick="Sys.addHobby('higiene')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🍽️ Alimentação</span></div><div id="hobby-alimentacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-alimentacao" class="routine-input" placeholder="Nova Alimentação..."><button class="btn-add-rtn" onclick="Sys.addHobby('alimentacao')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💧 Hidratação</span></div><div id="hobby-hidratacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-hidratacao" class="routine-input" placeholder="Nova Hidratação..."><button class="btn-add-rtn" onclick="Sys.addHobby('hidratacao')">+</button></div></div>
@@ -1580,7 +1582,6 @@
 
             <div class="quest-division">CONFIGURAÇÕES</div>
             <div id="miss-config-ui" style="margin-top:8px;"></div>
-            <button class="btn-reset" style="margin-top:20px; font-size:9px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
         <button class="btn-window-close" onclick="Sys.switchTab('system')">VOLTAR</button>
     </div>
@@ -1637,6 +1638,11 @@
                     <div class="bar-w"><div id="energy-bar" class="energy-bar-f"></div></div>
                 </div>
 
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <span class="stat-label">DIAS JOGADOS</span>
+                    <span class="stat-val" id="days-played">0</span>
+                </div>
+
                 <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); margin-bottom: 12px;" onclick="Sys.doPrestige()">👑 RENASCER</button>
             </div>
 
@@ -1651,10 +1657,13 @@
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
             <div id="mission-ui"></div>
+
+            <button class="btn-reset" style="margin-top:25px; font-size:10px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
     </div>
 
     <script>
+        // ====== SISTEMA MODAL ======
         const SystemModal = {
             resolve: null,
             init() {
@@ -1731,11 +1740,13 @@
             }
         };
 
+        // ====== CONSTANTES ======
         const RANKS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS+'];
 
         const CATEGORY_MAP = {
             forca: { type: '💪 FORÇA', debuff: 'corpo' },
             mobilidade: { type: '🛡️ MOBILIDADE', debuff: 'corpo' },
+            condicionamento: { type: '🏃 CONDICIONAMENTO', debuff: 'corpo' },
             higiene: { type: '🧼 HIGIENE', debuff: 'corpo' },
             alimentacao: { type: '🍽️ ALIMENTAÇÃO', debuff: 'corpo' },
             hidratacao: { type: '💧 HIDRATAÇÃO', debuff: 'corpo' },
@@ -1749,6 +1760,7 @@
             obrigacoes: { type: '📋 OBRIGAÇÕES', debuff: null }
         };
 
+        // ====== OBJETO SYS ======
         const Sys = {
             db: null,
             key: 'monarch_v8_permanent',
@@ -1784,145 +1796,99 @@
             async init() {
                 let d = localStorage.getItem(this.key);
                 if (d) {
-                    this.db = JSON.parse(d);
-
-                    if (this.db.attr && Object.keys(this.db.attr).length > 1) {
-                        const oldAttrKeys = Object.keys(this.db.attr);
-                        const firstKey = oldAttrKeys[0];
-                        const firstValue = this.db.attr[firstKey] || 1;
-                        const firstName = (this.db.attrNames && this.db.attrNames[firstKey]) || '';
-
-                        if (!this.db.customAttributes) this.db.customAttributes = [];
-                        for (let i = 1; i < oldAttrKeys.length; i++) {
-                            const key = oldAttrKeys[i];
-                            const val = this.db.attr[key] || 1;
-                            const name = (this.db.attrNames && this.db.attrNames[key]) || '';
-                            this.db.customAttributes.push({
-                                id: 'migrated_' + key + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                                name: name,
-                                value: val,
-                                purchasePrice: 0
-                            });
-                        }
-
-                        this.db.attr = { ATTR: firstValue };
-                        this.db.attrNames = { ATTR: firstName };
-                        this.save();
+                    try {
+                        this.db = JSON.parse(d);
+                    } catch (e) {
+                        console.warn('Save corrompido, criando novo estado padrão.');
+                        this.db = null;
                     }
-
-                    if (!this.db.attr || typeof this.db.attr !== 'object') {
-                        this.db.attr = { ATTR: 1 };
-                    }
-                    if (!this.db.attrNames || typeof this.db.attrNames !== 'object') {
-                        this.db.attrNames = { ATTR: '' };
-                    }
-                    if (!this.db.attr.hasOwnProperty('ATTR')) {
-                        this.db.attr.ATTR = 1;
-                    }
-                    if (!this.db.attrNames.hasOwnProperty('ATTR')) {
-                        this.db.attrNames.ATTR = '';
-                    }
-                    if (!this.db.customAttributes) {
-                        this.db.customAttributes = [];
-                    }
-                    if (!this.db.customCali) {
-                        this.db.customCali = {};
-                    }
-                    RANKS.slice(0, 6).forEach(rank => {
-                        if (!Array.isArray(this.db.customCali[rank])) {
-                            this.db.customCali[rank] = [];
-                        }
-                    });
-                    if (!this.db.trains) this.db.trains = {};
-                    if (!this.db.trainTitles) this.db.trainTitles = {};
-                    Object.keys(this.db.trains).forEach(cat => {
-                        if (!Array.isArray(this.db.trains[cat])) {
-                            this.db.trains[cat] = [];
-                        }
-                        if (!this.db.trainTitles[cat]) {
-                            this.db.trainTitles[cat] = cat.toUpperCase();
-                        }
-                    });
-
-                    if (!this.db.activeBuffs) this.db.activeBuffs = { doubleXP: false, penaltyImmunity: 0 };
-                    if (!this.db.debuffs) this.db.debuffs = { corpo: false, mente: false, espirito: false, emboscada: false };
-
-                    if (!this.db.stats) this.db.stats = { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0,
-                        seasonQuests: 0, seasonBosses: 0 };
-                    if (this.db.prestige === undefined) this.db.prestige = 0;
-                    if (this.db.seasonMonth === undefined) this.db.seasonMonth = new Date().getMonth();
-                    if (this.db.eventToday === undefined) this.db.eventToday = false;
-
-                    if (this.db.aura !== undefined) {
-                        this.db.energy = this.db.aura;
-                        delete this.db.aura;
-                    }
-
-                    if (!this.db.trainRewardGiven) {
-                        this.db.trainRewardGiven = {};
-                    }
-
-                    if (this.db.hobbies && this.db.hobbies.resist && !this.db.hobbies.mobilidade) {
-                        this.db.hobbies.mobilidade = this.db.hobbies.resist;
-                        delete this.db.hobbies.resist;
-                    }
-                    if (!this.db.hobbies) this.db.hobbies = {};
-                    if (!this.db.hobbies.mobilidade) this.db.hobbies.mobilidade = [];
-                    if (!this.db.hobbies.forca) this.db.hobbies.forca = [];
-                    if (!this.db.hobbies.espirito) this.db.hobbies.espirito = [];
-                    if (!this.db.hobbies.criativo) this.db.hobbies.criativo = [];
-                    if (!this.db.hobbies.conhecimento) this.db.hobbies.conhecimento = [];
-                    if (!this.db.hobbies.concentracao) this.db.hobbies.concentracao = [];
-                    if (!this.db.hobbies.baixa) this.db.hobbies.baixa = [];
-                    if (!this.db.hobbies.higiene) this.db.hobbies.higiene = [];
-                    if (!this.db.hobbies.alimentacao) this.db.hobbies.alimentacao = [];
-                    if (!this.db.hobbies.hidratacao) this.db.hobbies.hidratacao = [];
-                    if (!this.db.hobbies.sono) this.db.hobbies.sono = [];
-                    if (!this.db.hobbies.vinculos) this.db.hobbies.vinculos = [];
-                    if (!this.db.hobbies.obrigacoes) this.db.hobbies.obrigacoes = [];
-
-                    if (!this.db.essences) this.db.essences = "MBTI";
-
-                    if (this.db.routine) delete this.db.routine;
-                    if (this.db.commitments) delete this.db.commitments;
-
-                    ['forca','mobilidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'].forEach(cat => {
-                        if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
-                        this.db.hobbies[cat].forEach(h => {
-                            if (!h.desc) h.desc = '';
-                        });
-                    });
-
-                    if (!this.db.missConfig) this.db.missConfig = { counts: {}, names: {} };
-                    if (!this.db.missConfig.counts) this.db.missConfig.counts = {};
-                    if (!this.db.missConfig.names) this.db.missConfig.names = {};
-
-                    const defaultCounts = { forca: 1, mobilidade: 1, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 };
-                    const defaultNames = { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' };
-
-                    Object.keys(defaultCounts).forEach(k => {
-                        if (this.db.missConfig.counts[k] === undefined) this.db.missConfig.counts[k] = defaultCounts[k];
-                    });
-                    Object.keys(defaultNames).forEach(k => {
-                        if (!this.db.missConfig.names[k]) this.db.missConfig.names[k] = defaultNames[k];
-                    });
-
-                    if (!this.db.routineSystem) {
-                        this.db.routineSystem = this.createDefaultRoutine();
-                    } else {
-                        this.ensureRoutineStructure();
-                    }
-
-                    if (this.db.last === undefined || this.db.last === null) {
-                        this.db.last = '';
-                    }
-
-                    this.initTimer();
-                    await this.check();
-                    this.render();
-                } else {
-                    document.getElementById('setup-screen').classList.remove('hidden');
                 }
+
+                if (!this.db || typeof this.db !== 'object') {
+                    this.db = this.getDefaultState();
+                } else {
+                    this.normalizeState();
+                }
+
+                this.initTimer();
+                await this.check();
+                this.render();
+            },
+
+            getDefaultState() {
+                return {
+                    points: 0,
+                    name: '',
+                    attr: { ATTR: 1 },
+                    attrNames: { ATTR: "" },
+                    customAttributes: [],
+                    miss: [],
+                    skills: [],
+                    hobbies: { forca: [], mobilidade: [], condicionamento: [], higiene: [], alimentacao: [], hidratacao: [], sono: [], espirito: [], vinculos: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
+                    trains: { puxada: [], empurrada: [], core: [] },
+                    trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
+                    trainRewardGiven: {},
+                    customCali: { E: [], D: [], C: [], B: [], A: [], S: [] },
+                    lvl: 1,
+                    energy: 0,
+                    activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
+                    debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
+                    stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
+                    prestige: 0,
+                    eventToday: false,
+                    seasonMonth: new Date().getMonth(),
+                    essences: "MBTI",
+                    startDate: new Date().toISOString().split('T')[0],
+                    missConfig: {
+                        counts: { forca: 1, mobilidade: 1, condicionamento: 0, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
+                        names: { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', condicionamento: '🏃 CONDICIONAMENTO', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' }
+                    },
+                    routineSystem: this.createDefaultRoutine()
+                };
+            },
+
+            normalizeState() {
+                const def = this.getDefaultState();
+                if (!this.db.attr || typeof this.db.attr !== 'object') this.db.attr = def.attr;
+                if (!this.db.attrNames) this.db.attrNames = def.attrNames;
+                if (!this.db.customAttributes) this.db.customAttributes = def.customAttributes;
+                if (!this.db.miss) this.db.miss = def.miss;
+                if (!this.db.skills) this.db.skills = def.skills;
+                if (!this.db.hobbies) this.db.hobbies = def.hobbies;
+                else {
+                    // garante que cada categoria de hobby exista
+                    Object.keys(def.hobbies).forEach(cat => {
+                        if (!this.db.hobbies[cat]) this.db.hobbies[cat] = [];
+                    });
+                }
+                if (!this.db.trains) this.db.trains = def.trains;
+                if (!this.db.trainTitles) this.db.trainTitles = def.trainTitles;
+                if (!this.db.trainRewardGiven) this.db.trainRewardGiven = def.trainRewardGiven;
+                if (!this.db.customCali) this.db.customCali = def.customCali;
+                if (!this.db.lvl) this.db.lvl = def.lvl;
+                if (this.db.energy === undefined) this.db.energy = def.energy;
+                if (!this.db.activeBuffs) this.db.activeBuffs = def.activeBuffs;
+                if (!this.db.debuffs) this.db.debuffs = def.debuffs;
+                if (!this.db.stats) this.db.stats = def.stats;
+                if (this.db.prestige === undefined) this.db.prestige = def.prestige;
+                if (this.db.eventToday === undefined) this.db.eventToday = def.eventToday;
+                if (this.db.seasonMonth === undefined) this.db.seasonMonth = def.seasonMonth;
+                if (!this.db.essences) this.db.essences = def.essences;
+                if (!this.db.startDate) this.db.startDate = def.startDate;
+                if (!this.db.missConfig) this.db.missConfig = def.missConfig;
+                else {
+                    if (!this.db.missConfig.counts) this.db.missConfig.counts = def.missConfig.counts;
+                    if (!this.db.missConfig.names) this.db.missConfig.names = def.missConfig.names;
+                    // garante novas categorias
+                    Object.keys(def.missConfig.counts).forEach(cat => {
+                        if (this.db.missConfig.counts[cat] === undefined) this.db.missConfig.counts[cat] = def.missConfig.counts[cat];
+                    });
+                    Object.keys(def.missConfig.names).forEach(cat => {
+                        if (!this.db.missConfig.names[cat]) this.db.missConfig.names[cat] = def.missConfig.names[cat];
+                    });
+                }
+                if (!this.db.routineSystem) this.db.routineSystem = def.routineSystem;
+                else this.ensureRoutineStructure();
             },
 
             createDefaultRoutine() {
@@ -1947,7 +1913,8 @@
                     days[d] = {
                         morning: defaultTasks.morning.map(t => ({...t, done: false})),
                         afternoon: defaultTasks.afternoon.map(t => ({...t, done: false})),
-                        night: defaultTasks.night.map(t => ({...t, done: false}))
+                        night: defaultTasks.night.map(t => ({...t, done: false})),
+                        rewards: { morning: false, afternoon: false, night: false }
                     };
                 }
                 return { days };
@@ -1961,6 +1928,7 @@
                     if (!this.db.routineSystem.days[d].morning) this.db.routineSystem.days[d].morning = [];
                     if (!this.db.routineSystem.days[d].afternoon) this.db.routineSystem.days[d].afternoon = [];
                     if (!this.db.routineSystem.days[d].night) this.db.routineSystem.days[d].night = [];
+                    if (!this.db.routineSystem.days[d].rewards) this.db.routineSystem.days[d].rewards = { morning: false, afternoon: false, night: false };
                     ['morning','afternoon','night'].forEach(block => {
                         this.db.routineSystem.days[d][block].forEach(t => {
                             if (t.done === undefined) t.done = false;
@@ -1970,6 +1938,13 @@
             },
 
             save() { localStorage.setItem(this.key, JSON.stringify(this.db)); },
+
+            getDaysPlayed() {
+                const start = new Date(this.db.startDate + 'T00:00:00');
+                const now = new Date();
+                const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                return diff >= 0 ? diff : 0;
+            },
 
             switchTab(t) {
                 const allWindows = ['system', 'train', 'skills', 'hobbies', 'routine'];
@@ -2012,37 +1987,12 @@
             finalize() {
                 let n = document.getElementById('setup-name').value;
                 if (!n) return;
-                this.db = {
-                    points: 0,
-                    name: n.toUpperCase(),
-                    attr: { ATTR: 1 },
-                    attrNames: { ATTR: "" },
-                    customAttributes: [],
-                    miss: [],
-                    skills: [],
-                    hobbies: { forca: [], mobilidade: [], higiene: [], alimentacao: [], hidratacao: [], sono: [], espirito: [], vinculos: [], criativo: [], conhecimento: [], concentracao: [], baixa: [], obrigacoes: [] },
-                    trains: { puxada: [], empurrada: [], core: [] },
-                    trainTitles: { puxada: '[01] PUXADA', empurrada: '[02] EMPURRADA', core: '[03] CORE' },
-                    trainRewardGiven: {},
-                    customCali: { E: [], D: [], C: [], B: [], A: [], S: [] },
-                    lvl: 1,
-                    energy: 0,
-                    activeBuffs: { doubleXP: false, penaltyImmunity: 0 },
-                    debuffs: { corpo: false, mente: false, espirito: false, emboscada: false },
-                    stats: { totalTrains: 0, totalKnowledge: 0, totalBosses: 0, seasonTrains: 0, seasonQuests: 0, seasonBosses: 0 },
-                    prestige: 0,
-                    eventToday: false,
-                    seasonMonth: new Date().getMonth(),
-                    essences: "MBTI",
-                    missConfig: {
-                        counts: { forca: 1, mobilidade: 1, higiene: 0, alimentacao: 0, hidratacao: 0, sono: 0, espirito: 1, vinculos: 0, hobby: 2, conhecimento: 1, concentracao: 1, obrigacoes: 1 },
-                        names: { forca: '💪 FORÇA', mobilidade: '🛡️ MOBILIDADE', higiene: '🧼 HIGIENE', alimentacao: '🍽️ ALIMENTAÇÃO', hidratacao: '💧 HIDRATAÇÃO', sono: '😴 SONO', espirito: '✝️ ESPÍRITO', vinculos: '🤝 VÍNCULOS', hobby: '🧠 HOBBY', conhecimento: '📚 CONHECIMENTO', concentracao: '🧠 CONCENTRAÇÃO', obrigacoes: '📋 OBRIGAÇÕES' }
-                    },
-                    routineSystem: this.createDefaultRoutine()
-                };
+                this.db = this.getDefaultState();
+                this.db.name = n.toUpperCase();
                 this.genMiss();
                 this.save();
-                location.reload();
+                document.getElementById('setup-screen').classList.add('hidden');
+                this.render();
             },
 
             async check() {
@@ -2085,7 +2035,7 @@
                         if (this.db.miss && Date.now() > (this.db.missionBlockUntil || 0)) {
                             this.db.miss.forEach(m => {
                                 if (!m.done && !m.skipped) {
-                                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
+                                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'condicionamento' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
                                         penaltyTotal++;
                                         this.db.debuffs.corpo = true;
                                     }
@@ -2263,7 +2213,7 @@
                     });
                 };
 
-                const bodyCats = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono'];
+                const bodyCats = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono'];
                 bodyCats.forEach(cat => {
                     for (let i = 0; i < (counts[cat] || 0); i++) {
                         addMissForCat(cat, `Cadastre missão de ${names[cat] || cat}`, names[cat] || cat);
@@ -2440,7 +2390,7 @@
                     }
                     this.db.energy += m.energyG;
                     this.db.points += 2;
-                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
+                    if (m.cat === 'mobilidade' || m.cat === 'forca' || m.cat === 'condicionamento' || m.cat === 'higiene' || m.cat === 'alimentacao' || m.cat === 'hidratacao' || m.cat === 'sono') {
                         this.db.debuffs.corpo = false;
                     }
                     if (m.cat === 'espirito' || m.cat === 'vinculos') {
@@ -3014,6 +2964,8 @@
                 if (ess) ess.innerText = this.db.essences || 'MBTI';
                 const lvlUi = document.getElementById('lvl-ui');
                 if (lvlUi) lvlUi.innerText = "LVL " + this.db.lvl;
+                const daysPlayedEl = document.getElementById('days-played');
+                if (daysPlayedEl) daysPlayedEl.innerText = this.getDaysPlayed();
 
                 const presUi = document.getElementById('prestige-ui');
                 if (presUi) {
@@ -3122,7 +3074,7 @@
                 const trainsContainer = document.getElementById('trains-container');
                 if (trainsContainer) trainsContainer.innerHTML = tTotalH;
 
-                const allCats = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'];
+                const allCats = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'criativo', 'conhecimento', 'concentracao', 'baixa', 'obrigacoes'];
                 allCats.forEach(cat => {
                     let hH = "";
                     if (this.db.hobbies[cat]) {
@@ -3164,7 +3116,7 @@
                 if (missionUi) missionUi.innerHTML = mH;
 
                 let configHtml = '';
-                const catKeys = ['forca', 'mobilidade', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
+                const catKeys = ['forca', 'mobilidade', 'condicionamento', 'higiene', 'alimentacao', 'hidratacao', 'sono', 'espirito', 'vinculos', 'hobby', 'conhecimento', 'concentracao', 'obrigacoes'];
                 catKeys.forEach(cat => {
                     let count = this.db.missConfig.counts[cat] || 0;
                     let name = this.db.missConfig.names[cat] || cat;
@@ -3491,8 +3443,25 @@
                 const action = task.done ? 'DESFAZER CONCLUSÃO?' : 'CONFIRMAR CONCLUSÃO?';
                 if (await SystemModal.confirm(action)) {
                     task.done = !task.done;
+                    this.checkRoutineBlockReward(dayIndex, block, e);
                     this.save();
                     this.renderRoutine();
+                }
+            },
+
+            checkRoutineBlockReward(dayIndex, block, evt) {
+                const day = this.db.routineSystem.days[dayIndex];
+                const tasks = day[block];
+                const allDone = tasks.every(t => t.done);
+                if (allDone && !day.rewards[block]) {
+                    day.rewards[block] = true;
+                    let xp = 0;
+                    if (block === 'morning') xp = 100;
+                    else if (block === 'afternoon') xp = 50;
+                    else if (block === 'night') xp = 25;
+                    this.db.energy += xp;
+                    this.checkLvl();
+                    this.pop(evt, `+${xp} XP`);
                 }
             },
 
@@ -3510,6 +3479,7 @@
                     if (idx !== -1) {
                         if (await SystemModal.confirm("CONFIRMAR CONCLUSÃO?")) {
                             tasks[idx].done = true;
+                            this.checkRoutineBlockReward(today, b, null);
                             this.save();
                             this.renderRoutine();
                         }
