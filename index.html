@@ -1279,8 +1279,8 @@
             <input type="text" id="edit-mission-task" class="routine-input" placeholder="Nome da missão">
             <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DESCRIÇÃO</label>
             <textarea id="edit-mission-desc" class="routine-input" placeholder="Descrição (opcional)" style="height:80px; text-align:left;"></textarea>
-            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DIA ESPECÍFICO</label>
-            <select id="edit-mission-day" class="routine-input" style="text-align:center;">
+            <label class="stat-label" style="margin-top:10px; margin-bottom:4px;">DIAS ESPECÍFICOS (CTRL/CMD PARA VÁRIOS)</label>
+            <select id="edit-mission-day" class="routine-input" style="text-align:center;height:110px;" multiple>
                 <option value="null">TODOS OS DIAS</option>
                 <option value="0">DOMINGO</option>
                 <option value="1">SEGUNDA</option>
@@ -1335,6 +1335,7 @@
         <div class="window-title">QUEST SYSTEM</div>
         <div class="panel">
             <div class="quest-division">CORPO</div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">❤️ Vitalidade</span></div><div id="hobby-vitalidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vitalidade" class="routine-input" placeholder="Nova Vitalidade..."><button class="btn-add-rtn" onclick="Sys.addHobby('vitalidade')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🏃 Condicionamento</span></div><div id="hobby-condicionamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-condicionamento" class="routine-input" placeholder="Novo Condicionamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('condicionamento')">+</button></div></div>
@@ -1422,7 +1423,7 @@
                 <h3>Modificações Diárias</h3>
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
-            <div id="mission-ui"></div>
+            <div class="protocol-banner" style="margin-top:8px;">🔒 ÍCONE AO LADO DA QUEST: TRAVAR POSIÇÃO</div><div id="mission-ui"></div>
 
             <button class="btn-reset" style="margin-top:25px; font-size:10px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
@@ -1449,16 +1450,19 @@
 'use strict';
 
 const RANKS = ['E','D','C','B','A','S','SS+'];
-const HOBBY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'];
-const BODY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono'];
+const HOBBY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'];
+const BODY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono'];
 const CATEGORY_MAP = {
     forca:{type:'💪 FORÇA',debuff:'corpo'}, mobilidade:{type:'🛡️ MOBILIDADE',debuff:'corpo'}, condicionamento:{type:'🏃 CONDICIONAMENTO',debuff:'corpo'},
-    calejamento:{type:'🦾 CALEJAMENTO',debuff:'corpo'}, resistencia:{type:'🛡️ RESISTÊNCIA',debuff:'corpo'}, higiene:{type:'🧼 HIGIENE',debuff:'corpo'},
+    calejamento:{type:'🦾 CALEJAMENTO',debuff:'corpo'}, resistencia:{type:'🛡️ RESISTÊNCIA',debuff:'corpo'}, vitalidade:{type:'❤️ VITALIDADE',debuff:'corpo'}, higiene:{type:'🧼 HIGIENE',debuff:'corpo'},
     alimentacao:{type:'🍽️ ALIMENTAÇÃO',debuff:'corpo'}, hidratacao:{type:'💧 HIDRATAÇÃO',debuff:'corpo'}, sono:{type:'😴 SONO',debuff:'corpo'},
     espirito:{type:'✝️ ESPÍRITO',debuff:'espirito'}, vinculos:{type:'🤝 VÍNCULOS',debuff:'espirito'}, criativo:{type:'🎨 HOBBY',debuff:'mente'},
     conhecimento:{type:'📚 CONHECIMENTO',debuff:'mente'}, concentracao:{type:'🧠 CONCENTRAÇÃO',debuff:'mente'}, baixa:{type:'🔋 HOBBY',debuff:'mente'}, obrigacoes:{type:'📋 OBRIGAÇÕES',debuff:null}
 };
 const DAY_NAMES = ['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+function normalizeMissionDays(value){if(value===null||value===undefined||value==='')return null;const values=(Array.isArray(value)?value:[value]).filter(v=>v!==null&&v!==undefined&&v!==''&&String(v)!=='null');const days=values.map(v=>finiteInteger(v,null,0,6)).filter(v=>v!==null);return days.length?[...new Set(days)].sort((a,b)=>a-b):null;}
+function missionDayMatches(value,today){return value===null||(Array.isArray(value)?value.includes(today):value===today);}
+function missionDaysLabel(value){return value===null?'TODOS OS DIAS':value.map(day=>DAY_NAMES[day]).join(', ');}
 
 function isObject(value){ return value !== null && typeof value === 'object' && !Array.isArray(value); }
 function finiteNumber(value, fallback, min, max){
@@ -1469,7 +1473,7 @@ function finiteNumber(value, fallback, min, max){
     if (Number.isFinite(max)) result = Math.min(max, result);
     return result;
 }
-function finiteInteger(value, fallback, min, max){ return Math.trunc(finiteNumber(value, fallback, min, max)); }
+function finiteInteger(value, fallback, min, max){const n=typeof value==='number'?value:Number(value);if(!Number.isFinite(n))return fallback;let result=Math.trunc(n);if(Number.isFinite(min))result=Math.max(min,result);if(Number.isFinite(max))result=Math.min(max,result);return result;}
 function safeText(value, fallback=''){ return typeof value === 'string' ? value.trim() : fallback; }
 function cloneData(value){ return JSON.parse(JSON.stringify(value)); }
 function escapeHTML(value){
@@ -1555,7 +1559,7 @@ const Sys = {
         const categories = {};
         HOBBY_CATEGORIES.forEach(cat => { categories[cat] = []; });
         const names = {
-            forca:'💪 FORÇA',mobilidade:'🛡️ MOBILIDADE',condicionamento:'🏃 CONDICIONAMENTO',calejamento:'🦾 CALEJAMENTO',resistencia:'🛡️ RESISTÊNCIA',
+            forca:'💪 FORÇA',mobilidade:'🛡️ MOBILIDADE',condicionamento:'🏃 CONDICIONAMENTO',calejamento:'🦾 CALEJAMENTO',resistencia:'🛡️ RESISTÊNCIA',vitalidade:'❤️ VITALIDADE',
             higiene:'🧼 HIGIENE',alimentacao:'🍽️ ALIMENTAÇÃO',hidratacao:'💧 HIDRATAÇÃO',sono:'😴 SONO',espirito:'✝️ ESPÍRITO',vinculos:'🤝 VÍNCULOS',
             hobby:'🧠 HOBBY',conhecimento:'📚 CONHECIMENTO',concentracao:'🧠 CONCENTRAÇÃO',obrigacoes:'📋 OBRIGAÇÕES'
         };
@@ -1565,8 +1569,8 @@ const Sys = {
             customCali:{E:[],D:[],C:[],B:[],A:[],S:[], 'SS+':[]},lvl:1,energy:0,activeBuffs:{doubleXP:false,penaltyImmunity:0},
             debuffs:{corpo:false,mente:false,espirito:false,emboscada:false},stats:{totalTrains:0,totalKnowledge:0,totalBosses:0,seasonTrains:0,seasonQuests:0,seasonBosses:0},
             prestige:0,eventToday:false,seasonMonth:today.getMonth(),essences:'MBTI',startDate:today.toISOString().split('T')[0],last:'',
-            missConfig:{counts:{forca:1,mobilidade:1,condicionamento:0,calejamento:0,resistencia:0,higiene:0,alimentacao:0,hidratacao:0,sono:0,espirito:1,vinculos:0,hobby:2,conhecimento:1,concentracao:1,obrigacoes:1},names},
-            pinnedMissions:[],profileImage:'',customRank:'',missionBlockUntil:0
+            missConfig:{counts:{forca:1,mobilidade:1,condicionamento:0,calejamento:0,resistencia:0,vitalidade:0,higiene:0,alimentacao:0,hidratacao:0,sono:0,espirito:1,vinculos:0,hobby:2,conhecimento:1,concentracao:1,obrigacoes:1},names},
+            pinnedMissions:[],missionOrder:{},slotOrder:[],profileImage:'',customRank:'',missionBlockUntil:0
         };
     },
 
@@ -1575,8 +1579,8 @@ const Sys = {
         return {
             type:safeText(m.type,'MISSÃO'),task:safeText(m.task,'Missão sem nome') || 'Missão sem nome',desc:safeText(m.desc,''),done:Boolean(m.done),
             xpG:finiteInteger(m.xpG,0,0,100000),energyG:finiteInteger(m.energyG,0,0,100000),skipped:Boolean(m.skipped),cat:HOBBY_CATEGORIES.includes(m.cat)?m.cat:'obrigacoes',
-            pinned:Boolean(m.pinned),day:m.day === null || m.day === undefined || m.day === '' ? null : finiteInteger(m.day, null, 0, 6),sourceCat:HOBBY_CATEGORIES.includes(m.sourceCat)?m.sourceCat:null,
-            sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null
+            pinned:Boolean(m.pinned),day:normalizeMissionDays(m.day),sourceCat:HOBBY_CATEGORIES.includes(m.sourceCat)?m.sourceCat:null,
+            sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null,slotKey:safeText(m.slotKey,'') || null
         };
     },
 
@@ -1619,7 +1623,7 @@ const Sys = {
             out.hobbies[cat] = source.map(item => {
                 if (typeof item === 'string') return {task:item.trim(),desc:'',day:null};
                 const h = isObject(item) ? item : {};
-                return {task:safeText(h.task,''),desc:safeText(h.desc,''),day:h.day === null || h.day === undefined || h.day === '' ? null : finiteInteger(h.day,null,0,6)};
+                return {task:safeText(h.task,''),desc:safeText(h.desc,''),day:normalizeMissionDays(h.day)};
             }).filter(item => item.task);
         });
 
@@ -1645,6 +1649,8 @@ const Sys = {
             return {index:finiteInteger(p.index,0,0,100000),miss:this.normalizeMission(p.miss)};
         }) : [];
         out.pinnedMissions = out.pinnedMissions.filter((pm,i,a)=>a.findIndex(x=>x.index===pm.index)===i);
+        out.missionOrder=isObject(raw.missionOrder)?{...raw.missionOrder}:{};
+        out.slotOrder=Array.isArray(raw.slotOrder)?raw.slotOrder.map(x=>safeText(x,'')).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i):[];
 
         const defCounts = def.missConfig.counts;
         const defNames = def.missConfig.names;
@@ -1660,7 +1666,25 @@ const Sys = {
         const rawStats = isObject(raw.stats) ? raw.stats : {};
         out.stats = {};
         Object.keys(def.stats).forEach(key => { out.stats[key] = finiteInteger(rawStats[key],0,0,100000000); });
-        this.db = out;
+        this.db=out;
+        this.ensureSlotOrder();
+    },
+
+    ensureSlotOrder(){
+        if(!this.db||!Array.isArray(this.db.miss))return;
+        const used=new Set(), counters={};
+        this.db.miss.forEach(m=>{
+            let key=safeText(m.slotKey,'');
+            if(!key||used.has(key)){
+                const base=HOBBY_CATEGORIES.includes(m.cat)?m.cat:'slot';
+                const n=counters[base]||0;counters[base]=n+1;key=`${base}:${n}`;
+                while(used.has(key))key=`${base}:${counters[base]++}`;
+                m.slotKey=key;
+            }
+            used.add(key);
+        });
+        const current=this.db.miss.map(m=>m.slotKey).filter(Boolean), previous=Array.isArray(this.db.slotOrder)?this.db.slotOrder:[];
+        this.db.slotOrder=[...previous.filter(k=>current.includes(k)),...current.filter(k=>!previous.includes(k))];
     },
 
     save(){
@@ -1811,34 +1835,53 @@ const Sys = {
         if (!this.db) return;
         const today=new Date().getDay();
         const used=new Set();
-        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>pm.miss.day===null||pm.miss.day===today);
+        // Missões fixadas só existem quando são válidas hoje. As fixadas ocupam
+        // a posição escolhida pelo usuário, mas uma missão agendada não fixada
+        // não consome o slot diário da categoria.
+        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>missionDayMatches(pm.miss.day,today));
         pins.forEach(pm=>used.add(pm.miss.task));
-        const pick=(cat,fallback)=>{
-            const pool=(this.db.hobbies[cat]||[]).map((h,index)=>({h,index})).filter(x=>x.h.day===null||x.h.day===today);
-            const candidates=pool.filter(x=>!used.has(x.h.task));
-            const selected=(candidates.length?candidates:(pool.length?pool:[]));
-            if (!selected.length) return {task:fallback,desc:'',day:null,sourceCat:null,sourceIndex:null};
-            const chosen=selected[Math.floor(Math.random()*selected.length)];
-            used.add(chosen.h.task);
-            return {task:chosen.h.task,desc:chosen.h.desc,day:chosen.h.day,sourceCat:cat,sourceIndex:chosen.index};
-        };
         const result=[]; const counts=this.db.missConfig.counts,names=this.db.missConfig.names;
-        const add=(cat,fallback,type)=>{ const p=pick(cat,fallback); result.push(this.normalizeMission({...p,type,cat,done:false,skipped:false,pinned:false})); };
-        BODY_CATEGORIES.forEach(cat=>{ for(let i=0;i<(counts[cat]||0);i++) add(cat,`Cadastre missão de ${names[cat]||cat}`,names[cat]||cat); });
-        for(let i=0;i<(counts.espirito||0);i++) add('espirito','Cadastre Missão de Espírito',names.espirito);
-        for(let i=0;i<(counts.vinculos||0);i++) add('vinculos','Cadastre Vínculo',names.vinculos);
+        const slotCounters={};const nextSlotKey=cat=>{const base=HOBBY_CATEGORIES.includes(cat)?cat:'slot';const n=slotCounters[base]||0;slotCounters[base]=n+1;return `${base}:${n}`;};const addMission=(cat,entry,type,pinned=false)=>result.push(this.normalizeMission({type,cat,task:entry.h.task,desc:entry.h.desc,day:entry.h.day,sourceCat:cat,sourceIndex:entry.index,done:false,skipped:false,pinned,slotKey:nextSlotKey(cat)}));
+        const addCategory=(cat,fallback,type,count)=>{
+            const source=(this.db.hobbies[cat]||[]).map((h,index)=>({h,index}));
+            const scheduled=source.filter(x=>x.h.day!==null&&missionDayMatches(x.h.day,today)&&!used.has(x.h.task));
+            const daily=source.filter(x=>x.h.day===null&&!used.has(x.h.task));
+            // O slot configura apenas a quantidade sorteada diariamente.
+            for(let i=0;i<count;i++){
+                const candidates=daily.filter(x=>!used.has(x.h.task));
+                if(!candidates.length){
+                    result.push(this.normalizeMission({task:fallback,desc:'',day:null,sourceCat:null,sourceIndex:null,type,cat,done:false,skipped:false,pinned:false,slotKey:nextSlotKey(cat)}));
+                    continue;
+                }
+                const chosen=candidates[Math.floor(Math.random()*candidates.length)];
+                used.add(chosen.h.task); addMission(cat,chosen,type);
+            }
+            // Todas as missões marcadas para hoje entram além dos slots.
+            scheduled.forEach(chosen=>{used.add(chosen.h.task);addMission(cat,chosen,type);});
+        };
+        BODY_CATEGORIES.forEach(cat=>addCategory(cat,`Cadastre missão de ${names[cat]||cat}`,names[cat]||cat,counts[cat]||0));
+        addCategory('espirito','Cadastre Missão de Espírito',names.espirito,counts.espirito||0);
+        addCategory('vinculos','Cadastre Vínculo',names.vinculos,counts.vinculos||0);
         const hobbyCount=counts.hobby||0;
-        if(hobbyCount===1){
-            const mixed=[...(this.db.hobbies.criativo||[]).map((h,index)=>({h,index,cat:'criativo'})),...(this.db.hobbies.baixa||[]).map((h,index)=>({h,index,cat:'baixa'}))].filter(x=>x.h.day===null||x.h.day===today);
-            const candidates=mixed.filter(x=>!used.has(x.h.task)); const chosen=(candidates.length?candidates:mixed)[Math.floor(Math.random()*(candidates.length?candidates.length:mixed.length))];
-            if(chosen){used.add(chosen.h.task);result.push(this.normalizeMission({type:names.hobby,cat:chosen.cat,task:chosen.h.task,desc:chosen.h.desc,day:chosen.h.day,sourceCat:chosen.cat,sourceIndex:chosen.index}));}
-            else result.push(this.normalizeMission({type:names.hobby,cat:'criativo',task:'Cadastre um Hobby'}));
-        } else if(hobbyCount>1){ for(let i=0;i<Math.ceil(hobbyCount/2);i++) add('criativo','Cadastre missão Criativa',names.hobby); for(let i=0;i<Math.floor(hobbyCount/2);i++) add('baixa','Cadastre missão de Baixa Energia',names.hobby); }
-        for(let i=0;i<(counts.conhecimento||0);i++) add('conhecimento','Cadastre missão de Conhecimento',names.conhecimento);
-        for(let i=0;i<(counts.concentracao||0);i++) add('concentracao','Cadastre missão de Concentração',names.concentracao);
-        for(let i=0;i<(counts.obrigacoes||0);i++) add('obrigacoes','Cadastre Obrigação',names.obrigacoes);
-        pins.forEach(pm=>{ const mission=this.normalizeMission({...pm.miss,pinned:true,done:false,skipped:false}); if(pm.index>=0&&pm.index<result.length) result[pm.index]=mission; else result.push(mission); });
-        this.db.miss=result;
+        const hobbySource=[...(this.db.hobbies.criativo||[]).map((h,index)=>({h,index,cat:'criativo'})),...(this.db.hobbies.baixa||[]).map((h,index)=>({h,index,cat:'baixa'}))];
+        const hobbyDaily=hobbySource.filter(x=>x.h.day===null&&!used.has(x.h.task));
+        const hobbyScheduled=hobbySource.filter(x=>x.h.day!==null&&missionDayMatches(x.h.day,today)&&!used.has(x.h.task));
+        for(let i=0;i<hobbyCount;i++){
+            const candidates=hobbyDaily.filter(x=>!used.has(x.h.task));
+            if(!candidates.length){result.push(this.normalizeMission({type:names.hobby,cat:'criativo',task:'Cadastre um Hobby',done:false,skipped:false,pinned:false,slotKey:nextSlotKey('criativo')}));continue;}
+            const chosen=candidates[Math.floor(Math.random()*candidates.length)]; used.add(chosen.h.task); addMission(chosen.cat,chosen,names.hobby);
+        }
+        hobbyScheduled.forEach(chosen=>{used.add(chosen.h.task);addMission(chosen.cat,chosen,names.hobby);});
+        addCategory('conhecimento','Cadastre missão de Conhecimento',names.conhecimento,counts.conhecimento||0);
+        addCategory('concentracao','Cadastre missão de Concentração',names.concentracao,counts.concentracao||0);
+        addCategory('obrigacoes','Cadastre Obrigação',names.obrigacoes,counts.obrigacoes||0);
+        this.ensureSlotOrder();
+        const previous=Array.isArray(this.db.slotOrder)?[...this.db.slotOrder]:[], available=new Map(result.map(m=>[m.slotKey,m])), ordered=[];
+        previous.forEach(key=>{const m=available.get(key);if(m){ordered.push(m);available.delete(key);}});
+        result.forEach(m=>{if(available.has(m.slotKey)){ordered.push(m);available.delete(m.slotKey);}});
+        pins.forEach(pm=>{const m=this.normalizeMission({...pm.miss,pinned:true,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});if(pm.index>=0&&pm.index<ordered.length){const displaced=ordered[pm.index];ordered[pm.index]=m;if(displaced&&displaced.task!==m.task)ordered.push(displaced);}else ordered.push(m);});
+        this.db.miss=ordered;this.db.slotOrder=ordered.map(m=>m.slotKey).filter(Boolean);
+        this.db.miss.forEach((m,index)=>{const key=m.sourceCat!==null&&m.sourceIndex!==null?`${m.sourceCat}:${m.sourceIndex}`:null;if(key!==null)this.db.missionOrder[key]=index;});
     },
 
     switchTab(tab){
@@ -1870,7 +1913,7 @@ const Sys = {
     },
     moveMiss(index,direction,event){
         if(event&&event.stopPropagation)event.stopPropagation(); const target=index+direction;if(target<0||target>=this.db.miss.length)return;[this.db.miss[index],this.db.miss[target]]=[this.db.miss[target],this.db.miss[index]];
-        this.db.pinnedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.save();this.render();
+        this.db.pinnedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.db.slotOrder=this.db.miss.map(m=>m.slotKey).filter(Boolean);if(!this.db.missionOrder)this.db.missionOrder={};this.db.miss.forEach((m,i)=>{if(m.sourceCat!==null&&m.sourceIndex!==null)this.db.missionOrder[`${m.sourceCat}:${m.sourceIndex}`]=i;});this.save();this.render();
     },
     togglePinMission(index,event){
         if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss)return;
@@ -1882,7 +1925,7 @@ const Sys = {
         const miss=this.db.miss[index];if(!miss)return;this.detailContext=index;
         const title=document.getElementById('mission-detail-title'),body=document.getElementById('mission-detail-body'),overlay=document.getElementById('mission-detail-overlay'),edit=document.getElementById('mission-detail-edit');
         if(title)title.textContent=miss.type||'MISSÃO';
-        if(body)body.textContent=`${miss.task}\n\n${miss.desc||'Sem descrição cadastrada.'}\n\nDIA: ${miss.day===null?'TODOS OS DIAS':DAY_NAMES[miss.day]}\nSTATUS: ${miss.done?'CONCLUÍDA':miss.skipped?'PULADA':'PENDENTE'}`;
+        if(body)body.textContent=`${miss.task}\n\n${miss.desc||'Sem descrição cadastrada.'}\n\nDIAS: ${missionDaysLabel(miss.day)}\nSTATUS: ${miss.done?'CONCLUÍDA':miss.skipped?'PULADA':'PENDENTE'}`;
         if(edit){edit.onclick=()=>{this.closeMissDetail();if(miss.sourceCat!==null&&miss.sourceIndex!==null)this.edHobby(miss.sourceCat,miss.sourceIndex);else SystemModal.alert('Esta é uma missão automática; cadastre uma missão na categoria correspondente para editá-la.');};}
         if(overlay)overlay.classList.remove('hidden');
     },
@@ -1893,18 +1936,25 @@ const Sys = {
     closeEditMissionPanel(){const overlay=document.getElementById('edit-mission-overlay');if(overlay){overlay.classList.add('hidden');overlay.classList.remove('closing');}this.editContext=null;},
     async confirmEditMission(){
         if(!this.editContext)return;const {cat,idx}=this.editContext;const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][idx];if(!hobby)return;
-        const taskEl=document.getElementById('edit-mission-task'),descEl=document.getElementById('edit-mission-desc'),dayEl=document.getElementById('edit-mission-day');const task=(taskEl&&taskEl.value.trim())||hobby.task;const desc=descEl?descEl.value.trim():'';const day=dayEl&&dayEl.value!=='null'?finiteInteger(dayEl.value,null,0,6):null;
+        const taskEl=document.getElementById('edit-mission-task'),descEl=document.getElementById('edit-mission-desc'),dayEl=document.getElementById('edit-mission-day');const task=(taskEl&&taskEl.value.trim())||hobby.task;const desc=descEl?descEl.value.trim():'';const day=dayEl?normalizeMissionDays([...dayEl.selectedOptions].map(option=>option.value)):null;
         if(!(await SystemModal.confirm('Salvar alterações?')))return;hobby.task=task;hobby.desc=desc;hobby.day=day;this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===idx){pm.miss.task=task;pm.miss.desc=desc;pm.miss.day=day;}});this.genMiss();this.save();this.closeEditMissionPanel();this.render();
     },
 
     addHobby(cat){
-        if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`);const task=input?input.value.trim():'';if(!task)return;this.db.hobbies[cat].push({task,desc:'',day:null});if(input)input.value='';this.genMiss();this.save();this.render();
+        if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`),select=document.querySelector(`[data-new-day="${cat}"]`),task=input?input.value.trim():'';if(!task)return;
+        const day=select?normalizeMissionDays([...select.selectedOptions].map(o=>o.value)):null;this.db.hobbies[cat].push({task,desc:'',day});if(input)input.value='';if(select)Array.from(select.options).forEach(o=>o.selected=o.value==='null');this.genMiss();this.save();this.render();
+    },
+    isHobbyPinned(cat,index){const m=this.db.miss.find(x=>x.sourceCat===cat&&x.sourceIndex===index);return Boolean((m&&m.pinned)||this.db.pinnedMissions.some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
+    togglePinHobby(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const current=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current>=0){this.togglePinMission(current,event);return;}
+        const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const existing=this.db.pinnedMissions.find(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index);
+        if(existing)this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>pm!==existing);else{const type=(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||this.db.missConfig.names[cat]||cat.toUpperCase();const usedIndexes=new Set(this.db.pinnedMissions.map(pm=>pm.index));let pinIndex=this.db.miss.length;while(usedIndexes.has(pinIndex))pinIndex++;this.db.pinnedMissions.push({index:pinIndex,miss:this.normalizeMission({type,cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,pinned:true,slotKey:`pinned:${cat}:${index}`})});}this.genMiss();this.save();this.render();
     },
     async delHobby(cat,index,event){
         if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.hobbies[cat];if(!arr||!arr[index])return;if(!(await SystemModal.confirm(`Excluir a missão "${arr[index].task}"?`)))return;arr.splice(index,1);this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex>index)pm.miss.sourceIndex--;});this.genMiss();this.save();this.render();
     },
     edHobby(cat,index,event){
-        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const task=document.getElementById('edit-mission-task'),desc=document.getElementById('edit-mission-desc'),day=document.getElementById('edit-mission-day');if(task)task.value=hobby.task;if(desc)desc.value=hobby.desc||'';if(day)day.value=hobby.day===null?'null':String(hobby.day);this.openEditMissionPanel(cat,index);
+        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const task=document.getElementById('edit-mission-task'),desc=document.getElementById('edit-mission-desc'),day=document.getElementById('edit-mission-day');if(task)task.value=hobby.task;if(desc)desc.value=hobby.desc||'';if(day)Array.from(day.options).forEach(option=>option.selected=hobby.day===null?option.value==='null':Array.isArray(hobby.day)&&hobby.day.includes(Number(option.value)));this.openEditMissionPanel(cat,index);
     },
 
     addTrain(cat){
@@ -2010,7 +2060,7 @@ const Sys = {
 
     renderMissions(){
         const container=document.getElementById('mission-ui');if(!container)return;if(!this.db.miss.length){container.innerHTML='<div class="empty-state">Nenhuma modificação diária configurada.</div>';return;}
-        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Fixar missão">${m.pinned?'◆':'◇'}</button><span class="m-info" data-detail="${index}" title="Detalhes">ⓘ</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
+        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Travar missão nesta posição">${m.pinned?'🔒':'🔓'}</button><span class="m-info" data-detail="${index}" title="Detalhes">ⓘ</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
         container.querySelectorAll('[data-mission]').forEach(el=>el.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('[data-detail]'))return;this.showMissDetail(Number(el.dataset.mission));}));
         container.querySelectorAll('[data-pin]').forEach(el=>el.addEventListener('click',event=>this.togglePinMission(Number(el.dataset.pin),event)));
         container.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>this.showMissDetail(Number(el.dataset.detail))));
@@ -2041,8 +2091,10 @@ const Sys = {
     },
 
     renderHobbies(){
-        HOBBY_CATEGORIES.forEach(cat=>{const list=document.getElementById(`hobby-${cat}-ui`);if(!list)return;const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${DAY_NAMES[item.day]}]</small>`:''}</span><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',event=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),event)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',event=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),event)));});
-        const config=document.getElementById('miss-config-ui');if(!config)return;const keys=['forca','mobilidade','condicionamento','calejamento','resistencia','higiene','alimentacao','hidratacao','sono','espirito','vinculos','hobby','conhecimento','concentracao','obrigacoes'];config.innerHTML=keys.map(cat=>`<div class="config-line"><span class="config-name" title="Renomear categoria">${escapeHTML(this.db.missConfig.names[cat]||cat.toUpperCase())}</span><button class="mini-btn" data-rename-cat="${cat}">✎</button><button class="mini-btn" data-adjust-cat="${cat}" data-delta="-1">−</button><span class="config-count">${this.db.missConfig.counts[cat]||0}</span><button class="mini-btn" data-adjust-cat="${cat}" data-delta="1">+</button></div>`).join('');config.querySelectorAll('[data-rename-cat]').forEach(el=>el.addEventListener('click',()=>this.renameMissClass(el.dataset.renameCat)));config.querySelectorAll('[data-adjust-cat]').forEach(el=>el.addEventListener('click',()=>this.adjustMissCount(el.dataset.adjustCat,Number(el.dataset.delta))));
+        const opts=`<option value="null">TODOS</option>${DAY_NAMES.map((d,i)=>`<option value="${i}">${d.slice(0,3)}</option>`).join('')}`;
+        HOBBY_CATEGORIES.forEach(cat=>{const list=document.getElementById(`hobby-${cat}-ui`);if(!list)return;const wrapper=list.parentElement&&list.parentElement.querySelector('.routine-input-wrap');if(wrapper&&!wrapper.querySelector('[data-new-day]')){const s=document.createElement('select');s.className='routine-input';s.multiple=true;s.size=3;s.dataset.newDay=cat;s.title='Selecione um ou mais dias; TODOS = todos os dias';s.style.cssText='flex:1.4;min-width:0;height:40px;margin:0;padding:3px;font-size:9px;text-align:center;';s.innerHTML=opts;wrapper.insertBefore(s,wrapper.querySelector('.btn-add-rtn'));s.options[0].selected=true;}
+            const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${missionDaysLabel(item.day)}]</small>`:''}</span><button class="btn-order" data-pin-hobby="${cat}" data-hobby-i="${index}" title="Fixar/desfixar Quest">${this.isHobbyPinned(cat,index)?'🔒':'🔓'}</button><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-pin-hobby]').forEach(el=>el.addEventListener('click',e=>this.togglePinHobby(el.dataset.pinHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',e=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',e=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),e)));});
+        const config=document.getElementById('miss-config-ui');if(!config)return;const keys=['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','hobby','conhecimento','concentracao','obrigacoes'];config.innerHTML=keys.map(cat=>`<div class="config-line"><span class="config-name" title="Renomear categoria">${escapeHTML(this.db.missConfig.names[cat]||cat.toUpperCase())}</span><button class="mini-btn" data-rename-cat="${cat}">✎</button><button class="mini-btn" data-adjust-cat="${cat}" data-delta="-1">−</button><span class="config-count">${this.db.missConfig.counts[cat]||0}</span><button class="mini-btn" data-adjust-cat="${cat}" data-delta="1">+</button></div>`).join('');config.querySelectorAll('[data-rename-cat]').forEach(el=>el.addEventListener('click',()=>this.renameMissClass(el.dataset.renameCat)));config.querySelectorAll('[data-adjust-cat]').forEach(el=>el.addEventListener('click',()=>this.adjustMissCount(el.dataset.adjustCat,Number(el.dataset.delta))));
     },
 
     adjustMissCount(cat,delta){if(!Object.prototype.hasOwnProperty.call(this.db.missConfig.counts,cat))return;this.db.missConfig.counts[cat]=finiteInteger(this.db.missConfig.counts[cat]+delta,0,0,20);this.genMiss();this.save();this.render();},
