@@ -1423,7 +1423,7 @@
                 <h3>Modificações Diárias</h3>
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
-            <div class="protocol-banner" style="margin-top:8px;">▣ ÍCONE AO LADO DA QUEST: TRAVAR POSIÇÃO</div><div id="mission-ui"></div>
+            <div id="mission-ui"></div>
 
             <button class="btn-reset" style="margin-top:25px; font-size:10px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
@@ -2103,9 +2103,8 @@ const Sys = {
 
     renderMissions(){
         const container=document.getElementById('mission-ui');if(!container)return;if(!this.db.miss.length){container.innerHTML='<div class="empty-state">Nenhuma modificação diária configurada.</div>';return;}
-        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Travar missão nesta posição">${m.pinned?'▣':'□'}</button><span class="m-info" data-detail="${index}" title="Detalhes">i</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
+        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><span class="m-info" data-detail="${index}" title="Detalhes">i</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
         container.querySelectorAll('[data-mission]').forEach(el=>el.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('[data-detail]'))return;this.showMissDetail(Number(el.dataset.mission));}));
-        container.querySelectorAll('[data-pin]').forEach(el=>el.addEventListener('click',event=>this.togglePinMission(Number(el.dataset.pin),event)));
         container.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>this.showMissDetail(Number(el.dataset.detail))));
         container.querySelectorAll('[data-do-mission]').forEach(el=>el.addEventListener('click',event=>this.doMiss(Number(el.dataset.doMission),event)));
         container.querySelectorAll('[data-skip-mission]').forEach(el=>el.addEventListener('click',event=>this.skipMiss(Number(el.dataset.skipMission),event)));
