@@ -867,6 +867,18 @@
             background: color-mix(in srgb, var(--a) 5%, transparent);
             border-color: color-mix(in srgb, var(--a) 50%, transparent);
         }
+        .mission-slot-hidden {
+            display: none !important;
+        }
+        .mission-item.slot-locked {
+            border-left-color: var(--gold);
+            box-shadow: 0 0 8px color-mix(in srgb, var(--gold) 18%, transparent);
+        }
+        .mini-btn.locked {
+            color: var(--gold);
+            border-color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+        }
         .mission-item.done {
             opacity: 0.4;
             filter: grayscale(0.8);
@@ -1583,7 +1595,7 @@ const Sys = {
             type:cleanSystemText(m.type||'MISSÃO') || 'MISSÃO',task:cleanSystemText(m.task||'Missão sem nome') || 'Missão sem nome',desc:cleanSystemText(m.desc||''),done:Boolean(m.done),
             xpG:finiteInteger(m.xpG,0,0,100000),energyG:finiteInteger(m.energyG,0,0,100000),skipped:Boolean(m.skipped),cat:HOBBY_CATEGORIES.includes(m.cat)?m.cat:'obrigacoes',
             pinned:Boolean(m.pinned),day:normalizeMissionDays(m.day),sourceCat:HOBBY_CATEGORIES.includes(m.sourceCat)?m.sourceCat:null,
-            sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null,slotKey:safeText(m.slotKey,'') || null
+            sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null,slotKey:safeText(m.slotKey,'') || null,slotLocked:Boolean(m.slotLocked),hiddenSlot:false
         };
     },
 
@@ -1777,7 +1789,7 @@ const Sys = {
             if (this.db.activeBuffs.penaltyImmunity > 0 && !isSunday) this.db.activeBuffs.penaltyImmunity--;
             else if (!isSunday && Date.now() > this.db.missionBlockUntil) {
                 this.db.miss.forEach(m => {
-                    if (m.done || m.skipped) return;
+                    if (m.hiddenSlot || m.done || m.skipped) return;
                     penaltyTotal++;
                     if (CATEGORY_MAP[m.cat] && CATEGORY_MAP[m.cat].debuff) this.db.debuffs[CATEGORY_MAP[m.cat].debuff] = true;
                 });
@@ -1852,8 +1864,7 @@ const Sys = {
         // Missões fixadas só existem quando são válidas hoje. As fixadas ocupam
         // a posição escolhida pelo usuário, mas uma missão agendada não fixada
         // não consome o slot diário da categoria.
-        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>missionDayMatches(pm.miss.day,today));
-        pins.forEach(pm=>used.add(pm.miss.task));
+        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>Boolean(pm.miss.slotLocked));
         const result=[]; const counts=this.db.missConfig.counts,names=this.db.missConfig.names;
         const slotCounters={};const nextSlotKey=cat=>{const base=HOBBY_CATEGORIES.includes(cat)?cat:'slot';const n=slotCounters[base]||0;slotCounters[base]=n+1;return `${base}:${n}`;};const addMission=(cat,entry,type,pinned=false)=>result.push(this.normalizeMission({type,cat,task:entry.h.task,desc:entry.h.desc,day:entry.h.day,sourceCat:cat,sourceIndex:entry.index,done:false,skipped:false,pinned,slotKey:nextSlotKey(cat)}));
         const addCategory=(cat,fallback,type,count)=>{
@@ -1893,7 +1904,7 @@ const Sys = {
         const previous=Array.isArray(this.db.slotOrder)?[...this.db.slotOrder]:[], available=new Map(result.map(m=>[m.slotKey,m])), ordered=[];
         previous.forEach(key=>{const m=available.get(key);if(m){ordered.push(m);available.delete(key);}});
         result.forEach(m=>{if(available.has(m.slotKey)){ordered.push(m);available.delete(m.slotKey);}});
-        pins.forEach(pm=>{const m=this.normalizeMission({...pm.miss,pinned:true,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});if(pm.index>=0&&pm.index<ordered.length){const displaced=ordered[pm.index];ordered[pm.index]=m;if(displaced&&displaced.task!==m.task)ordered.push(displaced);}else ordered.push(m);});
+        pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);if(selectedIndex<0)return;const selected=ordered.splice(selectedIndex,1)[0];selected.slotLocked=true;selected.pinned=true;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
         this.db.miss=ordered;this.db.slotOrder=ordered.map(m=>m.slotKey).filter(Boolean);
         this.db.miss.forEach((m,index)=>{const key=m.sourceCat!==null&&m.sourceIndex!==null?`${m.sourceCat}:${m.sourceIndex}`:null;if(key!==null)this.db.missionOrder[key]=index;});
     },
@@ -1933,8 +1944,8 @@ const Sys = {
         if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss)return;
         const sameMission=pm=>{const pinned=pm&&pm.miss||{};return pm.index===index||(miss.sourceCat!==null&&miss.sourceIndex!==null&&pinned.sourceCat===miss.sourceCat&&pinned.sourceIndex===miss.sourceIndex)||(miss.slotKey&&pinned.slotKey===miss.slotKey);};
         const alreadyPinned=Boolean(miss.pinned)||this.db.pinnedMissions.some(sameMission);
-        if(alreadyPinned){miss.pinned=false;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));}
-        else {miss.pinned=true;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));this.db.pinnedMissions.push({index,miss:cloneData(miss)});}
+        if(alreadyPinned){miss.pinned=false;miss.slotLocked=false;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));}
+        else {miss.pinned=true;miss.slotLocked=true;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));this.db.pinnedMissions.push({index,miss:cloneData(miss)});}
         this.save();this.render();
     },
     showMissDetail(index){
@@ -2103,11 +2114,12 @@ const Sys = {
 
     renderMissions(){
         const container=document.getElementById('mission-ui');if(!container)return;if(!this.db.miss.length){container.innerHTML='<div class="empty-state">Nenhuma modificação diária configurada.</div>';return;}
-        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><span class="m-info" data-detail="${index}" title="Detalhes">i</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
+        container.innerHTML=this.db.miss.map((m,index)=>{if(m.hiddenSlot)return `<div class="mission-slot-hidden" data-mission="${index}"></div>`;const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';const locked=Boolean(m.slotLocked);return `<div class="mission-item ${m.done?'done':''} ${locked?'slot-locked':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><span class="m-info" data-detail="${index}" title="Detalhes">i</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn ${locked?'locked':''}" data-toggle-slot-lock="${index}" title="${locked?'Desbloquear este slot':'Bloquear esta missão neste slot'}">${locked?'🔒':'🔓'}</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
         container.querySelectorAll('[data-mission]').forEach(el=>el.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('[data-detail]'))return;this.showMissDetail(Number(el.dataset.mission));}));
         container.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>this.showMissDetail(Number(el.dataset.detail))));
         container.querySelectorAll('[data-do-mission]').forEach(el=>el.addEventListener('click',event=>this.doMiss(Number(el.dataset.doMission),event)));
         container.querySelectorAll('[data-skip-mission]').forEach(el=>el.addEventListener('click',event=>this.skipMiss(Number(el.dataset.skipMission),event)));
+        container.querySelectorAll('[data-toggle-slot-lock]').forEach(el=>el.addEventListener('click',event=>this.togglePinMission(Number(el.dataset.toggleSlotLock),event)));
         container.querySelectorAll('[data-move-mission]').forEach(el=>el.addEventListener('click',event=>this.moveMiss(Number(el.dataset.moveMission),Number(el.dataset.dir),event)));
     },
 
