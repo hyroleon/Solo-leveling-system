@@ -10,26 +10,26 @@
             --p: rgba(12, 22, 38, 0.85);
             --b: #0f3854;
             --a: #00e5ff;
-            --a-dim: rgba(0, 229, 255, 0.15);
+            --a-dim: color-mix(in srgb, var(--a) 15%, transparent);
             --t: #e0f7fa;
             --t-dim: #6b8c9e;
-            --glow: 0 0 12px rgba(0, 229, 255, 0.7);
-            --glow-box: 0 0 15px rgba(0, 229, 255, 0.25), inset 0 0 20px rgba(0, 229, 255, 0.1);
+            --glow: 0 0 12px color-mix(in srgb, var(--a) 70%, transparent);
+            --glow-box: 0 0 15px color-mix(in srgb, var(--a) 25%, transparent), inset 0 0 20px color-mix(in srgb, var(--a) 10%, transparent);
             --locked: rgba(10, 15, 25, 0.9);
-            --state-icon: #00e5ff;
-            --gold: #b026ff;
-            --danger: #bd00ff;
-            --energy-color: #00e5ff;
-            --hud-corner: #00e5ff;
-            --hud-line: rgba(0, 229, 255, 0.25);
+            --state-icon: var(--a);
+            --gold: var(--a);
+            --danger: var(--a);
+            --energy-color: var(--a);
+            --hud-corner: var(--a);
+            --hud-line: color-mix(in srgb, var(--a) 25%, transparent);
             --panel-bg: rgba(8, 15, 26, 0.92);
-            --panel-border: rgba(0, 229, 255, 0.3);
-            --panel-glow: 0 0 20px rgba(0, 229, 255, 0.12), inset 0 0 30px rgba(0, 229, 255, 0.03);
+            --panel-border: color-mix(in srgb, var(--a) 30%, transparent);
+            --panel-glow: 0 0 20px color-mix(in srgb, var(--a) 12%, transparent), inset 0 0 30px color-mix(in srgb, var(--a) 3%, transparent);
             --font-tech: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
             --window-bg: rgba(5, 10, 18, 0.95);
-            --window-border: rgba(0, 229, 255, 0.5);
-            --window-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1);
+            --window-border: color-mix(in srgb, var(--a) 50%, transparent);
+            --window-shadow: 0 0 30px color-mix(in srgb, var(--a) 30%, transparent), 0 0 60px color-mix(in srgb, var(--a) 10%, transparent);
             --z-base: 1;
             --z-interface: 10;
             --z-section: 100;
@@ -70,9 +70,9 @@
             width: 100%;
             height: 100%;
             background:
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 229, 255, 0.02) 2px, rgba(0, 229, 255, 0.02) 4px),
-                radial-gradient(circle at 80% 20%, rgba(0, 100, 150, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 20% 80%, rgba(0, 150, 200, 0.05) 0%, transparent 50%);
+                repeating-linear-gradient(0deg, transparent, transparent 2px, color-mix(in srgb, var(--a) 2%, transparent) 2px, color-mix(in srgb, var(--a) 2%, transparent) 4px),
+                radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--a) 8%, transparent) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, color-mix(in srgb, var(--a) 5%, transparent) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
             opacity: 0.7;
@@ -113,14 +113,14 @@
             100% { opacity: 0.7; text-shadow: none; }
         }
         @keyframes systemWarning {
-            0% { box-shadow: 0 0 10px rgba(176, 38, 255, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(176, 38, 255, 0.6); }
-            100% { box-shadow: 0 0 10px rgba(176, 38, 255, 0.2); }
+            0% { box-shadow: 0 0 10px color-mix(in srgb, var(--a) 20%, transparent); }
+            50% { box-shadow: 0 0 20px color-mix(in srgb, var(--a) 60%, transparent); }
+            100% { box-shadow: 0 0 10px color-mix(in srgb, var(--a) 20%, transparent); }
         }
         @keyframes subtleGlow {
-            0% { box-shadow: 0 0 5px rgba(0,229,255,0.3); }
-            50% { box-shadow: 0 0 15px rgba(0,229,255,0.5); }
-            100% { box-shadow: 0 0 5px rgba(0,229,255,0.3); }
+            0% { box-shadow: 0 0 5px color-mix(in srgb, var(--a) 30%, transparent); }
+            50% { box-shadow: 0 0 15px color-mix(in srgb, var(--a) 50%, transparent); }
+            100% { box-shadow: 0 0 5px color-mix(in srgb, var(--a) 30%, transparent); }
         }
         @keyframes hudPanelEnter {
             0% { opacity: 0; transform: translateY(10px) scale(0.98); filter: brightness(1.5); }
@@ -225,7 +225,7 @@
         textarea:focus,
         select:focus {
             border-color: var(--a);
-            box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 8px color-mix(in srgb, var(--a) 40%, transparent);
         }
         input::placeholder,
         textarea::placeholder {
@@ -243,7 +243,7 @@
         .btn-init {
             width: 100%;
             padding: 12px;
-            background: rgba(0, 229, 255, 0.05);
+            background: color-mix(in srgb, var(--a) 5%, transparent);
             border: 1px solid var(--a);
             color: var(--a);
             font-weight: 900;
@@ -251,7 +251,7 @@
             margin-top: 15px;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+            box-shadow: 0 0 10px color-mix(in srgb, var(--a) 15%, transparent);
             font-family: var(--font-tech);
             position: relative;
             overflow: hidden;
@@ -440,14 +440,14 @@
             transition: left 0.3s ease;
         }
         .nav-btn:hover {
-            border-color: rgba(0, 229, 255, 0.5);
+            border-color: color-mix(in srgb, var(--a) 50%, transparent);
             color: var(--t);
         }
         .nav-btn.active {
             border-color: var(--a);
             color: var(--t);
             background: var(--a-dim);
-            box-shadow: inset 0 -2px 0 var(--a), 0 0 15px rgba(0, 229, 255, 0.3);
+            box-shadow: inset 0 -2px 0 var(--a), 0 0 15px color-mix(in srgb, var(--a) 30%, transparent);
             text-shadow: 0 0 5px var(--a);
         }
         .nav-btn.active::before {
@@ -615,9 +615,9 @@
             transition: border-color 0.2s ease;
         }
         .routine-box:hover {
-            border-color: rgba(0, 229, 255, 0.4);
+            border-color: color-mix(in srgb, var(--a) 40%, transparent);
             border-left-color: var(--a);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.05);
+            box-shadow: 0 0 10px color-mix(in srgb, var(--a) 5%, transparent);
         }
         .routine-header {
             display: flex;
@@ -645,7 +645,7 @@
             transition: background 0.2s ease, opacity 0.2s ease;
         }
         .routine-item:hover {
-            background: rgba(0, 229, 255, 0.05);
+            background: color-mix(in srgb, var(--a) 5%, transparent);
         }
         .routine-item.checked {
             color: var(--t-dim);
@@ -694,7 +694,7 @@
             width: 30px;
             cursor: pointer;
             text-shadow: var(--glow);
-            box-shadow: 0 0 5px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 5px color-mix(in srgb, var(--a) 20%, transparent);
             border-radius: 0;
             font-family: var(--font-mono);
         }
@@ -720,7 +720,7 @@
         }
         .btn-all-train:hover {
             opacity: 1;
-            box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 8px color-mix(in srgb, var(--a) 40%, transparent);
         }
         .btn-order {
             background: none;
@@ -847,7 +847,7 @@
         .btn-shuffle:hover {
             border-color: var(--a);
             color: var(--a);
-            box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 5px color-mix(in srgb, var(--a) 30%, transparent);
         }
 
         .mission-item {
@@ -864,8 +864,8 @@
             transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
         }
         .mission-item:hover {
-            background: rgba(0, 229, 255, 0.05);
-            border-color: rgba(0, 229, 255, 0.5);
+            background: color-mix(in srgb, var(--a) 5%, transparent);
+            border-color: color-mix(in srgb, var(--a) 50%, transparent);
         }
         .mission-item.done {
             opacity: 0.4;
@@ -881,7 +881,7 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 3px;
-            text-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
+            text-shadow: 0 0 5px color-mix(in srgb, var(--a) 40%, transparent);
             font-family: var(--font-mono);
         }
         .m-task {
@@ -953,7 +953,7 @@
         .skill-item.mastered {
             border-color: var(--a);
             background: var(--a-dim);
-            box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.1);
+            box-shadow: inset 0 0 10px color-mix(in srgb, var(--a) 10%, transparent);
         }
         .check-box {
             width: 16px;
@@ -1013,7 +1013,7 @@
             background: var(--a-dim);
             border-color: var(--a);
             color: var(--a);
-            box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.15);
+            box-shadow: inset 0 0 10px color-mix(in srgb, var(--a) 15%, transparent);
             text-shadow: var(--glow);
         }
         .passive-btn.locked {
@@ -1070,8 +1070,8 @@
         }
         .division-mente {
             color: var(--gold);
-            text-shadow: 0 0 8px rgba(176, 38, 255, 0.5);
-            border-bottom-color: rgba(176, 38, 255, 0.3);
+            text-shadow: 0 0 8px color-mix(in srgb, var(--a) 50%, transparent);
+            border-bottom-color: color-mix(in srgb, var(--a) 30%, transparent);
         }
 
         #timer-display {
@@ -1101,7 +1101,7 @@
         .timer-btn:hover {
             border-color: var(--a);
             color: var(--t);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 10px color-mix(in srgb, var(--a) 20%, transparent);
             text-shadow: var(--glow);
         }
 
@@ -1118,7 +1118,7 @@
             transition: border-color 0.2s ease;
         }
         .custom-slot-item:hover {
-            border-color: rgba(0, 229, 255, 0.4);
+            border-color: color-mix(in srgb, var(--a) 40%, transparent);
         }
         .btn-slot-remove {
             opacity: 0.5;
@@ -1302,11 +1302,11 @@
     <!-- JANELAS DO SYSTEM -->
     <div id="tab-train" class="system-window hidden">
         <div class="window-title">TREINAMENTO</div>
-        <div class="panel" style="text-align:center; margin-bottom:12px; border-color:var(--gold); box-shadow: 0 0 15px rgba(176,38,255,0.15), inset 0 0 20px rgba(176,38,255,0.05);">
-            <h3 style="color:var(--gold); font-size:13px; letter-spacing:2px; margin:0 0 6px 0; text-shadow: 0 0 5px rgba(176,38,255,0.5); font-family: var(--font-mono);">CRONÔMETRO</h3>
+        <div class="panel" style="text-align:center; margin-bottom:12px; border-color:var(--gold); box-shadow: 0 0 15px color-mix(in srgb, var(--a) 15%, transparent), inset 0 0 20px color-mix(in srgb, var(--a) 5%, transparent);">
+            <h3 style="color:var(--gold); font-size:13px; letter-spacing:2px; margin:0 0 6px 0; text-shadow: 0 0 5px color-mix(in srgb, var(--a) 50%, transparent); font-family: var(--font-mono);">CRONÔMETRO</h3>
             <div id="timer-display">00:00:00</div>
             <div>
-                <button class="timer-btn" onclick="Sys.startTimer()" style="color:#00e5ff; border-color:#00e5ff;">▶ Play</button>
+                <button class="timer-btn" onclick="Sys.startTimer()" style="color:var(--a); border-color:var(--a);">▶ Play</button>
                 <button class="timer-btn" onclick="Sys.pauseTimer()">⏸ Pause</button>
                 <button class="timer-btn" onclick="Sys.resetTimer()" style="color:var(--danger); border-color:var(--danger);">⏹ Reset</button>
             </div>
@@ -1335,20 +1335,20 @@
         <div class="window-title">QUEST SYSTEM</div>
         <div class="panel">
             <div class="quest-division">CORPO</div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">❤️ Vitalidade</span></div><div id="hobby-vitalidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vitalidade" class="routine-input" placeholder="Nova Vitalidade..."><button class="btn-add-rtn" onclick="Sys.addHobby('vitalidade')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💪 Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🏃 Condicionamento</span></div><div id="hobby-condicionamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-condicionamento" class="routine-input" placeholder="Novo Condicionamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('condicionamento')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🦾 Calejamento</span></div><div id="hobby-calejamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-calejamento" class="routine-input" placeholder="Novo Calejamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('calejamento')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🛡️ Resistência</span></div><div id="hobby-resistencia-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-resistencia" class="routine-input" placeholder="Nova Resistência..."><button class="btn-add-rtn" onclick="Sys.addHobby('resistencia')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🧼 Higiene</span></div><div id="hobby-higiene-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-higiene" class="routine-input" placeholder="Nova Higiene..."><button class="btn-add-rtn" onclick="Sys.addHobby('higiene')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🍽️ Alimentação</span></div><div id="hobby-alimentacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-alimentacao" class="routine-input" placeholder="Nova Alimentação..."><button class="btn-add-rtn" onclick="Sys.addHobby('alimentacao')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">💧 Hidratação</span></div><div id="hobby-hidratacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-hidratacao" class="routine-input" placeholder="Nova Hidratação..."><button class="btn-add-rtn" onclick="Sys.addHobby('hidratacao')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">😴 Sono</span></div><div id="hobby-sono-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-sono" class="routine-input" placeholder="Nova Sono..."><button class="btn-add-rtn" onclick="Sys.addHobby('sono')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">⊙ Vitalidade</span></div><div id="hobby-vitalidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vitalidade" class="routine-input" placeholder="Nova Vitalidade..."><button class="btn-add-rtn" onclick="Sys.addHobby('vitalidade')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">◆ Força</span></div><div id="hobby-forca-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-forca" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('forca')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">◇ Mobilidade</span></div><div id="hobby-mobilidade-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-mobilidade" class="routine-input" placeholder="Nova Missão..."><button class="btn-add-rtn" onclick="Sys.addHobby('mobilidade')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">△ Condicionamento</span></div><div id="hobby-condicionamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-condicionamento" class="routine-input" placeholder="Novo Condicionamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('condicionamento')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">▣ Calejamento</span></div><div id="hobby-calejamento-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-calejamento" class="routine-input" placeholder="Novo Calejamento..."><button class="btn-add-rtn" onclick="Sys.addHobby('calejamento')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">◇ Resistência</span></div><div id="hobby-resistencia-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-resistencia" class="routine-input" placeholder="Nova Resistência..."><button class="btn-add-rtn" onclick="Sys.addHobby('resistencia')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">⌁ Higiene</span></div><div id="hobby-higiene-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-higiene" class="routine-input" placeholder="Nova Higiene..."><button class="btn-add-rtn" onclick="Sys.addHobby('higiene')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">≋ Alimentação</span></div><div id="hobby-alimentacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-alimentacao" class="routine-input" placeholder="Nova Alimentação..."><button class="btn-add-rtn" onclick="Sys.addHobby('alimentacao')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">∿ Hidratação</span></div><div id="hobby-hidratacao-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-hidratacao" class="routine-input" placeholder="Nova Hidratação..."><button class="btn-add-rtn" onclick="Sys.addHobby('hidratacao')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">◌ Sono</span></div><div id="hobby-sono-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-sono" class="routine-input" placeholder="Nova Sono..."><button class="btn-add-rtn" onclick="Sys.addHobby('sono')">+</button></div></div>
 
             <div class="quest-division">ESPÍRITO</div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">✝️ Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">🤝 Vínculos</span></div><div id="hobby-vinculos-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vinculos" class="routine-input" placeholder="Novo Vínculo..."><button class="btn-add-rtn" onclick="Sys.addHobby('vinculos')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">† Práticas Espirituais</span></div><div id="hobby-espirito-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-espirito" class="routine-input" placeholder="Nova Prática..."><button class="btn-add-rtn" onclick="Sys.addHobby('espirito')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">∞ Vínculos</span></div><div id="hobby-vinculos-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-vinculos" class="routine-input" placeholder="Novo Vínculo..."><button class="btn-add-rtn" onclick="Sys.addHobby('vinculos')">+</button></div></div>
 
             <div class="quest-division division-mente">MENTE</div>
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Criativo</span></div><div id="hobby-criativo-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-criativo" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('criativo')">+</button></div></div>
@@ -1357,7 +1357,7 @@
             <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--gold)">Baixa Energia</span></div><div id="hobby-baixa-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-baixa" class="routine-input" placeholder="Novo..."><button class="btn-add-rtn" onclick="Sys.addHobby('baixa')">+</button></div></div>
 
             <div class="quest-division">OBRIGAÇÕES</div>
-            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">📋 Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
+            <div class="routine-box"><div class="routine-header"><span class="stat-label" style="color:var(--a)">▥ Obrigações</span></div><div id="hobby-obrigacoes-ui" class="routine-list"></div><div class="routine-input-wrap"><input type="text" id="inp-obrigacoes" class="routine-input" placeholder="Nova Obrigação..."><button class="btn-add-rtn" onclick="Sys.addHobby('obrigacoes')">+</button></div></div>
 
             <div class="quest-division">CONFIGURAÇÕES</div>
             <div id="miss-config-ui" style="margin-top:8px;"></div>
@@ -1410,20 +1410,20 @@
                     <span class="stat-val" id="days-played">0</span>
                 </div>
 
-                <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); margin-bottom: 12px;" onclick="Sys.doPrestige()">👑 RENASCER</button>
+                <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px color-mix(in srgb, var(--a) 40%, transparent); margin-bottom: 12px;" onclick="Sys.doPrestige()">◆ RENASCER</button>
             </div>
 
             <div id="attributes-grid" class="attributes-grid"></div>
 
             <div style="margin-top: 8px; text-align:center;">
-                <button class="btn-init" onclick="Sys.buyAttributeSlot()" style="border-color:var(--a); color:var(--a); margin-top:0; font-size:11px;">🏪 COMPRAR ATRIBUTO</button>
+                <button class="btn-init" onclick="Sys.buyAttributeSlot()" style="border-color:var(--a); color:var(--a); margin-top:0; font-size:11px;">▦ COMPRAR ATRIBUTO</button>
             </div>
 
             <div class="mission-header">
                 <h3>Modificações Diárias</h3>
                 <button class="btn-shuffle" onclick="Sys.shuffleMiss()">Sorteio</button>
             </div>
-            <div class="protocol-banner" style="margin-top:8px;">🔒 ÍCONE AO LADO DA QUEST: TRAVAR POSIÇÃO</div><div id="mission-ui"></div>
+            <div class="protocol-banner" style="margin-top:8px;">▣ ÍCONE AO LADO DA QUEST: TRAVAR POSIÇÃO</div><div id="mission-ui"></div>
 
             <button class="btn-reset" style="margin-top:25px; font-size:10px;" onclick="Sys.reset()">[ FORMATAR NÚCLEO DO SISTEMA ]</button>
         </div>
@@ -1433,8 +1433,8 @@
     .dynamic-row{display:flex;align-items:center;gap:6px;width:100%;min-width:0}
     .dynamic-row .grow{flex:1;min-width:0}
     .mini-btn{background:rgba(0,0,0,.45);border:1px solid var(--b);color:var(--t-dim);padding:4px 7px;font:900 9px var(--font-mono);cursor:pointer;white-space:nowrap}
-    .mini-btn:hover{border-color:var(--a);color:var(--a);box-shadow:0 0 7px rgba(0,229,255,.25)}
-    .mini-btn.danger{color:var(--danger);border-color:rgba(189,0,255,.45)}
+    .mini-btn:hover{border-color:var(--a);color:var(--a);box-shadow:0 0 7px color-mix(in srgb, var(--a) 25%, transparent)}
+    .mini-btn.danger{color:var(--danger);border-color:var(--danger)}
     .mini-btn.good{color:var(--state-icon);border-color:var(--state-icon)}
     .mission-actions{display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
     .mission-status{font:900 8px var(--font-mono);letter-spacing:1px;color:var(--state-icon);text-transform:uppercase}
@@ -1453,11 +1453,11 @@ const RANKS = ['E','D','C','B','A','S','SS+'];
 const HOBBY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','criativo','conhecimento','concentracao','baixa','obrigacoes'];
 const BODY_CATEGORIES = ['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono'];
 const CATEGORY_MAP = {
-    forca:{type:'💪 FORÇA',debuff:'corpo'}, mobilidade:{type:'🛡️ MOBILIDADE',debuff:'corpo'}, condicionamento:{type:'🏃 CONDICIONAMENTO',debuff:'corpo'},
-    calejamento:{type:'🦾 CALEJAMENTO',debuff:'corpo'}, resistencia:{type:'🛡️ RESISTÊNCIA',debuff:'corpo'}, vitalidade:{type:'❤️ VITALIDADE',debuff:'corpo'}, higiene:{type:'🧼 HIGIENE',debuff:'corpo'},
-    alimentacao:{type:'🍽️ ALIMENTAÇÃO',debuff:'corpo'}, hidratacao:{type:'💧 HIDRATAÇÃO',debuff:'corpo'}, sono:{type:'😴 SONO',debuff:'corpo'},
-    espirito:{type:'✝️ ESPÍRITO',debuff:'espirito'}, vinculos:{type:'🤝 VÍNCULOS',debuff:'espirito'}, criativo:{type:'🎨 HOBBY',debuff:'mente'},
-    conhecimento:{type:'📚 CONHECIMENTO',debuff:'mente'}, concentracao:{type:'🧠 CONCENTRAÇÃO',debuff:'mente'}, baixa:{type:'🔋 HOBBY',debuff:'mente'}, obrigacoes:{type:'📋 OBRIGAÇÕES',debuff:null}
+    forca:{type:'◆ FORÇA',debuff:'corpo'}, mobilidade:{type:'◇ MOBILIDADE',debuff:'corpo'}, condicionamento:{type:'△ CONDICIONAMENTO',debuff:'corpo'},
+    calejamento:{type:'▣ CALEJAMENTO',debuff:'corpo'}, resistencia:{type:'◇ RESISTÊNCIA',debuff:'corpo'}, vitalidade:{type:'⊙ VITALIDADE',debuff:'corpo'}, higiene:{type:'⌁ HIGIENE',debuff:'corpo'},
+    alimentacao:{type:'≋ ALIMENTAÇÃO',debuff:'corpo'}, hidratacao:{type:'∿ HIDRATAÇÃO',debuff:'corpo'}, sono:{type:'◌ SONO',debuff:'corpo'},
+    espirito:{type:'† ESPÍRITO',debuff:'espirito'}, vinculos:{type:'∞ VÍNCULOS',debuff:'espirito'}, criativo:{type:'✦ HOBBY',debuff:'mente'},
+    conhecimento:{type:'▤ CONHECIMENTO',debuff:'mente'}, concentracao:{type:'◎ CONCENTRAÇÃO',debuff:'mente'}, baixa:{type:'◒ HOBBY',debuff:'mente'}, obrigacoes:{type:'▥ OBRIGAÇÕES',debuff:null}
 };
 const DAY_NAMES = ['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 function normalizeMissionDays(value){if(value===null||value===undefined||value==='')return null;const values=(Array.isArray(value)?value:[value]).filter(v=>v!==null&&v!==undefined&&v!==''&&String(v)!=='null');const days=values.map(v=>finiteInteger(v,null,0,6)).filter(v=>v!==null);return days.length?[...new Set(days)].sort((a,b)=>a-b):null;}
@@ -1475,6 +1475,8 @@ function finiteNumber(value, fallback, min, max){
 }
 function finiteInteger(value, fallback, min, max){const n=typeof value==='number'?value:Number(value);if(!Number.isFinite(n))return fallback;let result=Math.trunc(n);if(Number.isFinite(min))result=Math.max(min,result);if(Number.isFinite(max))result=Math.min(max,result);return result;}
 function safeText(value, fallback=''){ return typeof value === 'string' ? value.trim() : fallback; }
+const LEGACY_SYMBOLS=[['💪','◆'],['🛡️','◇'],['🏃','△'],['🦾','▣'],['❤️','⊙'],['🧼','⌁'],['🍽️','≋'],['💧','∿'],['😴','◌'],['✝️','†'],['🤝','∞'],['🎨','✦'],['📚','▤'],['🧠','◎'],['🔋','◒'],['📋','▥'],['🔒','▣'],['🔓','□'],['🎁','[DROP]'],['✨','✦'],['⚔️','⚔'],['👺','[THIEF]'],['♨️','≈'],['🏺','[RELIC]'],['🌬️','...'],['👑','◆'],['⚠','!'],['ⓘ','i']];
+function cleanSystemText(value){let text=safeText(value,'');LEGACY_SYMBOLS.forEach(([oldValue,newValue])=>{text=text.split(oldValue).join(newValue);});return text;}
 function cloneData(value){ return JSON.parse(JSON.stringify(value)); }
 function escapeHTML(value){
     return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
@@ -1559,9 +1561,9 @@ const Sys = {
         const categories = {};
         HOBBY_CATEGORIES.forEach(cat => { categories[cat] = []; });
         const names = {
-            forca:'💪 FORÇA',mobilidade:'🛡️ MOBILIDADE',condicionamento:'🏃 CONDICIONAMENTO',calejamento:'🦾 CALEJAMENTO',resistencia:'🛡️ RESISTÊNCIA',vitalidade:'❤️ VITALIDADE',
-            higiene:'🧼 HIGIENE',alimentacao:'🍽️ ALIMENTAÇÃO',hidratacao:'💧 HIDRATAÇÃO',sono:'😴 SONO',espirito:'✝️ ESPÍRITO',vinculos:'🤝 VÍNCULOS',
-            hobby:'🧠 HOBBY',conhecimento:'📚 CONHECIMENTO',concentracao:'🧠 CONCENTRAÇÃO',obrigacoes:'📋 OBRIGAÇÕES'
+            forca:'◆ FORÇA',mobilidade:'◇ MOBILIDADE',condicionamento:'△ CONDICIONAMENTO',calejamento:'▣ CALEJAMENTO',resistencia:'◇ RESISTÊNCIA',vitalidade:'⊙ VITALIDADE',
+            higiene:'⌁ HIGIENE',alimentacao:'≋ ALIMENTAÇÃO',hidratacao:'∿ HIDRATAÇÃO',sono:'◌ SONO',espirito:'† ESPÍRITO',vinculos:'∞ VÍNCULOS',
+            hobby:'◎ HOBBY',conhecimento:'▤ CONHECIMENTO',concentracao:'◎ CONCENTRAÇÃO',obrigacoes:'▥ OBRIGAÇÕES'
         };
         return {
             points:0,name:'',attr:{ATTR:1},attrNames:{ATTR:''},customAttributes:[],miss:[],skills:[],hobbies:categories,
@@ -1577,7 +1579,7 @@ const Sys = {
     normalizeMission(mission){
         const m = isObject(mission) ? mission : {};
         return {
-            type:safeText(m.type,'MISSÃO'),task:safeText(m.task,'Missão sem nome') || 'Missão sem nome',desc:safeText(m.desc,''),done:Boolean(m.done),
+            type:cleanSystemText(m.type||'MISSÃO') || 'MISSÃO',task:cleanSystemText(m.task||'Missão sem nome') || 'Missão sem nome',desc:cleanSystemText(m.desc||''),done:Boolean(m.done),
             xpG:finiteInteger(m.xpG,0,0,100000),energyG:finiteInteger(m.energyG,0,0,100000),skipped:Boolean(m.skipped),cat:HOBBY_CATEGORIES.includes(m.cat)?m.cat:'obrigacoes',
             pinned:Boolean(m.pinned),day:normalizeMissionDays(m.day),sourceCat:HOBBY_CATEGORIES.includes(m.sourceCat)?m.sourceCat:null,
             sourceIndex:Number.isInteger(m.sourceIndex) ? m.sourceIndex : null,slotKey:safeText(m.slotKey,'') || null
@@ -1591,7 +1593,7 @@ const Sys = {
         out.name = safeText(raw.name,'');
         out.points = finiteInteger(raw.points,0,0,1000000);
         out.lvl = finiteInteger(raw.lvl,1,1,9999);
-        out.energy = finiteInteger(raw.energy,0,0,100000000);
+        out.energy = finiteInteger(raw.energy,0,-100000000,100000000);
         out.prestige = finiteInteger(raw.prestige,0,0,9999);
         out.seasonMonth = finiteInteger(raw.seasonMonth,def.seasonMonth,0,11);
         out.eventToday = Boolean(raw.eventToday);
@@ -1621,9 +1623,9 @@ const Sys = {
         HOBBY_CATEGORIES.forEach(cat => {
             const source = raw.hobbies && Array.isArray(raw.hobbies[cat]) ? raw.hobbies[cat] : [];
             out.hobbies[cat] = source.map(item => {
-                if (typeof item === 'string') return {task:item.trim(),desc:'',day:null};
+                if (typeof item === 'string') return {task:cleanSystemText(item),desc:'',day:null};
                 const h = isObject(item) ? item : {};
-                return {task:safeText(h.task,''),desc:safeText(h.desc,''),day:normalizeMissionDays(h.day)};
+                return {task:cleanSystemText(h.task),desc:cleanSystemText(h.desc),day:normalizeMissionDays(h.day)};
             }).filter(item => item.task);
         });
 
@@ -1657,7 +1659,7 @@ const Sys = {
         const rawConfig = isObject(raw.missConfig) ? raw.missConfig : {};
         out.missConfig = {counts:{},names:{}};
         Object.keys(defCounts).forEach(cat => { out.missConfig.counts[cat] = finiteInteger(rawConfig.counts && rawConfig.counts[cat],defCounts[cat],0,20); });
-        Object.keys(defNames).forEach(cat => { out.missConfig.names[cat] = safeText(rawConfig.names && rawConfig.names[cat],defNames[cat]) || defNames[cat]; });
+        Object.keys(defNames).forEach(cat => { out.missConfig.names[cat] = cleanSystemText(rawConfig.names && rawConfig.names[cat] || defNames[cat]) || defNames[cat]; });
 
         const defBuffs = def.activeBuffs, rawBuffs = isObject(raw.activeBuffs) ? raw.activeBuffs : {};
         out.activeBuffs = {doubleXP:Boolean(rawBuffs.doubleXP),penaltyImmunity:finiteInteger(rawBuffs.penaltyImmunity,defBuffs.penaltyImmunity,0,99)};
@@ -1709,6 +1711,7 @@ const Sys = {
         }
         if (!this.db) this.db = this.getDefaultState();
         this.normalizeState();
+        this.normalizeLevelEnergy(false);
         this.initTimer();
         if (this.db.name) {
             await this.check();
@@ -1755,7 +1758,7 @@ const Sys = {
             if (this.db.debuffs.emboscada) {
                 this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-2);
                 this.db.debuffs.emboscada = false;
-                await SystemModal.alert('⚔️ FALHA NA EMBOSCADA: você não completou o treino de Boss ontem. -2 no Atributo Base.');
+                await SystemModal.alert('⚔ FALHA NA EMBOSCADA: você não completou o treino de Boss ontem. -2 no Atributo Base.');
             }
             if (this.db.attr.ATTR > 1) this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-1);
             this.db.customAttributes.forEach(attr => { attr.value = Math.max(1,attr.value-1); });
@@ -1794,13 +1797,13 @@ const Sys = {
         this.db.eventToday = true;
         const r = Math.random();
         let msg = '';
-        if (r < .20) { this.db.energy += 50; msg='🎁 BAÚ ENCONTRADO! Você vasculhou a área e encontrou +50 Energia.'; }
-        else if (r < .35) { this.db.activeBuffs.doubleXP=true; msg='✨ BÊNÇÃO DOS DEUSES: todas as missões renderão EXP dobrado hoje!'; }
-        else if (r < .60) { this.db.debuffs.emboscada=true; msg='⚔️ EMBOSCADA DETECTADA: complete um treino de Boss hoje ou perca Atributo Base amanhã.'; }
-        else if (r < .70) { if (this.db.points>0) { this.db.points--; msg='👺 GOBLIN LADRÃO! Uma criatura roubou 1 Ponto de Atributo.'; } else msg='👺 GOBLIN LADRÃO apareceu, mas não havia pontos para roubar.'; }
-        else if (r < .85) { this.db.activeBuffs.penaltyImmunity=1; msg='♨️ FONTE TERMAL: imunidade total a penalidades amanhã.'; }
-        else if (r < .95) { this.db.points++; this.db.energy=Math.max(0,this.db.energy-20); msg='🏺 RELÍQUIA QUEBRADA: -20 Energia, mas +1 Ponto de Atributo.'; }
-        else msg='🌬️ O dia está tranquilo. Nenhum evento ocorreu.';
+        if (r < .20) { this.db.energy += 50; msg='[DROP] BAÚ ENCONTRADO! Você vasculhou a área e encontrou +50 Energia.'; }
+        else if (r < .35) { this.db.activeBuffs.doubleXP=true; msg='✦ BÊNÇÃO DOS DEUSES: todas as missões renderão EXP dobrado hoje!'; }
+        else if (r < .60) { this.db.debuffs.emboscada=true; msg='⚔ EMBOSCADA DETECTADA: complete um treino de Boss hoje ou perca Atributo Base amanhã.'; }
+        else if (r < .70) { if (this.db.points>0) { this.db.points--; msg='[THIEF] GOBLIN LADRÃO! Uma criatura roubou 1 Ponto de Atributo.'; } else msg='[THIEF] GOBLIN LADRÃO apareceu, mas não havia pontos para roubar.'; }
+        else if (r < .85) { this.db.activeBuffs.penaltyImmunity=1; msg='≈ FONTE TERMAL: imunidade total a penalidades amanhã.'; }
+        else if (r < .95) { this.db.points++; this.db.energy=Math.max(0,this.db.energy-20); msg='[RELIC] RELÍQUIA QUEBRADA: -20 Energia, mas +1 Ponto de Atributo.'; }
+        else msg='... O dia está tranquilo. Nenhum evento ocorreu.';
         this.checkLvl();
         this.save();
         await SystemModal.alert(`EVENTO DIÁRIO:\n\n${msg}`);
@@ -1905,7 +1908,7 @@ const Sys = {
         if(event&&event.stopPropagation)event.stopPropagation();
         const miss=this.db.miss[index]; if(!miss||miss.done||miss.skipped)return;
         miss.done=true; const reward=Math.round((10+(miss.cat==='conhecimento'?5:0))*this.getMultiplier()); const energy=Math.round((5+(miss.cat==='obrigacoes'?2:0))*this.getMultiplier());
-        miss.xpG=reward;miss.energyG=energy;this.db.energy+=energy;this.db.stats.seasonQuests++;this.db.stats.totalKnowledge+=(miss.cat==='conhecimento'?1:0);this.checkLvl();this.save();this.pop(event,`+${reward} EXP\n+${energy} ENERGIA`);this.render();
+        miss.xpG=reward;miss.energyG=energy;this.db.energy+=energy;this.db.points++;this.db.stats.seasonQuests++;this.db.stats.totalKnowledge+=(miss.cat==='conhecimento'?1:0);this.checkLvl();this.save();this.pop(event,`+${reward} EXP\n+${energy} ENERGIA`);this.render();
     },
     async skipMiss(index,event){
         if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss||miss.done||miss.skipped)return;
@@ -2000,31 +2003,37 @@ const Sys = {
         const old=this.db.customCali[rank][index],value=safeText(await SystemModal.prompt('Novo nome da skill:',old),'');if(!value||value===old)return;this.db.customCali[rank][index]=value;const learned=this.db.skills.indexOf(old);if(learned>=0)this.db.skills[learned]=value;this.save();this.renderSkills();
     },
 
-    getEnergyRequired(){return Math.max(100,finiteInteger(this.db.lvl,1,1,9999)*100);},
-    checkLvl(){
-        let leveled=false;
-        let required=this.getEnergyRequired();
-        while(this.db.energy>=required){
-            this.db.energy-=required;
-            this.db.lvl++;
-            this.db.points++;
-            leveled=true;
-            required=this.getEnergyRequired();
+    getEnergyRequired(level=this.db.lvl){return Math.max(100,finiteInteger(level,1,1,100)*100);},
+    normalizeLevelEnergy(announce=true){
+        if(!this.db)return {up:0,down:0};
+        const maxLevel=100;
+        this.db.lvl=finiteInteger(this.db.lvl,1,1,maxLevel);
+        this.db.energy=finiteInteger(this.db.energy,0,-100000000,100000000);
+        let up=0,down=0;
+        while(this.db.energy>=this.getEnergyRequired() && this.db.lvl<maxLevel){
+            this.db.energy-=this.getEnergyRequired(); this.db.lvl++; this.db.points++; up++;
         }
-        if(leveled){this.updateThemeByLevel();this.pop(null,`LEVEL UP!\nLVL ${this.db.lvl}`);}
-        this.db.energy=Math.max(0,this.db.energy);
+        while(this.db.energy<0 && this.db.lvl>1){
+            this.db.lvl--; this.db.energy+=this.getEnergyRequired(this.db.lvl); this.db.points=Math.max(0,this.db.points-1); down++;
+        }
+        if(this.db.lvl===1 && this.db.energy<0)this.db.energy=0;
+        this.db.energy=Math.min(100000000,Math.max(0,this.db.energy));
+        if(up||down)this.updateThemeByLevel();
+        if(announce&&(up||down))this.pop(null,`${up?'LEVEL UP +'+up:down?'LEVEL DOWN -'+down:''}\nLVL ${this.db.lvl}`);
+        return {up,down};
     },
+    checkLvl(){return this.normalizeLevelEnergy(true);},
     async doPrestige(){
         if(this.db.lvl<10)return SystemModal.alert('RENASCER requer pelo menos LVL 10.');if(!(await SystemModal.confirm('Renascimento reinicia o nível, energia e pontos, mas preserva skills, atributos, missões e histórico. Continuar?')))return;this.db.prestige++;this.db.lvl=1;this.db.energy=0;this.db.points=0;this.db.activeBuffs={doubleXP:false,penaltyImmunity:0};this.updateThemeByLevel();this.save();this.render();
     },
-    getAttributeSlotPrice(){return 5+(this.db.customAttributes.length*5);},
+    getAttributeSlotPrice(){return (this.db.customAttributes.length+1)*50;},
     async buyAttributeSlot(){
-        const price=this.getAttributeSlotPrice();if(this.db.points<price)return SystemModal.alert(`Pontos insuficientes. Custo atual: ${price}.`);const name=safeText(await SystemModal.prompt(`Nome do atributo personalizado (custo ${price} pontos):`),'');if(!name)return;const id=`custom_${Date.now()}_${Math.floor(Math.random()*1000)}`;this.db.customAttributes.push({id,name,value:1});this.db.points-=price;this.save();this.render();
+        const price=this.getAttributeSlotPrice();if(this.db.points<price)return SystemModal.alert(`Pontos insuficientes. Custo atual: ${price} pontos.`);const name=safeText(await SystemModal.prompt(`Nome do atributo personalizado (custo ${price} pontos):`),'');if(!name)return;const id=`custom_${Date.now()}_${Math.floor(Math.random()*1000)}`;this.db.customAttributes.push({id,name,value:1});this.db.points-=price;this.save();this.render();
     },
     async removeCustomAttr(id){
         const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;if(!(await SystemModal.confirm(`Remover o atributo "${found.name}"?`)))return;this.db.customAttributes=this.db.customAttributes.filter(a=>a.id!==id);this.save();this.render();
     },
-    async edEnergy(){const maximum=this.getEnergyRequired()-1;const value=await SystemModal.prompt(`Energia atual (0 a ${maximum}):`,String(this.db.energy));if(value===null)return;this.db.energy=finiteInteger(value,this.db.energy,0,maximum);this.checkLvl();this.save();this.render();},
+    async edEnergy(){const limit=100000000;const value=await SystemModal.prompt(`Energia acumulada (pode ser positiva ou negativa; limite ±${limit}):`,String(this.db.energy));if(value===null)return;this.db.energy=finiteInteger(value,this.db.energy,-limit,limit);this.checkLvl();this.save();this.render();},
     async edAttrValue(){const value=await SystemModal.prompt('Valor do atributo base:',String(this.db.attr.ATTR));if(value===null)return;this.db.attr.ATTR=finiteInteger(value,this.db.attr.ATTR,1,1000000);this.save();this.render();},
     async edPoints(){const value=await SystemModal.prompt('Pontos de atributo:',String(this.db.points));if(value===null)return;this.db.points=finiteInteger(value,this.db.points,0,1000000);this.save();this.render();},
     async edRank(){const value=safeText(await SystemModal.prompt('Rank manual (deixe vazio para automático):',this.db.customRank),'');this.db.customRank=RANKS.includes(value)?value:'';this.save();this.render();},
@@ -2060,7 +2069,7 @@ const Sys = {
 
     renderMissions(){
         const container=document.getElementById('mission-ui');if(!container)return;if(!this.db.miss.length){container.innerHTML='<div class="empty-state">Nenhuma modificação diária configurada.</div>';return;}
-        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Travar missão nesta posição">${m.pinned?'🔒':'🔓'}</button><span class="m-info" data-detail="${index}" title="Detalhes">ⓘ</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
+        container.innerHTML=this.db.miss.map((m,index)=>{const status=m.done?'CONCLUÍDA':m.skipped?'PULADA':'PENDENTE';return `<div class="mission-item ${m.done?'done':''}" data-mission="${index}"><div class="dynamic-row"><div class="grow"><span class="m-type">${escapeHTML(m.type)}</span><span class="m-task">${escapeHTML(m.task)}</span></div><button class="pin-btn ${m.pinned?'pinned':''}" data-pin="${index}" title="Travar missão nesta posição">${m.pinned?'▣':'□'}</button><span class="m-info" data-detail="${index}" title="Detalhes">i</span></div><div class="mission-actions"><span class="mission-status ${m.skipped?'skipped':''}">${status}</span><button class="mini-btn good" data-do-mission="${index}" ${m.done||m.skipped?'disabled':''}>${m.done?'OK':'CONCLUIR'}</button><button class="mini-btn" data-skip-mission="${index}" ${m.done||m.skipped?'disabled':''}>PULAR</button><button class="mini-btn" data-move-mission="${index}" data-dir="-1">▲</button><button class="mini-btn" data-move-mission="${index}" data-dir="1">▼</button></div></div>`;}).join('');
         container.querySelectorAll('[data-mission]').forEach(el=>el.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('[data-detail]'))return;this.showMissDetail(Number(el.dataset.mission));}));
         container.querySelectorAll('[data-pin]').forEach(el=>el.addEventListener('click',event=>this.togglePinMission(Number(el.dataset.pin),event)));
         container.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>this.showMissDetail(Number(el.dataset.detail))));
@@ -2093,7 +2102,7 @@ const Sys = {
     renderHobbies(){
         const opts=`<option value="null">TODOS</option>${DAY_NAMES.map((d,i)=>`<option value="${i}">${d.slice(0,3)}</option>`).join('')}`;
         HOBBY_CATEGORIES.forEach(cat=>{const list=document.getElementById(`hobby-${cat}-ui`);if(!list)return;const wrapper=list.parentElement&&list.parentElement.querySelector('.routine-input-wrap');if(wrapper&&!wrapper.querySelector('[data-new-day]')){const s=document.createElement('select');s.className='routine-input';s.multiple=true;s.size=3;s.dataset.newDay=cat;s.title='Selecione um ou mais dias; TODOS = todos os dias';s.style.cssText='flex:1.4;min-width:0;height:40px;margin:0;padding:3px;font-size:9px;text-align:center;';s.innerHTML=opts;wrapper.insertBefore(s,wrapper.querySelector('.btn-add-rtn'));s.options[0].selected=true;}
-            const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${missionDaysLabel(item.day)}]</small>`:''}</span><button class="btn-order" data-pin-hobby="${cat}" data-hobby-i="${index}" title="Fixar/desfixar Quest">${this.isHobbyPinned(cat,index)?'🔒':'🔓'}</button><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-pin-hobby]').forEach(el=>el.addEventListener('click',e=>this.togglePinHobby(el.dataset.pinHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',e=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',e=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),e)));});
+            const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${missionDaysLabel(item.day)}]</small>`:''}</span><button class="btn-order" data-pin-hobby="${cat}" data-hobby-i="${index}" title="Fixar/desfixar Quest">${this.isHobbyPinned(cat,index)?'▣':'□'}</button><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-pin-hobby]').forEach(el=>el.addEventListener('click',e=>this.togglePinHobby(el.dataset.pinHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',e=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',e=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),e)));});
         const config=document.getElementById('miss-config-ui');if(!config)return;const keys=['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','hobby','conhecimento','concentracao','obrigacoes'];config.innerHTML=keys.map(cat=>`<div class="config-line"><span class="config-name" title="Renomear categoria">${escapeHTML(this.db.missConfig.names[cat]||cat.toUpperCase())}</span><button class="mini-btn" data-rename-cat="${cat}">✎</button><button class="mini-btn" data-adjust-cat="${cat}" data-delta="-1">−</button><span class="config-count">${this.db.missConfig.counts[cat]||0}</span><button class="mini-btn" data-adjust-cat="${cat}" data-delta="1">+</button></div>`).join('');config.querySelectorAll('[data-rename-cat]').forEach(el=>el.addEventListener('click',()=>this.renameMissClass(el.dataset.renameCat)));config.querySelectorAll('[data-adjust-cat]').forEach(el=>el.addEventListener('click',()=>this.adjustMissCount(el.dataset.adjustCat,Number(el.dataset.delta))));
     },
 
@@ -2104,16 +2113,23 @@ const Sys = {
         h=((h%360)+360)%360;s=Math.max(0,Math.min(1,s));l=Math.max(0,Math.min(1,l));const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;let r=0,g=0,b=0;if(h<60)[r,g,b]=[c,x,0];else if(h<120)[r,g,b]=[x,c,0];else if(h<180)[r,g,b]=[0,c,x];else if(h<240)[r,g,b]=[0,x,c];else if(h<300)[r,g,b]=[x,0,c];else[r,g,b]=[c,0,x];return [Math.round((r+m)*255),Math.round((g+m)*255),Math.round((b+m)*255)];
     },
     updateThemeByLevel(){
-        if(!this.db)return;const hue=(185+(this.db.lvl-1)*13+(this.db.prestige||0)*28)%360;const [r,g,b]=this.hslToRgb(hue,.95,.52);const color=`rgb(${r}, ${g}, ${b})`;const dim=`rgba(${r}, ${g}, ${b}, .15)`;const glow=`0 0 12px rgba(${r}, ${g}, ${b}, .7)`;const box=`0 0 15px rgba(${r}, ${g}, ${b}, .25), inset 0 0 20px rgba(${r}, ${g}, ${b}, .1)`;const root=document.documentElement;root.style.setProperty('--a',color);root.style.setProperty('--a-dim',dim);root.style.setProperty('--glow',glow);root.style.setProperty('--glow-box',box);root.style.setProperty('--state-icon',color);root.style.setProperty('--energy-color',color);root.style.setProperty('--hud-corner',color);root.style.setProperty('--hud-line',`rgba(${r}, ${g}, ${b}, .25)`);root.style.setProperty('--panel-border',`rgba(${r}, ${g}, ${b}, .3)`);root.style.setProperty('--panel-glow',`0 0 20px rgba(${r}, ${g}, ${b}, .12), inset 0 0 30px rgba(${r}, ${g}, ${b}, .03)`);root.style.setProperty('--b',`rgb(${Math.round(r*.25)}, ${Math.round(g*.25)}, ${Math.round(b*.25)})`);
+        if(!this.db)return;
+        const progress=Math.max(0,Math.min(1,(this.db.lvl-1)/99));
+        const cycle=(this.db.prestige||0)%3;
+        let hue;
+        if(cycle===0) hue=190+(280-190)*progress;
+        else if(cycle===1) hue=280+(355-280)*progress;
+        else hue=355-(355-190)*progress;
+        const [r,g,b]=this.hslToRgb(hue,.95,.52);const color=`rgb(${r}, ${g}, ${b})`;const dim=`rgba(${r}, ${g}, ${b}, .15)`;const glow=`0 0 12px rgba(${r}, ${g}, ${b}, .7)`;const box=`0 0 15px rgba(${r}, ${g}, ${b}, .25), inset 0 0 20px rgba(${r}, ${g}, ${b}, .1)`;const root=document.documentElement;root.style.setProperty('--a',color);root.style.setProperty('--a-dim',dim);root.style.setProperty('--glow',glow);root.style.setProperty('--glow-box',box);root.style.setProperty('--state-icon',color);root.style.setProperty('--energy-color',color);root.style.setProperty('--hud-corner',color);root.style.setProperty('--hud-line',`rgba(${r}, ${g}, ${b}, .25)`);root.style.setProperty('--panel-border',`rgba(${r}, ${g}, ${b}, .3)`);root.style.setProperty('--panel-glow',`0 0 20px rgba(${r}, ${g}, ${b}, .12), inset 0 0 30px rgba(${r}, ${g}, ${b}, .03)`);root.style.setProperty('--b',`rgb(${Math.round(r*.25)}, ${Math.round(g*.25)}, ${Math.round(b*.25)})`);
     },
 
     render(){
-        if(!this.db)return;this.normalizeState();this.updateThemeByLevel();
+        if(!this.db)return;this.normalizeState();this.normalizeLevelEnergy(false);this.updateThemeByLevel();
         const setup=document.getElementById('setup-screen');if(setup)setup.classList.toggle('hidden',Boolean(this.db.name));
         const name=document.getElementById('p-name');if(name)name.textContent=this.db.name||'--';
         const img=document.getElementById('p-img'),placeholder=document.getElementById('p-img-placeholder');if(img&&placeholder){if(this.db.profileImage){img.src=this.db.profileImage;img.classList.remove('hidden');placeholder.classList.add('hidden');}else{img.removeAttribute('src');img.classList.add('hidden');placeholder.classList.remove('hidden');}}
         const level=document.getElementById('lvl-ui');if(level)level.textContent=`LVL ${this.db.lvl}`;const essence=document.getElementById('essences-ui');if(essence)essence.textContent=this.db.essences||'MBTI';const prestige=document.getElementById('prestige-ui');if(prestige)prestige.textContent=this.db.prestige?`PRESTÍGIO ${this.db.prestige}`:'';
-        const buffs=[];if(this.db.activeBuffs.doubleXP)buffs.push('✦ BÊNÇÃO: EXP DUPLO');if(this.db.activeBuffs.penaltyImmunity)buffs.push('✦ IMUNIDADE A PENALIDADES');const buffEl=document.getElementById('day-buffs');if(buffEl)buffEl.textContent=buffs.join('  ');const debuffs=[];if(this.db.debuffs.corpo)debuffs.push('⚠ DEBUFF CORPO');if(this.db.debuffs.mente)debuffs.push('⚠ DEBUFF MENTE');if(this.db.debuffs.espirito)debuffs.push('⚠ DEBUFF ESPÍRITO');if(this.db.debuffs.emboscada)debuffs.push('⚠ EMBOSCADA');const debuffEl=document.getElementById('day-debuffs');if(debuffEl)debuffEl.textContent=debuffs.join('  ');
+        const buffs=[];if(this.db.activeBuffs.doubleXP)buffs.push('✦ BÊNÇÃO: EXP DUPLO');if(this.db.activeBuffs.penaltyImmunity)buffs.push('✦ IMUNIDADE A PENALIDADES');const buffEl=document.getElementById('day-buffs');if(buffEl)buffEl.textContent=buffs.join('  ');const debuffs=[];if(this.db.debuffs.corpo)debuffs.push('! DEBUFF CORPO');if(this.db.debuffs.mente)debuffs.push('! DEBUFF MENTE');if(this.db.debuffs.espirito)debuffs.push('! DEBUFF ESPÍRITO');if(this.db.debuffs.emboscada)debuffs.push('! EMBOSCADA');const debuffEl=document.getElementById('day-debuffs');if(debuffEl)debuffEl.textContent=debuffs.join('  ');
         const rank=document.getElementById('rank-ui');if(rank)rank.textContent=this.getDisplayRank();const points=document.getElementById('points-ui');if(points)points.textContent=String(this.db.points);const maxEnergy=this.getEnergyRequired();const energy=document.getElementById('energy-val');if(energy)energy.textContent=`${this.db.energy} / ${maxEnergy}`;const bar=document.getElementById('energy-bar');if(bar)bar.style.width=`${Math.min(100,(this.db.energy/maxEnergy)*100)}%`;const days=document.getElementById('days-played');if(days)days.textContent=String(this.getDaysPlayed());const prestigeBtn=document.getElementById('btn-prestige');if(prestigeBtn)prestigeBtn.classList.toggle('hidden',this.db.lvl<10);
         this.renderAttributes();this.renderMissions();this.renderTrains();this.renderSkills();this.renderHobbies();this.updateTimerUI();
     }
