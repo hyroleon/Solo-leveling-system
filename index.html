@@ -1586,7 +1586,7 @@ const Sys = {
             debuffs:{corpo:false,mente:false,espirito:false,emboscada:false},stats:{totalTrains:0,totalKnowledge:0,totalBosses:0,seasonTrains:0,seasonQuests:0,seasonBosses:0},
             prestige:0,eventToday:false,seasonMonth:today.getMonth(),essences:'MBTI',startDate:today.toISOString().split('T')[0],last:'',
             missConfig:{counts:{forca:1,mobilidade:1,condicionamento:0,calejamento:0,resistencia:0,vitalidade:0,higiene:0,alimentacao:0,hidratacao:0,sono:0,espirito:1,vinculos:0,hobby:2,conhecimento:1,concentracao:1,obrigacoes:1},names},
-            pinnedMissions:[],missionOrder:{},slotOrder:[],profileImage:'',customRank:'',missionBlockUntil:0
+            pinnedMissions:[],lockedMissions:[],missionOrder:{},slotOrder:[],profileImage:'',customRank:'',missionBlockUntil:0
         };
     },
 
@@ -1667,6 +1667,7 @@ const Sys = {
             return {index:finiteInteger(p.index,0,0,100000),miss:this.normalizeMission(p.miss)};
         }) : [];
         out.pinnedMissions = out.pinnedMissions.filter((pm,i,a)=>a.findIndex(x=>x.index===pm.index)===i);
+        out.lockedMissions = Array.isArray(raw.lockedMissions) ? raw.lockedMissions.map(pm => { const p=isObject(pm)?pm:{}; return {index:finiteInteger(p.index,0,0,100000),miss:this.normalizeMission(p.miss)}; }).filter((pm,i,a)=>a.findIndex(x=>x.index===pm.index)===i) : [];
         out.missionOrder=isObject(raw.missionOrder)?{...raw.missionOrder}:{};
         out.slotOrder=Array.isArray(raw.slotOrder)?raw.slotOrder.map(x=>safeText(x,'')).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i):[];
 
@@ -1906,7 +1907,10 @@ const Sys = {
         const previous=Array.isArray(this.db.slotOrder)?[...this.db.slotOrder]:[], available=new Map(result.map(m=>[m.slotKey,m])), ordered=[];
         previous.forEach(key=>{const m=available.get(key);if(m){ordered.push(m);available.delete(key);}});
         result.forEach(m=>{if(available.has(m.slotKey)){ordered.push(m);available.delete(m.slotKey);}});
-        pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);const selected=selectedIndex>=0?ordered.splice(selectedIndex,1)[0]:this.normalizeMission({...pm.miss,pinned:true,slotLocked:Boolean(pm.miss.slotLocked),hiddenSlot:false,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});selected.pinned=true;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
+        pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);const selected=selectedIndex>=0?ordered.splice(selectedIndex,1)[0]:this.normalizeMission({...pm.miss,pinned:true,slotLocked:false,hiddenSlot:false,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});selected.pinned=true;selected.slotLocked=false;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
+        const locks=(this.db.lockedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).sort((a,b)=>a.index-b.index);
+        locks.forEach(lock=>{const match=m=>lock.miss.sourceCat!==null&&lock.miss.sourceIndex!==null?m.sourceCat===lock.miss.sourceCat&&m.sourceIndex===lock.miss.sourceIndex:m.task===lock.miss.task;const found=ordered.findIndex(match);if(found<0)return;const selected=ordered.splice(found,1)[0];selected.slotLocked=true;const target=Math.max(0,Math.min(lock.index,ordered.length));ordered.splice(target,0,selected);});
+        ordered.forEach(m=>{if(!m.slotLocked)m.slotLocked=false;});
         this.db.miss=ordered;this.db.slotOrder=ordered.map(m=>m.slotKey).filter(Boolean);
         this.db.miss.forEach((m,index)=>{const key=m.sourceCat!==null&&m.sourceIndex!==null?`${m.sourceCat}:${m.sourceIndex}`:null;if(key!==null)this.db.missionOrder[key]=index;});
     },
@@ -1940,14 +1944,14 @@ const Sys = {
     },
     moveMiss(index,direction,event){
         if(event&&event.stopPropagation)event.stopPropagation(); const target=index+direction;if(target<0||target>=this.db.miss.length)return;[this.db.miss[index],this.db.miss[target]]=[this.db.miss[target],this.db.miss[index]];
-        this.db.pinnedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.db.slotOrder=this.db.miss.map(m=>m.slotKey).filter(Boolean);if(!this.db.missionOrder)this.db.missionOrder={};this.db.miss.forEach((m,i)=>{if(m.sourceCat!==null&&m.sourceIndex!==null)this.db.missionOrder[`${m.sourceCat}:${m.sourceIndex}`]=i;});this.save();this.render();
+        this.db.pinnedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.db.lockedMissions.forEach(pm=>{if(pm.index===index)pm.index=target;else if(pm.index===target)pm.index=index;});this.db.slotOrder=this.db.miss.map(m=>m.slotKey).filter(Boolean);if(!this.db.missionOrder)this.db.missionOrder={};this.db.miss.forEach((m,i)=>{if(m.sourceCat!==null&&m.sourceIndex!==null)this.db.missionOrder[`${m.sourceCat}:${m.sourceIndex}`]=i;});this.save();this.render();
     },
-    togglePinMission(index,event){
-        if(event&&event.stopPropagation)event.stopPropagation(); const miss=this.db.miss[index];if(!miss)return;
-        const sameMission=pm=>{const pinned=pm&&pm.miss||{};return pm.index===index||(miss.sourceCat!==null&&miss.sourceIndex!==null&&pinned.sourceCat===miss.sourceCat&&pinned.sourceIndex===miss.sourceIndex)||(miss.slotKey&&pinned.slotKey===miss.slotKey);};
-        const alreadyPinned=Boolean(miss.pinned)||this.db.pinnedMissions.some(sameMission);
-        if(alreadyPinned){miss.pinned=false;miss.slotLocked=false;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));}
-        else {miss.pinned=true;miss.slotLocked=true;this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!sameMission(pm));this.db.pinnedMissions.push({index,miss:cloneData(miss)});}
+    async togglePinMission(index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const miss=this.db.miss[index];if(!miss)return;
+        const sameLock=pm=>{const locked=pm&&pm.miss||{};if(miss.sourceCat!==null&&miss.sourceIndex!==null)return locked.sourceCat===miss.sourceCat&&locked.sourceIndex===miss.sourceIndex;return Boolean(miss.slotKey&&locked.slotKey===miss.slotKey)||(!locked.sourceCat&&locked.task===miss.task);};
+        const alreadyLocked=Boolean(miss.slotLocked)||this.db.lockedMissions.some(sameLock);const action=alreadyLocked?'DESBLOQUEAR':'BLOQUEAR';if(!(await SystemModal.confirm(`${action} a missão \"${miss.task}\" neste slot?`)))return;
+        if(alreadyLocked){miss.slotLocked=false;this.db.lockedMissions=this.db.lockedMissions.filter(pm=>!sameLock(pm));}
+        else{miss.slotLocked=true;this.db.lockedMissions=this.db.lockedMissions.filter(pm=>!sameLock(pm));this.db.lockedMissions.push({index,miss:cloneData(miss)});}
         this.save();this.render();
     },
     showMissDetail(index){
@@ -1973,15 +1977,15 @@ const Sys = {
         if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`),select=document.querySelector(`[data-new-day="${cat}"]`),task=input?input.value.trim():'';if(!task)return;
         const day=select?normalizeMissionDays([...select.selectedOptions].map(o=>o.value)):null;this.db.hobbies[cat].push({task,desc:'',day});if(input)input.value='';if(select)Array.from(select.options).forEach(o=>o.selected=o.value==='null');this.save();this.render();
     },
-    isHobbyPinned(cat,index){const m=this.db.miss.find(x=>x.sourceCat===cat&&x.sourceIndex===index);return Boolean((m&&m.pinned)||this.db.pinnedMissions.some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
+    isHobbyPinned(cat,index){const m=this.db.miss.find(x=>x.sourceCat===cat&&x.sourceIndex===index);return Boolean(this.db.pinnedMissions.some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
     async togglePinHobby(cat,index,event){
-        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const matches=pm=>pm&&pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index;const already=this.db.pinnedMissions.some(matches);const action=already?'DESATIVAR':'ATIVAR';if(!(await SystemModal.confirm(`${action} fixador da Quest \"${hobby.task}\"?`)))return;
-        if(already){this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current){current.pinned=false;current.slotLocked=false;}}
-        else{const currentIndex=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);const pinIndex=currentIndex>=0?currentIndex:(this.db.miss.length||0);const type=(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||this.db.missConfig.names[cat]||cat.toUpperCase();const mission=this.normalizeMission({type,cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,pinned:true,slotLocked:true,slotKey:`pinned:${cat}:${index}`});this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));this.db.pinnedMissions.push({index:pinIndex,miss:mission});const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current){current.pinned=true;current.slotLocked=true;}}
+        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const matches=pm=>pm&&pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index;const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);const already=this.db.pinnedMissions.some(matches)||Boolean(current&&current.pinned);const action=already?'DESATIVAR':'ATIVAR';if(!(await SystemModal.confirm(`${action} fixador da Quest \"${hobby.task}\"?`)))return;
+        if(already){this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));if(current){current.pinned=false;}}
+        else{const currentIndex=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);const pinIndex=currentIndex>=0?currentIndex:(this.db.miss.length||0);const type=(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||this.db.missConfig.names[cat]||cat.toUpperCase();const mission=this.normalizeMission({type,cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,pinned:true,slotLocked:false,slotKey:`pinned:${cat}:${index}`});this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));this.db.pinnedMissions.push({index:pinIndex,miss:mission});const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current){current.pinned=true;}}
         this.save();this.render();
     },
     async delHobby(cat,index,event){
-        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.hobbies[cat];if(!arr||!arr[index])return;if(!(await SystemModal.confirm(`Excluir a missão "${arr[index].task}"?`)))return;arr.splice(index,1);this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex>index)pm.miss.sourceIndex--;});this.genMiss();this.save();this.render();
+        if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.hobbies[cat];if(!arr||!arr[index])return;if(!(await SystemModal.confirm(`Excluir a missão "${arr[index].task}"?`)))return;arr.splice(index,1);this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.lockedMissions=this.db.lockedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex>index)pm.miss.sourceIndex--;});this.genMiss();this.save();this.render();
     },
     edHobby(cat,index,event){
         if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const task=document.getElementById('edit-mission-task'),desc=document.getElementById('edit-mission-desc'),day=document.getElementById('edit-mission-day');if(task)task.value=hobby.task;if(desc)desc.value=hobby.desc||'';if(day)Array.from(day.options).forEach(option=>option.selected=hobby.day===null?option.value==='null':Array.isArray(hobby.day)&&hobby.day.includes(Number(option.value)));this.openEditMissionPanel(cat,index);
