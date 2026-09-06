@@ -1865,7 +1865,8 @@ const Sys = {
         // Missões fixadas só existem quando são válidas hoje. As fixadas ocupam
         // a posição escolhida pelo usuário, mas uma missão agendada não fixada
         // não consome o slot diário da categoria.
-        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>Boolean(pm.miss.slotLocked));
+        const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>missionDayMatches(pm.miss.day,today));
+        pins.forEach(pm=>{if(pm.miss.task)used.add(pm.miss.task);});
         const result=[]; const counts=this.db.missConfig.counts,names=this.db.missConfig.names;
         const slotCounters={};const nextSlotKey=cat=>{const base=HOBBY_CATEGORIES.includes(cat)?cat:'slot';const n=slotCounters[base]||0;slotCounters[base]=n+1;return `${base}:${n}`;};const addMission=(cat,entry,type,pinned=false)=>result.push(this.normalizeMission({type,cat,task:entry.h.task,desc:entry.h.desc,day:entry.h.day,sourceCat:cat,sourceIndex:entry.index,done:false,skipped:false,pinned,slotKey:nextSlotKey(cat)}));
         const addCategory=(cat,fallback,type,count)=>{
@@ -1905,7 +1906,7 @@ const Sys = {
         const previous=Array.isArray(this.db.slotOrder)?[...this.db.slotOrder]:[], available=new Map(result.map(m=>[m.slotKey,m])), ordered=[];
         previous.forEach(key=>{const m=available.get(key);if(m){ordered.push(m);available.delete(key);}});
         result.forEach(m=>{if(available.has(m.slotKey)){ordered.push(m);available.delete(m.slotKey);}});
-        pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);if(selectedIndex<0)return;const selected=ordered.splice(selectedIndex,1)[0];selected.slotLocked=true;selected.pinned=true;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
+        pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);const selected=selectedIndex>=0?ordered.splice(selectedIndex,1)[0]:this.normalizeMission({...pm.miss,pinned:true,slotLocked:Boolean(pm.miss.slotLocked),hiddenSlot:false,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});selected.pinned=true;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
         this.db.miss=ordered;this.db.slotOrder=ordered.map(m=>m.slotKey).filter(Boolean);
         this.db.miss.forEach((m,index)=>{const key=m.sourceCat!==null&&m.sourceIndex!==null?`${m.sourceCat}:${m.sourceIndex}`:null;if(key!==null)this.db.missionOrder[key]=index;});
     },
@@ -1965,20 +1966,19 @@ const Sys = {
     async confirmEditMission(){
         if(!this.editContext)return;const {cat,idx}=this.editContext;const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][idx];if(!hobby)return;
         const taskEl=document.getElementById('edit-mission-task'),descEl=document.getElementById('edit-mission-desc'),dayEl=document.getElementById('edit-mission-day');const task=(taskEl&&taskEl.value.trim())||hobby.task;const desc=descEl?descEl.value.trim():'';const day=dayEl?normalizeMissionDays([...dayEl.selectedOptions].map(option=>option.value)):null;
-        if(!(await SystemModal.confirm('Salvar alterações?')))return;hobby.task=task;hobby.desc=desc;hobby.day=day;this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===idx){pm.miss.task=task;pm.miss.desc=desc;pm.miss.day=day;}});this.genMiss();this.save();this.closeEditMissionPanel();this.render();
+        if(!(await SystemModal.confirm('Salvar alterações?')))return;hobby.task=task;hobby.desc=desc;hobby.day=day;this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===idx){pm.miss.task=task;pm.miss.desc=desc;pm.miss.day=day;}});this.db.miss.forEach(m=>{if(m.sourceCat===cat&&m.sourceIndex===idx){m.task=task;m.desc=desc;m.day=day;}});this.save();this.closeEditMissionPanel();this.render();
     },
 
     addHobby(cat){
         if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`),select=document.querySelector(`[data-new-day="${cat}"]`),task=input?input.value.trim():'';if(!task)return;
-        const day=select?normalizeMissionDays([...select.selectedOptions].map(o=>o.value)):null;this.db.hobbies[cat].push({task,desc:'',day});if(input)input.value='';if(select)Array.from(select.options).forEach(o=>o.selected=o.value==='null');this.genMiss();this.save();this.render();
+        const day=select?normalizeMissionDays([...select.selectedOptions].map(o=>o.value)):null;this.db.hobbies[cat].push({task,desc:'',day});if(input)input.value='';if(select)Array.from(select.options).forEach(o=>o.selected=o.value==='null');this.save();this.render();
     },
     isHobbyPinned(cat,index){const m=this.db.miss.find(x=>x.sourceCat===cat&&x.sourceIndex===index);return Boolean((m&&m.pinned)||this.db.pinnedMissions.some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
-    togglePinHobby(cat,index,event){
-        if(event&&event.stopPropagation)event.stopPropagation();const current=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current>=0){this.togglePinMission(current,event);return;}
-        const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const matches=pm=>pm&&pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index;
-        if(this.db.pinnedMissions.some(matches))this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));
-        else{const type=(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||this.db.missConfig.names[cat]||cat.toUpperCase();const usedIndexes=new Set(this.db.pinnedMissions.map(pm=>pm.index));let pinIndex=this.db.miss.length;while(usedIndexes.has(pinIndex))pinIndex++;this.db.pinnedMissions.push({index:pinIndex,miss:this.normalizeMission({type,cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,pinned:true,slotKey:`pinned:${cat}:${index}`})});}
-        this.genMiss();this.save();this.render();
+    async togglePinHobby(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const matches=pm=>pm&&pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index;const already=this.db.pinnedMissions.some(matches);const action=already?'DESATIVAR':'ATIVAR';if(!(await SystemModal.confirm(`${action} fixador da Quest \"${hobby.task}\"?`)))return;
+        if(already){this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current){current.pinned=false;current.slotLocked=false;}}
+        else{const currentIndex=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);const pinIndex=currentIndex>=0?currentIndex:(this.db.miss.length||0);const type=(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||this.db.missConfig.names[cat]||cat.toUpperCase();const mission=this.normalizeMission({type,cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,pinned:true,slotLocked:true,slotKey:`pinned:${cat}:${index}`});this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!matches(pm));this.db.pinnedMissions.push({index:pinIndex,miss:mission});const current=this.db.miss.find(m=>m.sourceCat===cat&&m.sourceIndex===index);if(current){current.pinned=true;current.slotLocked=true;}}
+        this.save();this.render();
     },
     async delHobby(cat,index,event){
         if(event&&event.stopPropagation)event.stopPropagation();const arr=this.db.hobbies[cat];if(!arr||!arr[index])return;if(!(await SystemModal.confirm(`Excluir a missão "${arr[index].task}"?`)))return;arr.splice(index,1);this.db.pinnedMissions=this.db.pinnedMissions.filter(pm=>!(pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));this.db.pinnedMissions.forEach(pm=>{if(pm.miss.sourceCat===cat&&pm.miss.sourceIndex>index)pm.miss.sourceIndex--;});this.genMiss();this.save();this.render();
