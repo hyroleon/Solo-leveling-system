@@ -1787,8 +1787,8 @@ const Sys = {
                 this.db.debuffs.emboscada = false;
                 await SystemModal.alert('⚔ FALHA NA EMBOSCADA: você não completou o treino de Boss ontem. -2 no Atributo Base.');
             }
-            if (this.db.attr.ATTR > 1) this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-1);
-            this.db.customAttributes.forEach(attr => { attr.value = Math.max(1,attr.value-1); });
+            if (this.db.attr.ATTR > 1 && this.db.attr.ATTR < 10) this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-1);
+            this.db.customAttributes.forEach(attr => { if (attr.value > 1 && attr.value < 10) attr.value = Math.max(1,attr.value-1); });
             let penaltyTotal = 0;
             if (this.db.activeBuffs.penaltyImmunity > 0 && !isSunday) this.db.activeBuffs.penaltyImmunity--;
             else if (!isSunday && Date.now() > this.db.missionBlockUntil) {
@@ -1912,7 +1912,9 @@ const Sys = {
         result.forEach(m=>{if(available.has(m.slotKey)){ordered.push(m);available.delete(m.slotKey);}});
         pins.sort((a,b)=>a.index-b.index);pins.forEach(pm=>{const sourceMatch=m=>pm.miss.sourceCat!==null&&pm.miss.sourceIndex!==null?m.sourceCat===pm.miss.sourceCat&&m.sourceIndex===pm.miss.sourceIndex:m.task===pm.miss.task;const selectedIndex=ordered.findIndex(sourceMatch);const selected=selectedIndex>=0?ordered.splice(selectedIndex,1)[0]:this.normalizeMission({...pm.miss,pinned:true,slotLocked:false,hiddenSlot:false,done:false,skipped:false,slotKey:pm.miss.slotKey||`pinned:${pm.miss.sourceCat||'mission'}:${pm.miss.sourceIndex??pm.index}`});selected.pinned=true;selected.slotLocked=false;const target=Math.max(0,Math.min(pm.index,ordered.length));ordered.splice(target,0,selected);});
         const locks=(this.db.lockedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).sort((a,b)=>a.index-b.index);
-        locks.forEach(lock=>{const match=m=>lock.miss.sourceCat!==null&&lock.miss.sourceIndex!==null?m.sourceCat===lock.miss.sourceCat&&m.sourceIndex===lock.miss.sourceIndex:m.task===lock.miss.task;const found=ordered.findIndex(match);if(found<0)return;const selected=ordered.splice(found,1)[0];selected.slotLocked=true;const target=Math.max(0,Math.min(lock.index,ordered.length));ordered.splice(target,0,selected);});
+        const lockedBySlot=new Map();const lockedTasks=new Set();
+        locks.forEach(lock=>{const match=m=>lock.miss.sourceCat!==null&&lock.miss.sourceIndex!==null?m.sourceCat===lock.miss.sourceCat&&m.sourceIndex===lock.miss.sourceIndex:m.task===lock.miss.task;const found=ordered.findIndex(match);if(found<0)return;const selected=ordered.splice(found,1)[0];selected.slotLocked=true;const slot=Math.max(0,finiteInteger(lock.index,0,0,100000));if(!lockedBySlot.has(slot))lockedBySlot.set(slot,selected);});
+        const lockedSlots=[...lockedBySlot.keys()].sort((a,b)=>a-b);const maxLockedSlot=lockedSlots.length?lockedSlots[lockedSlots.length-1]:-1;const reservedLength=Math.max(ordered.length+lockedSlots.length,maxLockedSlot+1);const lockedResult=Array(reservedLength).fill(null);lockedBySlot.forEach((mission,slot)=>{lockedResult[slot]=mission;});const lockedSlotSet=new Set(lockedSlots);let fillIndex=0;for(let slot=0;slot<lockedResult.length;slot++){if(lockedSlotSet.has(slot))continue;if(fillIndex<ordered.length)lockedResult[slot]=ordered[fillIndex++];}while(fillIndex<ordered.length)lockedResult.push(ordered[fillIndex++]);ordered.length=0;lockedResult.forEach(m=>{if(m)ordered.push(m);});
         ordered.forEach(m=>{if(!m.slotLocked)m.slotLocked=false;});
         this.db.miss=ordered;this.db.slotOrder=ordered.map(m=>m.slotKey).filter(Boolean);
         this.db.miss.forEach((m,index)=>{const key=m.sourceCat!==null&&m.sourceIndex!==null?`${m.sourceCat}:${m.sourceIndex}`:null;if(key!==null)this.db.missionOrder[key]=index;});
