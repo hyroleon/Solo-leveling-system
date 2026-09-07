@@ -1696,19 +1696,11 @@ const Sys = {
 
     ensureSlotOrder(){
         if(!this.db||!Array.isArray(this.db.miss))return;
-        const used=new Set(), counters={};
-        this.db.miss.forEach(m=>{
-            let key=safeText(m.slotKey,'');
-            if(!key||used.has(key)){
-                const base=HOBBY_CATEGORIES.includes(m.cat)?m.cat:'slot';
-                const n=counters[base]||0;counters[base]=n+1;key=`${base}:${n}`;
-                while(used.has(key))key=`${base}:${counters[base]++}`;
-                m.slotKey=key;
-            }
-            used.add(key);
-        });
-        const current=this.db.miss.map(m=>m.slotKey).filter(Boolean), previous=Array.isArray(this.db.slotOrder)?this.db.slotOrder:[];
-        this.db.slotOrder=[...previous.filter(k=>current.includes(k)),...current.filter(k=>!previous.includes(k))];
+        // Cada classe possui seus próprios slots estáveis. Isso evita que
+        // missões específicas adicionadas/removidas criem colisões globais.
+        const counters={};
+        this.db.miss.forEach(m=>{const base=safeText(m.cat,'slot')||'slot';const n=counters[base]||0;counters[base]=n+1;m.slotKey=`${base}:${n}`;});
+        this.db.slotOrder=this.db.miss.map(m=>m.slotKey).filter(Boolean);
     },
 
     save(){
@@ -1880,7 +1872,7 @@ const Sys = {
         const pins=(this.db.pinnedMissions||[]).map(pm=>({index:pm.index,miss:this.sourceForPinned(pm)})).filter(pm=>missionDayMatches(pm.miss.day,today));
         pins.forEach(pm=>{if(pm.miss.task)used.add(pm.miss.task);});
         const result=[]; const counts=this.db.missConfig.counts,names=this.db.missConfig.names;
-        const slotCounters={};const nextSlotKey=cat=>{const base=HOBBY_CATEGORIES.includes(cat)?cat:'slot';const n=slotCounters[base]||0;slotCounters[base]=n+1;return `${base}:${n}`;};const addMission=(cat,entry,type,pinned=false)=>result.push(this.normalizeMission({type,cat,task:entry.h.task,desc:entry.h.desc,day:entry.h.day,sourceCat:cat,sourceIndex:entry.index,done:false,skipped:false,pinned,slotKey:nextSlotKey(cat)}));
+        const slotCounters={};const nextSlotKey=cat=>{const base=safeText(cat,'slot')||'slot';const n=slotCounters[base]||0;slotCounters[base]=n+1;return `${base}:${n}`;};const addMission=(cat,entry,type,pinned=false)=>result.push(this.normalizeMission({type,cat,task:entry.h.task,desc:entry.h.desc,day:entry.h.day,sourceCat:cat,sourceIndex:entry.index,done:false,skipped:false,pinned,slotKey:nextSlotKey(cat)}));
         const addCategory=(cat,fallback,type,count)=>{
             const source=(this.db.hobbies[cat]||[]).map((h,index)=>({h,index}));
             const scheduled=source.filter(x=>x.h.day!==null&&missionDayMatches(x.h.day,today)&&!used.has(x.h.task));
