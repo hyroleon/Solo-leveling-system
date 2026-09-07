@@ -1805,8 +1805,7 @@ const Sys = {
             Object.keys(this.db.trains).forEach(cat => { this.db.trains[cat].forEach(ex => { ex.done = false; }); this.db.trainRewardGiven[cat] = false; });
             this.db.last = today;
             this.db.eventToday = false;
-            this.genMiss();
-            this.save();
+            this.drawDailyMissions();
         }
         if (!this.db.eventToday) await this.rollEvent();
     },
@@ -1862,6 +1861,11 @@ const Sys = {
             return this.normalizeMission({...m,task:h.task,desc:h.desc,day:h.day,cat:m.sourceCat});
         }
         return this.normalizeMission(m);
+    },
+    drawDailyMissions(){
+        if (!this.db) return;
+        this.genMiss();
+        this.save();
     },
     genMiss(){
         if (!this.db) return;
@@ -2083,7 +2087,7 @@ const Sys = {
     async edCustomAttrValue(id){const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;const value=await SystemModal.prompt(`Valor de ${found.name}:`,String(found.value));if(value===null)return;found.value=finiteInteger(value,found.value,1,1000000);this.save();this.render();},
     async edAttrName(attr){const old=this.db.attrNames[attr]||'ATRIBUTO BASE',value=safeText(await SystemModal.prompt('Nome do atributo:',old),'');if(!value)return;this.db.attrNames[attr]=value;this.save();this.render();},
     async edCustomAttrName(id){const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;const value=safeText(await SystemModal.prompt('Nome do atributo:',found.name),'');if(!value)return;found.name=value;this.save();this.render();},
-    async shuffleMiss(){if(!(await SystemModal.confirm('Sortear novamente as modificações diárias? Missões atuais não concluídas serão substituídas.')))return;this.genMiss();this.save();this.render();},
+    async shuffleMiss(){if(!(await SystemModal.confirm('Sortear novamente as modificações diárias? Missões atuais não concluídas serão substituídas.')))return;this.drawDailyMissions();this.render();},
     async reset(){
         if(!(await SystemModal.confirm('FORMATAR NÚCLEO DO SISTEMA? O save atual será removido permanentemente.')))return;
         try{localStorage.removeItem(this.key);localStorage.removeItem(this.backupKey);}catch(error){console.warn('Não foi possível remover o save antigo.',error);}
