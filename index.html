@@ -1392,11 +1392,11 @@
                         <img id="p-img" src="" class="hidden">
                         <i id="p-img-placeholder">Upload</i>
                     </div>
-                    <div id="lvl-ui" class="lvl-badge">LVL 1</div>
+                    <div id="lvl-ui" class="lvl-badge" onclick="Sys.edLevel()" title="Editar level">LVL 1</div>
                     <input type="file" id="file-input" class="hidden" accept="image/*" onchange="Sys.upImg(event)">
                 </div>
 
-                <div id="p-name">--</div>
+                <div id="p-name" onclick="Sys.edName()" title="Editar nome">--</div>
                 <div id="essences-ui" onclick="Sys.edEssences()">MBTI</div>
 
                 <div id="prestige-ui" style="color:var(--gold); font-size:11px; font-weight:900; letter-spacing: 2px; margin-bottom:5px; text-transform: uppercase;"></div>
@@ -1419,7 +1419,7 @@
 
                 <div style="display:flex; justify-content:space-between; margin-top:8px;">
                     <span class="stat-label">DIAS JOGADOS</span>
-                    <span class="stat-val" id="days-played">0</span>
+                    <span class="stat-val" id="days-played" onclick="Sys.edDaysPlayed()" title="Editar dias jogados" style="cursor:pointer">0</span>
                 </div>
 
                 <button id="btn-prestige" class="btn-init hidden" style="border-color:var(--gold); color:var(--gold); box-shadow: 0 0 10px color-mix(in srgb, var(--a) 40%, transparent); margin-bottom: 12px;" onclick="Sys.doPrestige()">◆ RENASCER</button>
@@ -1585,7 +1585,7 @@ const Sys = {
             trains:{puxada:[],empurrada:[],core:[]},trainTitles:{puxada:'[01] PUXADA',empurrada:'[02] EMPURRADA',core:'[03] CORE'},trainRewardGiven:{},
             customCali:{E:[],D:[],C:[],B:[],A:[],S:[], 'SS+':[]},lvl:1,energy:0,activeBuffs:{doubleXP:false,penaltyImmunity:0},
             debuffs:{corpo:false,mente:false,espirito:false,emboscada:false},stats:{totalTrains:0,totalKnowledge:0,totalBosses:0,seasonTrains:0,seasonQuests:0,seasonBosses:0},
-            prestige:0,eventToday:false,seasonMonth:today.getMonth(),essences:'MBTI',startDate:today.toISOString().split('T')[0],last:'',
+            prestige:0,eventToday:false,seasonMonth:today.getMonth(),essences:'MBTI',startDate:today.toISOString().split('T')[0],daysPlayedOverride:null,last:'',
             missConfig:{counts:{forca:1,mobilidade:1,condicionamento:0,calejamento:0,resistencia:0,vitalidade:0,higiene:0,alimentacao:0,hidratacao:0,sono:0,espirito:1,vinculos:0,hobby:2,conhecimento:1,concentracao:1,terapia:0,obrigacoes:1},names},
             pinnedMissions:[],lockedMissions:[],missionOrder:{},slotOrder:[],profileImage:'',customRank:'',missionBlockUntil:0
         };
@@ -1614,6 +1614,7 @@ const Sys = {
         out.eventToday = Boolean(raw.eventToday);
         out.last = safeText(raw.last,'');
         out.startDate = /^\d{4}-\d{2}-\d{2}$/.test(safeText(raw.startDate,'')) ? raw.startDate : def.startDate;
+        out.daysPlayedOverride = raw.daysPlayedOverride === null || raw.daysPlayedOverride === undefined || raw.daysPlayedOverride === '' ? null : finiteInteger(raw.daysPlayedOverride,null,0,100000000);
         out.essences = safeText(raw.essences,def.essences) || def.essences;
         out.customRank = safeText(raw.customRank,'');
         let storedProfile='';
@@ -1722,6 +1723,7 @@ const Sys = {
     },
 
     getDaysPlayed(){
+        if(this.db.daysPlayedOverride!==null&&this.db.daysPlayedOverride!==undefined)return finiteInteger(this.db.daysPlayedOverride,0,0,100000000);
         const start = new Date(`${this.db.startDate}T00:00:00`);
         const diff = Math.floor((Date.now()-start.getTime())/86400000);
         return Number.isFinite(diff) && diff >= 0 ? diff : 0;
@@ -2069,6 +2071,9 @@ const Sys = {
     async removeCustomAttr(id){
         const found=this.db.customAttributes.find(a=>a.id===id);if(!found)return;if(!(await SystemModal.confirm(`Remover o atributo "${found.name}"?`)))return;this.db.customAttributes=this.db.customAttributes.filter(a=>a.id!==id);this.save();this.render();
     },
+    async edName(){const value=safeText(await SystemModal.prompt('Nome do jogador:',this.db.name||''),'');if(!value)return;this.db.name=value.toUpperCase();this.save();this.render();},
+    async edLevel(){const value=await SystemModal.prompt('Level do jogador:',String(this.db.lvl));if(value===null)return;this.db.lvl=finiteInteger(value,this.db.lvl,1,100000);this.db.energy=0;this.updateThemeByLevel();this.save();this.render();},
+    async edDaysPlayed(){const value=await SystemModal.prompt('Dias jogados:',String(this.getDaysPlayed()));if(value===null)return;this.db.daysPlayedOverride=finiteInteger(value,this.getDaysPlayed(),0,100000000);this.save();this.render();},
     async edEnergy(){const limit=100000000;const value=await SystemModal.prompt(`Energia acumulada (pode ser positiva ou negativa; limite ±${limit}):`,String(this.db.energy));if(value===null)return;this.db.energy=finiteInteger(value,this.db.energy,-limit,limit);this.checkLvl();this.save();this.render();},
     async edAttrValue(){const value=await SystemModal.prompt('Valor do atributo base:',String(this.db.attr.ATTR));if(value===null)return;this.db.attr.ATTR=finiteInteger(value,this.db.attr.ATTR,1,1000000);this.save();this.render();},
     async edPoints(){const value=await SystemModal.prompt('Pontos de atributo:',String(this.db.points));if(value===null)return;this.db.points=finiteInteger(value,this.db.points,0,1000000);this.save();this.render();},
