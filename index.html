@@ -1448,6 +1448,8 @@
     .mini-btn:hover{border-color:var(--a);color:var(--a);box-shadow:0 0 7px color-mix(in srgb, var(--a) 25%, transparent)}
     .mini-btn.danger{color:var(--danger);border-color:var(--danger)}
     .mini-btn.good{color:var(--state-icon);border-color:var(--state-icon)}
+    .quest-lock-btn{color:var(--a);border-color:var(--a);text-shadow:0 0 5px var(--a);min-width:25px}
+    .quest-lock-btn.active{color:var(--state-icon);border-color:var(--state-icon);box-shadow:0 0 7px color-mix(in srgb,var(--a) 35%,transparent)}
     .mission-actions{display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
     .mission-status{font:900 8px var(--font-mono);letter-spacing:1px;color:var(--state-icon);text-transform:uppercase}
     .mission-status.skipped{color:var(--danger)}
@@ -1785,7 +1787,7 @@ const Sys = {
         if (!this.db.last) { this.db.last = today; this.genMiss(); this.save(); return; }
         if (this.db.last !== today) {
             if (this.db.debuffs.emboscada) {
-                this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-2);
+                if(this.db.attr.ATTR>1&&this.db.attr.ATTR<10)this.db.attr.ATTR = Math.max(1,this.db.attr.ATTR-2);
                 this.db.debuffs.emboscada = false;
                 await SystemModal.alert('⚔ FALHA NA EMBOSCADA: você não completou o treino de Boss ontem. -2 no Atributo Base.');
             }
@@ -1814,7 +1816,7 @@ const Sys = {
         let remaining = Math.max(0,finiteInteger(amount,0,0,100000));
         const attrs = [{key:'ATTR',value:this.db.attr.ATTR},...this.db.customAttributes.map(a=>({key:a.id,value:a.value}))];
         while (remaining > 0 && attrs.some(a=>a.value > 1)) {
-            for (const attr of attrs) { if (attr.value > 1 && remaining > 0) { attr.value--; remaining--; } if (!remaining) break; }
+            for (const attr of attrs) { if (attr.value > 1 && attr.value < 10 && remaining > 0) { attr.value--; remaining--; } if (!remaining) break; }
         }
         this.db.attr.ATTR = attrs[0].value;
         attrs.slice(1).forEach(item => { const found = this.db.customAttributes.find(a=>a.id===item.key); if (found) found.value=item.value; });
@@ -1987,6 +1989,13 @@ const Sys = {
     addHobby(cat){
         if(!HOBBY_CATEGORIES.includes(cat))return;const input=document.getElementById(`inp-${cat}`),select=document.querySelector(`[data-new-day="${cat}"]`),task=input?input.value.trim():'';if(!task)return;
         const day=select?normalizeMissionDays([...select.selectedOptions].map(o=>o.value)):null;this.db.hobbies[cat].push({task,desc:'',day});if(input)input.value='';if(select)Array.from(select.options).forEach(o=>o.selected=o.value==='null');this.save();this.render();
+    },
+    isHobbyLocked(cat,index){return Boolean((this.db.lockedMissions||[]).some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
+    async toggleLockHobby(cat,index,event){
+        if(event&&event.stopPropagation)event.stopPropagation();const hobby=this.db.hobbies[cat]&&this.db.hobbies[cat][index];if(!hobby)return;const matches=pm=>pm&&pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index;const locked=this.db.lockedMissions.some(matches);const action=locked?'DESBLOQUEAR':'BLOQUEAR';if(!(await SystemModal.confirm(`${action} a Quest "${hobby.task}" na posição atual?`)))return;
+        if(locked){this.db.lockedMissions=this.db.lockedMissions.filter(pm=>!matches(pm));}
+        else{const current=this.db.miss.findIndex(m=>m.sourceCat===cat&&m.sourceIndex===index);const used=new Set(this.db.lockedMissions.map(pm=>pm.index));let slot=current>=0?current:this.db.miss.length;while(used.has(slot))slot++;const mission=this.normalizeMission({type:(CATEGORY_MAP[cat]&&CATEGORY_MAP[cat].type)||cat.toUpperCase(),cat,task:hobby.task,desc:hobby.desc,day:hobby.day,sourceCat:cat,sourceIndex:index,slotLocked:true,slotKey:`${cat}:${index}`});this.db.lockedMissions=this.db.lockedMissions.filter(pm=>!matches(pm));this.db.lockedMissions.push({index:slot,miss:mission});}
+        this.save();this.render();
     },
     isHobbyPinned(cat,index){const m=this.db.miss.find(x=>x.sourceCat===cat&&x.sourceIndex===index);return Boolean(this.db.pinnedMissions.some(pm=>pm.miss&&pm.miss.sourceCat===cat&&pm.miss.sourceIndex===index));},
     async togglePinHobby(cat,index,event){
@@ -2166,7 +2175,7 @@ const Sys = {
     renderHobbies(){
         const opts=`<option value="null">TODOS</option>${DAY_NAMES.map((d,i)=>`<option value="${i}">${d.slice(0,3)}</option>`).join('')}`;
         HOBBY_CATEGORIES.forEach(cat=>{const list=document.getElementById(`hobby-${cat}-ui`);if(!list)return;const wrapper=list.parentElement&&list.parentElement.querySelector('.routine-input-wrap');if(wrapper&&!wrapper.querySelector('[data-new-day]')){const s=document.createElement('select');s.className='routine-input';s.multiple=true;s.size=3;s.dataset.newDay=cat;s.title='Selecione um ou mais dias; TODOS = todos os dias';s.style.cssText='flex:1.4;min-width:0;height:40px;margin:0;padding:3px;font-size:9px;text-align:center;';s.innerHTML=opts;wrapper.insertBefore(s,wrapper.querySelector('.btn-add-rtn'));s.options[0].selected=true;s.addEventListener('change',()=>{if(Array.from(s.selectedOptions).some(option=>option.value==='null'))selectAllMissionDays(s);});}
-            const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${missionDaysLabel(item.day)}]</small>`:''}</span><button class="btn-order" data-pin-hobby="${cat}" data-hobby-i="${index}" title="Fixar/desfixar Quest">${this.isHobbyPinned(cat,index)?'▣':'□'}</button><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-pin-hobby]').forEach(el=>el.addEventListener('click',e=>this.togglePinHobby(el.dataset.pinHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',e=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',e=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),e)));});
+            const arr=this.db.hobbies[cat]||[];list.innerHTML=arr.length?arr.map((item,index)=>`<li class="routine-item"><span class="grow">${escapeHTML(item.task)}${item.day!==null?` <small style="color:var(--a)">[${missionDaysLabel(item.day)}]</small>`:''}</span><button class="btn-order" data-pin-hobby="${cat}" data-hobby-i="${index}" title="Fixar/desfixar Quest">${this.isHobbyPinned(cat,index)?'▣':'□'}</button><button class="btn-order quest-lock-btn ${this.isHobbyLocked(cat,index)?'active':''}" data-lock-hobby="${cat}" data-hobby-i="${index}" title="${this.isHobbyLocked(cat,index)?'Desbloquear posição':'Bloquear nesta posição'}">${this.isHobbyLocked(cat,index)?'🔒':'🔓'}</button><button class="btn-order" data-edit-hobby="${cat}" data-hobby-i="${index}">✎</button><button class="btn-order" data-delete-hobby="${cat}" data-hobby-i="${index}">×</button></li>`).join(''):'<li class="empty-state">Nenhuma missão cadastrada.</li>';list.querySelectorAll('[data-pin-hobby]').forEach(el=>el.addEventListener('click',e=>this.togglePinHobby(el.dataset.pinHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-lock-hobby]').forEach(el=>el.addEventListener('click',e=>this.toggleLockHobby(el.dataset.lockHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-edit-hobby]').forEach(el=>el.addEventListener('click',e=>this.edHobby(el.dataset.editHobby,Number(el.dataset.hobbyI),e)));list.querySelectorAll('[data-delete-hobby]').forEach(el=>el.addEventListener('click',e=>this.delHobby(el.dataset.deleteHobby,Number(el.dataset.hobbyI),e)));});
         const config=document.getElementById('miss-config-ui');if(!config)return;const keys=['forca','mobilidade','condicionamento','calejamento','resistencia','vitalidade','higiene','alimentacao','hidratacao','sono','espirito','vinculos','hobby','conhecimento','concentracao','terapia','obrigacoes'];config.innerHTML=keys.map(cat=>`<div class="config-line"><span class="config-name" title="Renomear categoria">${escapeHTML(this.db.missConfig.names[cat]||cat.toUpperCase())}</span><button class="mini-btn" data-rename-cat="${cat}">✎</button><button class="mini-btn" data-adjust-cat="${cat}" data-delta="-1">−</button><span class="config-count">${this.db.missConfig.counts[cat]||0}</span><button class="mini-btn" data-adjust-cat="${cat}" data-delta="1">+</button></div>`).join('');config.querySelectorAll('[data-rename-cat]').forEach(el=>el.addEventListener('click',()=>this.renameMissClass(el.dataset.renameCat)));config.querySelectorAll('[data-adjust-cat]').forEach(el=>el.addEventListener('click',()=>this.adjustMissCount(el.dataset.adjustCat,Number(el.dataset.delta))));
     },
 
